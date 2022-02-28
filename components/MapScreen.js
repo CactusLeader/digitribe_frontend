@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
-import { Button, Overlay, Input } from "react-native-elements";
+import { Button, Overlay, Input, Icon } from "react-native-elements";
 import { Entypo } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
@@ -13,11 +14,16 @@ function MapScreen() {
   const [currentLongitude, setCurrentLongitude] = useState(2.333333);
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
 
   console.log("currentLattitude", currentLatitude);
   console.log("currentLongitude", currentLongitude);
   console.log("addPOI", addPOI);
   console.log("listPOI", listPOI);
+  console.log("title", title);
+  console.log("tdescription", description);
 
   useEffect(() => {
     async function askPermissions() {
@@ -39,6 +45,7 @@ function MapScreen() {
 
   onPressButton = () => {
     setAddPOI(true);
+    setVisible(true);
   };
 
   onPressScreen = (evt) => {
@@ -49,19 +56,44 @@ function MapScreen() {
     console.log("long", long);
     if (addPOI) {
       setListPOI([...listPOI, { lat, long }]);
+      setAddPOI(false)
     }
+  };
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
+  const onPressAddPoi = () => {
+    setVisible(!visible);
+  };
+
+  const InputTitleChange = (val) => {
+    setTitle(val);
+  };
+
+ 
+
+
+  const InputDescChange = (val) => {
+    setDescription(val);
   };
 
   const tabListPOI = listPOI.map((poi, index) => {
     return (
-      <Marker
-        key={index}
-        coordinate={{
-          latitude: poi.lat,
-          longitude: poi.long,
-        }}
-        pinColor="#FFD440"
-      />
+      <View>
+        <Marker
+          key={index}
+          coordinate={{
+            latitude: poi.lat,
+            longitude: poi.long,
+          }}
+          pinColor="#FFD440"
+          title={title}
+          description={description}
+          //   photo=""
+        />
+      </View>
     );
   });
 
@@ -90,6 +122,7 @@ function MapScreen() {
         />
         {tabListPOI}
       </MapView>
+
       <View
         style={{
           position: "absolute",
@@ -113,11 +146,42 @@ function MapScreen() {
             height: 65,
           }}
           containerStyle={{
-            marginHorizontal: 30,
+            marginHorizontal: 15,
             marginVertical: 30,
           }}
           onPress={() => onPressButton()}
         />
+        <Overlay
+          isVisible={visible}
+          onBackdropPress={toggleOverlay}
+          overlayStyle={{ width: "70%" }}
+        >
+          <Input
+            placeholder="Title"
+            onChangeText={(val) => InputTitleChange(val)}
+          />
+          <Input
+            placeholder="Description"
+            onChangeText={(val) => InputDescChange(val)}
+          />
+          <Input placeholder="Photo" />
+          <Button
+            buttonStyle={{
+              backgroundColor: "#FFD440",
+            }}
+            icon={
+              <Icon
+                name="map-pin"
+                type="font-awesome"
+                color="white"
+                size={25}
+                iconStyle={{ marginRight: 10 }}
+              />
+            }
+            title="Ajouter POI"
+            onPress={() => onPressAddPoi()}
+          />
+        </Overlay>
       </View>
     </View>
   );
