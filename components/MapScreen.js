@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ImageBackground } from "react-native";
+import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
 import { Button, Overlay, Input } from "react-native-elements";
 
 import MapView from "react-native-maps";
@@ -47,21 +47,26 @@ function MapScreen() {
           title="Hello"
           description="I am here"
         />
+
+
+      
 <Button
                 title="+"
                 loading={false}
                 loadingProps={{ size: 'small', color: 'white' }}
                 buttonStyle={{
-                  backgroundColor: '#8525FF',
+                  backgroundColor: '#FFD440',
                   borderRadius: 100,
-                  width: 50,
-                  
-                 
+                  borderColor:'white',
+                  borderWidth:2,
+                  width:65, 
+                  height:65,     
                 }}
-                titleStyle={{ fontWeight: 'bold', fontSize: 23 }}
+                titleStyle={{ 
+                    fontWeight: 'bold', fontSize: 30 }}
                 containerStyle={{
                   marginHorizontal: 30,
-                  marginVertical: 30
+                  marginVertical: 30,
                 }}
                 onPress={() => console.log('aye')}
               />
