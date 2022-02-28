@@ -12,6 +12,7 @@ import LoginScreen from "./screens/LoginScreen";
 import AccountCreationScreen from "./components/AccountCreationScreen";
 import FocusScreen from "./components/FocusScreen";
 import ProfileCreationScreen from "./components/ProfileCreationScreen";
+import MapScreen from "./components/MapScreen";
 
 const Stack = createStackNavigator();
 
