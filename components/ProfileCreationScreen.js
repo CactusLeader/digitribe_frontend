@@ -9,11 +9,12 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
-import { Button } from "react-native-elements";
 import * as ImagePicker from "expo-image-picker";
+import { Button } from "react-native-elements";
 import { Picker } from "@react-native-picker/picker";
+import ButtonDrop from "../utils/Button.js";
 
-export default function ImagePickerExample() {
+export default function ImagePickerExample(props) {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState();
@@ -36,6 +37,10 @@ export default function ImagePickerExample() {
 
   const handleDescription = (val) => {
     setDescription(val);
+  };
+
+  const accountSubmit = () => {
+    props.navigation.navigate("Map");
   };
 
   return (
@@ -84,6 +89,7 @@ export default function ImagePickerExample() {
             <Picker.Item label="English" value="English" />
           </Picker>
         </View>
+        <ButtonDrop title="Suivant" onPress={() => accountSubmit()} />
       </View>
     </TouchableWithoutFeedback>
   );

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { CheckBox } from "react-native-elements";
+import Button from "../utils/Button.js";
 
-export default function FocusScreen() {
+export default function FocusScreen(props) {
   const [check1, setCheck1] = useState(false);
   const [check2, setCheck2] = useState(false);
   const [check3, setCheck3] = useState(false);
@@ -11,6 +12,10 @@ export default function FocusScreen() {
   const [check6, setCheck6] = useState(false);
   const [check7, setCheck7] = useState(false);
   const [check8, setCheck8] = useState(false);
+
+  const focusSubmit = () => {
+    props.navigation.navigate("ProfileCreation");
+  };
 
   return (
     <View style={styles.container}>
@@ -67,6 +72,7 @@ export default function FocusScreen() {
         checkedColor="#FFD440"
         onPress={() => setCheck8(!check8)}
       />
+      <Button title="Suivant" onPress={() => focusSubmit()} />
     </View>
   );
 }
@@ -75,16 +81,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    alignItems: "center",
   },
   header: {
     marginTop: "12%",
-    alignItems: "center",
   },
   innerHeader: {
     color: "#8525FF",
     fontSize: 28,
     fontWeight: "700",
     marginBottom: 48,
-    alignItems: "center",
+  },
+  checkbox: {
+    alignItems: "flex-start",
   },
 });
