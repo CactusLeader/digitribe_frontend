@@ -31,6 +31,10 @@ export default function App() {
           name="ProfileCreation"
           component={ProfileCreationScreen}
         />
+        <Stack.Screen
+          name="Map"
+          component={MapScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
