@@ -7,17 +7,37 @@ import Button from "../utils/Button.js";
 function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userExists, setUserExists] = useState(false);
+  const [listErrorsLogin, setErrorsLogin] = useState([]);
 
-  const MapSubmit = () => {
-    console.log("Page Map");
-    fetch("http://localhost:3000/MapScreen", {
+  const MapSubmit = async () => {
+    console.log("#1");
+
+    const data = fetch("http://192.168.148.169:3000/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `email=${email}&email=${password}`,
+      body: `email=${email}&password=${password}`,
     });
-    console.log("email", email);
-    console.log("password", password);
+    const body = await data.json();
+
+    console.log("body", body);
+
+    if (body.result === true) {
+      props.addToken(body.token);
+      setUserExists(true);
+    } else {
+      setErrorsLogin(body.error);
+    }
   };
+
+  if (userExists) {
+    console.log("Page Map");
+    props.navigation.navigate("Map");
+  }
+
+  const tabErrorsLogin = listErrorsLogin.map((error, i) => {
+    return <Text>{error}</Text>;
+  });
 
   return (
     <ImageBackground
@@ -41,6 +61,7 @@ function LoginScreen() {
         placeholder="Email"
         onChangeText={(val) => setEmail(val)}
       />
+      {tabErrorsLogin}
       <Input
         containerStyle={{ marginBottom: 25, width: "70%" }}
         inputStyle={{ marginLeft: 10 }}
