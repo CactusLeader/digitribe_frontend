@@ -14,11 +14,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {/* <Stack.Screen name="Home" component={HomeScreen} /> */}
-        {/* <Stack.Screen
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen
           name="AccountCreation"
           component={AccountCreationScreen}
-        /> */}
+        />
         <Stack.Screen name="Focus" component={FocusScreen} />
         <Stack.Screen
           name="ProfileCreation"
