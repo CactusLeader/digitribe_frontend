@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, ImageBackground } from "react-native";
+import { Button, Overlay, Input } from "react-native-elements";
+
 import MapView from "react-native-maps";
 import {Marker} from 'react-native-maps';
 import * as Location from "expo-location";
@@ -32,7 +34,11 @@ function MapScreen() {
 
   return (
       
-<MapView style={{flex : 1}}>
+<MapView style={{ 
+    flex:1,
+    alignItems:"flex-end",
+    justifyContent : "flex-end"
+    }}>
 <Marker
           coordinate={{
             latitude: currentLatitude,
@@ -41,7 +47,24 @@ function MapScreen() {
           title="Hello"
           description="I am here"
         />
-
+<Button
+                title="+"
+                loading={false}
+                loadingProps={{ size: 'small', color: 'white' }}
+                buttonStyle={{
+                  backgroundColor: '#8525FF',
+                  borderRadius: 100,
+                  width: 50,
+                  
+                 
+                }}
+                titleStyle={{ fontWeight: 'bold', fontSize: 23 }}
+                containerStyle={{
+                  marginHorizontal: 30,
+                  marginVertical: 30
+                }}
+                onPress={() => console.log('aye')}
+              />
 </MapView>
     
   );
