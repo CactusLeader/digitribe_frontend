@@ -3,7 +3,12 @@ import { StyleSheet, ImageBackground, Image, View } from "react-native";
 
 import Button from "../utils/Button.js";
 
-function HomeScreen() {
+function HomeScreen(props) {
+  const LoginSubmit = () => {
+    console.log("Page Login");
+    props.navigation.navigate("Login");
+  };
+
   return (
     <ImageBackground
       source={require("../assets/home.jpg")}
@@ -22,7 +27,7 @@ function HomeScreen() {
         }}
       >
         <Button title="Sign up" />
-        <Button title="Login" />
+        <Button title="Login" onPress={() => LoginSubmit()} />
       </View>
     </ImageBackground>
   );
