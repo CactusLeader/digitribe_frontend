@@ -9,15 +9,27 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import HomeScreen from "./screens/HomeScreen";
 import LoginScreen from "./screens/LoginScreen";
+import AccountCreationScreen from "./components/AccountCreationScreen";
+import FocusScreen from "./components/FocusScreen";
+import ProfileCreationScreen from "./components/ProfileCreationScreen";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer screenOptions={{ headerShown: false }}>
-      <Stack.Navigator>
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen
+          name="AccountCreation"
+          component={AccountCreationScreen}
+        />
+        <Stack.Screen name="Focus" component={FocusScreen} />
+        <Stack.Screen
+          name="ProfileCreation"
+          component={ProfileCreationScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
