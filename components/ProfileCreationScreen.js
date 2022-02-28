@@ -40,7 +40,7 @@ export default function ImagePickerExample(props) {
   };
 
   const accountSubmit = () => {
-    props.navigation.navigate("MapScreen");
+    props.navigation.navigate("Map");
   };
 
   return (

@@ -28,7 +28,6 @@ export default function FocusScreen(props) {
         title="Sport"
         checked={check1}
         checkedColor="#FFD440"
-        style={{styles.checkBox}}
         onPress={() => setCheck1(!check1)}
       />
       <CheckBox
