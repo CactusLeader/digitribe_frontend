@@ -9,8 +9,9 @@ import {
 } from "react-native";
 import { Input } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
+import Button from "../utils/Button.js";
 
-export default function AccountCreationScreen() {
+export default function AccountCreationScreen(props) {
   const [username, setUsername] = useState("");
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
@@ -35,6 +36,10 @@ export default function AccountCreationScreen() {
 
   const handlePassword = (val) => {
     setPassword(val);
+  };
+
+  const accountSubmit = () => {
+    props.navigation.navigate("Focus");
   };
 
   return (
@@ -93,6 +98,7 @@ export default function AccountCreationScreen() {
             label="Password"
             labelStyle={styles.label}
           />
+          <Button title="Suivant" onPress={() => accountSubmit()} />
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

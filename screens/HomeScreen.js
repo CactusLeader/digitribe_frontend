@@ -8,6 +8,9 @@ function HomeScreen(props) {
     console.log("Page Login");
     props.navigation.navigate("Login");
   };
+  const signupSubmit = () => {
+    props.navigation.navigate("AccountCreation");
+  };
 
   return (
     <ImageBackground
@@ -26,7 +29,7 @@ function HomeScreen(props) {
           marginTop: -120,
         }}
       >
-        <Button title="Sign up" />
+        <Button title="Sign up" onPress={() => signupSubmit()} />
         <Button title="Login" onPress={() => LoginSubmit()} />
       </View>
     </ImageBackground>
