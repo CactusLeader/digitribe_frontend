@@ -7,8 +7,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import HomeScreen from "./screens/HomeScreen";
-import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./components/HomeScreen";
+import LoginScreen from "./components/LoginScreen";
 import AccountCreationScreen from "./components/AccountCreationScreen";
 import FocusScreen from "./components/FocusScreen";
 import ProfileCreationScreen from "./components/ProfileCreationScreen";
@@ -31,10 +31,7 @@ export default function App() {
           name="ProfileCreation"
           component={ProfileCreationScreen}
         />
-        <Stack.Screen
-          name="Map"
-          component={MapScreen}
-        />
+        <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
