@@ -17,9 +17,11 @@ import ChatScreen from "./components/ChatScreen";
 
 import { createStore, combineReducers } from "redux";
 import { Provider } from "react-redux";
-import firstName from "./reducers/firstName";
 
-const store = createStore(combineReducers({ firstName }));
+import firstName from "./reducers/firstName";
+import token from "./reducers/token";
+
+const store = createStore(combineReducers({ firstName, token }));
 
 const Stack = createStackNavigator();
 

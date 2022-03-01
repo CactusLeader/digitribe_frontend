@@ -14,13 +14,12 @@ function LoginScreen(props) {
   const [firstName, setFirstName] = useState("");
 
   const MapSubmit = async () => {
-    console.log("#1");
-
     const data = await fetch("https://digitribebackend.herokuapp.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `email=${email}&password=${password}`,
     });
+
     const body = await data.json();
 
     // console.log("body", body);
@@ -28,6 +27,7 @@ function LoginScreen(props) {
     if (body.result === true) {
       setUserExists(true);
       setFirstName(body.user.firstName);
+      props.addToken(body.token);
     } else {
       setErrorsLogin(body.error);
     }
@@ -96,8 +96,14 @@ const styles = StyleSheet.create({
 function mapDispatchToProps(dispatch) {
   return {
     onSubmitFirstName: function (firstName) {
-      console.log("usduibvisdbibsdbi #1 firstName", firstName);
-      dispatch({ type: "savefirstName", firstName: firstName });
+      // console.log("usduibvisdbibsdbi #1 firstName", firstName);
+      dispatch({
+        type: "savefirstName",
+        firstName: firstName,
+      });
+    },
+    addToken: function (token) {
+      dispatch({ type: "addToken", token: token });
     },
   };
 }

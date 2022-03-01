@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView, KeyboardAvoidingView } from "react-native";
+import {
+  View,
+  ScrollView,
+  KeyboardAvoidingView,
+  StyleSheet,
+  ImageBackground,
+  Text,
+} from "react-native";
 import { Button, ListItem, Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 
@@ -19,6 +26,30 @@ function ChatScreen(props) {
       setListMessage([...listMessage, newMessageData]);
     });
   }, [listMessage]);
+
+  const MessageSubmit = async () => {
+    socket.emit("sendMessage", {
+      message: currentMessage,
+      firstName: firstName,
+    });
+
+    setCurrentMessage("");
+
+    const date = new Date().getDate();
+
+    const data = await fetch(
+      "https://digitribebackend.herokuapp.com/messages",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `message=${currentMessage}&date=${date}&tokenUser=${props.token}`,
+        //&recipientId=${}
+      }
+    );
+    const body = await data.json();
+
+    // console.log("body", body);
+  };
 
   const listMessageItem = listMessage.map((messageData, i) => {
     let msg = messageData.message.replace(/:\)/g, "\u263A");
@@ -40,42 +71,61 @@ function ChatScreen(props) {
   const firstName = props.firstName;
 
   return (
-    <View style={{ flex: 1 }}>
+    <ImageBackground
+      source={require("../assets/home.jpg")}
+      style={styles.container}
+    >
       <ScrollView style={{ flex: 1, marginTop: 50 }}>
         {listMessageItem}
       </ScrollView>
 
-      <KeyboardAvoidingView
+      {/* <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
+      > */}
+      <Text
+        style={{
+          fontSize: 40,
+          fontWeight: "bold",
+          color: "#7D4FF4",
+          marginBottom: 30,
+          marginTop: -1000,
+        }}
       >
-        <Input
-          containerStyle={{ marginBottom: 5 }}
-          placeholder="Ton message"
-          onChangeText={(msg) => setCurrentMessage(msg)}
-          value={currentMessage}
-        />
-        <Button
-          icon={<Icon name="envelope-o" size={20} color="#ffffff" />}
-          title="Send"
-          buttonStyle={{ backgroundColor: "#eb4d4b" }}
-          type="solid"
-          onPress={() => {
-            console.log("currentMessage", currentMessage);
-            socket.emit("sendMessage", {
-              message: currentMessage,
-              firstName: firstName,
-            });
-            setCurrentMessage("");
-          }}
-        />
-      </KeyboardAvoidingView>
-    </View>
+        Chat
+      </Text>
+      <Input
+        containerStyle={{ marginBottom: 25, width: "70%" }}
+        inputStyle={{ marginLeft: 10 }}
+        placeholder="Ton message"
+        onChangeText={(msg) => setCurrentMessage(msg)}
+        value={currentMessage}
+      />
+      <Button
+        icon={<Icon name="envelope-o" size={20} color="#ffffff" />}
+        title="Send"
+        buttonStyle={{ backgroundColor: "#eb4d4b" }}
+        type="solid"
+        onPress={() => MessageSubmit()}
+      />
+      {/* </KeyboardAvoidingView> */}
+    </ImageBackground>
   );
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+
 function mapStateToProps(state) {
-  console.log("#3 reception blabla state", state);
-  return { firstName: state.firstName };
+  //   console.log("#3 reception blabla state", state);
+  return {
+    firstName: state.firstName,
+    token: state.token,
+  };
 }
 
 export default connect(mapStateToProps, null)(ChatScreen);
