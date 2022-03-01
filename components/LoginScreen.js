@@ -4,7 +4,7 @@ import { Input } from "react-native-elements";
 
 import Button from "../utils/Button.js";
 
-function LoginScreen() {
+function LoginScreen(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userExists, setUserExists] = useState(false);
@@ -13,17 +13,16 @@ function LoginScreen() {
   const MapSubmit = async () => {
     console.log("#1");
 
-    const data = fetch("http://192.168.148.169:3000/login", {
+    const data = await fetch("https://digitribebackend.herokuapp.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `email=${email}&password=${password}`,
     });
     const body = await data.json();
 
-    console.log("body", body);
+    // console.log("body", body);
 
     if (body.result === true) {
-      props.addToken(body.token);
       setUserExists(true);
     } else {
       setErrorsLogin(body.error);
@@ -36,7 +35,15 @@ function LoginScreen() {
   }
 
   const tabErrorsLogin = listErrorsLogin.map((error, i) => {
-    return <Text>{error}</Text>;
+    return (
+      <Text
+        style={{
+          color: "red",
+        }}
+      >
+        {error}
+      </Text>
+    );
   });
 
   return (
@@ -55,13 +62,13 @@ function LoginScreen() {
       >
         Login
       </Text>
+      {tabErrorsLogin}
       <Input
         containerStyle={{ marginBottom: 25, width: "70%" }}
         inputStyle={{ marginLeft: 10 }}
         placeholder="Email"
         onChangeText={(val) => setEmail(val)}
       />
-      {tabErrorsLogin}
       <Input
         containerStyle={{ marginBottom: 25, width: "70%" }}
         inputStyle={{ marginLeft: 10 }}
