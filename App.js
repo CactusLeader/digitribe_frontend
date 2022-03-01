@@ -13,6 +13,7 @@ import AccountCreationScreen from "./components/AccountCreationScreen";
 import FocusScreen from "./components/FocusScreen";
 import ProfileCreationScreen from "./components/ProfileCreationScreen";
 import MapScreen from "./components/MapScreen";
+import CameraScreen from "./components/CameraScreen";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ export default function App() {
         <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Camera" component={CameraScreen} />
         <Stack.Screen
           name="AccountCreation"
           component={AccountCreationScreen}

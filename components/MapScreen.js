@@ -12,13 +12,16 @@ import {
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Camera } from "expo-camera";
-
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
+import { createStackNavigator } from '@react-navigation/stack';
+const Stack = createStackNavigator();
 
-function MapScreen() {
+
+
+function MapScreen(props) {
   const [currentLatitude, setCurrentLatitude] = useState(48.866667);
   const [currentLongitude, setCurrentLongitude] = useState(2.333333);
   const [addPOI, setAddPOI] = useState(false);
@@ -55,12 +58,12 @@ function MapScreen() {
     askPermissions();
   }, []);
 
-  onPressButton = () => {
+  const onPressButton = () => {
     setAddPOI(true);
     setVisible(true);
   };
 
-  onPressScreen = (evt) => {
+  const onPressScreen = (evt) => {
     console.log("evt.nativeEvent", evt.nativeEvent);
     const lat = evt.nativeEvent.coordinate.latitude;
     const long = evt.nativeEvent.coordinate.longitude;
@@ -90,13 +93,16 @@ function MapScreen() {
 
   const onPressAddPhoto = () => {
     (async () => {
-        const { status } = await Camera.requestPermissionsAsync();
-        console.log("status", status);
-        setHasPermission(status === "granted");
-      })();
+      const { status } = await Camera.requestPermissionsAsync();
+      console.log("status", status);
+      setHasPermission(status === "granted");
+      setVisible(false)
+    })();
   };
 
- 
+  if (hasPermission) {
+    props.navigation.navigate("Camera");
+  } 
 
   const tabListPOI = listPOI.map((poi, index) => {
     return (
@@ -117,6 +123,7 @@ function MapScreen() {
   });
 
   return (
+      
     <View
       style={{
         flex: 1,
@@ -217,9 +224,10 @@ function MapScreen() {
             title="Ajouter POI"
             onPress={() => onPressAddPoi()}
           />
-        </Overlay>
-      </View>
+        </Overlay>    
+      </View> 
     </View>
+    
   );
 }
 
