@@ -1,8 +1,9 @@
 import { LogBox } from "react-native";
 LogBox.ignoreAllLogs();
 
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { Provider } from "react-redux";
+import { createStore, combineReducers } from "redux";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -23,6 +24,10 @@ import token from "./reducers/token";
 
 const store = createStore(combineReducers({ firstName, token }));
 import CameraScreen from "./components/CameraScreen";
+
+import account from "./reducers/account";
+
+const store = createStore(combineReducers({ account }));
 
 const Stack = createStackNavigator();
 
