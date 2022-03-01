@@ -1,23 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
-import { Button, Overlay, Input } from "react-native-elements";
+import {
+  Button,
+  Overlay,
+  Input,
+  Icon,
+  Chip,
+  withTheme,
+  colors,
+} from "react-native-elements";
 import { Entypo } from "@expo/vector-icons";
-
+import { FontAwesome } from "@expo/vector-icons";
+import { Camera } from "expo-camera";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
+import { createStackNavigator } from "@react-navigation/stack";
+const Stack = createStackNavigator();
 
 function MapScreen(props) {
   const [currentLatitude, setCurrentLatitude] = useState(48.866667);
   const [currentLongitude, setCurrentLongitude] = useState(2.333333);
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [hasPermission, setHasPermission] = useState(false);
 
-  // console.log("currentLattitude", currentLatitude);
-  // console.log("currentLongitude", currentLongitude);
-  // console.log("addPOI", addPOI);
-  // console.log("listPOI", listPOI);
+//   console.log("currentLattitude", currentLatitude);
+//   console.log("currentLongitude", currentLongitude);
+//   console.log("addPOI", addPOI);
+//   console.log("listPOI", listPOI);
+//   console.log("title", title);
+//   console.log("description", description);
+//   console.log("hasPermission", hasPermission);
 
   useEffect(() => {
     async function askPermissions() {
@@ -37,8 +55,9 @@ function MapScreen(props) {
     askPermissions();
   }, []);
 
-  onPressButton = () => {
+  const onPressButton = () => {
     setAddPOI(true);
+    setVisible(true);
   };
 
   onPressScreen = (evt) => {
@@ -49,6 +68,7 @@ function MapScreen(props) {
     // console.log("long", long);
     if (addPOI) {
       setListPOI([...listPOI, { lat, long }]);
+      setAddPOI(false);
     }
   };
 
@@ -56,16 +76,50 @@ function MapScreen(props) {
     props.navigation.navigate("Chat");
   };
 
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
+
+  const onPressAddPoi = () => {
+    setVisible(!visible);
+  };
+
+  const InputTitleChange = (val) => {
+    setTitle(val);
+  };
+
+  const InputDescChange = (val) => {
+    setDescription(val);
+  };
+
+  const onPressAddPhoto = () => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      console.log("status", status);
+      setHasPermission(status === "granted");
+      setVisible(false);
+    })();
+  };
+
+  if (hasPermission) {
+    props.navigation.navigate("Camera");
+  }
+
   const tabListPOI = listPOI.map((poi, index) => {
     return (
-      <Marker
-        key={index}
-        coordinate={{
-          latitude: poi.lat,
-          longitude: poi.long,
-        }}
-        pinColor="#FFD440"
-      />
+      <View>
+        <Marker
+          key={index}
+          coordinate={{
+            latitude: poi.lat,
+            longitude: poi.long,
+          }}
+          pinColor="#FFD440"
+          title={title}
+          description={description}
+          //   photo=""
+        />
+      </View>
     );
   });
 
@@ -94,6 +148,7 @@ function MapScreen(props) {
         />
         {tabListPOI}
       </MapView>
+
       <View
         style={{
           position: "absolute",
@@ -117,12 +172,70 @@ function MapScreen(props) {
             height: 65,
           }}
           containerStyle={{
-            marginHorizontal: 30,
+            marginHorizontal: 15,
             marginVertical: 30,
           }}
           onPress={() => onPressButton()}
         />
-        <Button title="Chat" onPress={() => chatSubmit()} />
+        {/* <Button title="Chat" onPress={() => chatSubmit()} /> */}
+        <Overlay
+          isVisible={visible}
+          onBackdropPress={toggleOverlay}
+          overlayStyle={{ width: "70%" }}
+        >
+          <Input
+            placeholder="Title"
+            onChangeText={(val) => InputTitleChange(val)}
+          />
+          <Input
+            placeholder="Description"
+            onChangeText={(val) => InputDescChange(val)}
+          />
+          <View style={{ alignItems: "center" }}>
+            <Button
+              title="ajouter photo"
+              titleStyle={{
+                color: "black",
+                fontSize: 14,
+              }}
+              buttonStyle={{
+                color: "black",
+                borderRadius: 100,
+                borderColor: "black",
+              }}
+              icon={{
+                name: "photo-camera",
+                type: "materialicon",
+                size: 20,
+                color: "black",
+              }}
+              onPress={() => onPressAddPhoto()}
+              type="outline"
+              containerStyle={{
+                marginBottom: 20,
+                width: 150,
+                borderColor: "black",
+              }}
+            />
+          </View>
+          <Button
+            buttonStyle={{
+              color: "#8525FF",
+              backgroundColor: "#FFD440",
+            }}
+            icon={
+              <Icon
+                name="map-pin"
+                type="font-awesome"
+                color="white"
+                size={25}
+                iconStyle={{ marginRight: 10 }}
+              />
+            }
+            title="Ajouter POI"
+            onPress={() => onPressAddPoi()}
+          />
+        </Overlay>
       </View>
     </View>
   );

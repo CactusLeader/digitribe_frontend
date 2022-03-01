@@ -22,6 +22,7 @@ import firstName from "./reducers/firstName";
 import token from "./reducers/token";
 
 const store = createStore(combineReducers({ firstName, token }));
+import CameraScreen from "./components/CameraScreen";
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,7 @@ export default function App() {
           />
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Map" component={MapScreen} />
+          <Stack.Screen name="Camera" component={CameraScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
