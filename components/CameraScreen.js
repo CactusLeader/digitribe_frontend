@@ -27,7 +27,6 @@ function CameraScreen(props) {
       });
       var response = await rawResponse.json();
       console.log('response', response);
-      
     }
   };
 

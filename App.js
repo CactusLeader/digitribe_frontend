@@ -21,7 +21,6 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Camera" component={CameraScreen} />
@@ -34,7 +33,7 @@ export default function App() {
           name="ProfileCreation"
           component={ProfileCreationScreen}
         />
-        {/* <Stack.Screen name="Map" component={MapScreen} /> */}
+        <Stack.Screen name="Map" component={MapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
