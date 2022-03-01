@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
-import { Button, Overlay, Input, Icon } from "react-native-elements";
+import {
+  Button,
+  Overlay,
+  Input,
+  Icon,
+  Chip,
+  withTheme,
+  colors,
+} from "react-native-elements";
 import { Entypo } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import { Camera } from "expo-camera";
 
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
@@ -17,13 +26,16 @@ function MapScreen() {
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [count, setCount] = useState(0);
+  const [hasPermission, setHasPermission] = useState(false);
 
   console.log("currentLattitude", currentLatitude);
   console.log("currentLongitude", currentLongitude);
   console.log("addPOI", addPOI);
   console.log("listPOI", listPOI);
   console.log("title", title);
-  console.log("tdescription", description);
+  console.log("description", description);
+  console.log("hasPermission", hasPermission);
 
   useEffect(() => {
     async function askPermissions() {
@@ -56,7 +68,7 @@ function MapScreen() {
     console.log("long", long);
     if (addPOI) {
       setListPOI([...listPOI, { lat, long }]);
-      setAddPOI(false)
+      setAddPOI(false);
     }
   };
 
@@ -72,12 +84,19 @@ function MapScreen() {
     setTitle(val);
   };
 
- 
-
-
   const InputDescChange = (val) => {
     setDescription(val);
   };
+
+  const onPressAddPhoto = () => {
+    (async () => {
+        const { status } = await Camera.requestPermissionsAsync();
+        console.log("status", status);
+        setHasPermission(status === "granted");
+      })();
+  };
+
+ 
 
   const tabListPOI = listPOI.map((poi, index) => {
     return (
@@ -164,9 +183,26 @@ function MapScreen() {
             placeholder="Description"
             onChangeText={(val) => InputDescChange(val)}
           />
-          <Input placeholder="Photo" />
+          <View style={{ alignItems: "center" }}>
+            <Chip
+              title="ajouter photo"
+              icon={{
+                name: "photo-camera",
+                type: "materialicon",
+                size: 20,
+                color: "black",
+              }}
+              onPress={() => onPressAddPhoto()}
+              type="outline"
+              containerStyle={{
+                marginBottom: 20,
+                width: 150,
+              }}
+            />
+          </View>
           <Button
             buttonStyle={{
+              color: "#8525FF",
               backgroundColor: "#FFD440",
             }}
             icon={
