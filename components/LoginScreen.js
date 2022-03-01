@@ -4,27 +4,30 @@ import { Input } from "react-native-elements";
 
 import Button from "../utils/Button.js";
 
-function LoginScreen() {
+import { connect } from "react-redux";
+
+function LoginScreen(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userExists, setUserExists] = useState(false);
   const [listErrorsLogin, setErrorsLogin] = useState([]);
+  const [firstName, setFirstName] = useState("");
 
   const MapSubmit = async () => {
-    console.log("#1");
-
-    const data = fetch("http://192.168.148.169:3000/login", {
+    const data = await fetch("https://digitribebackend.herokuapp.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `email=${email}&password=${password}`,
     });
+
     const body = await data.json();
 
-    console.log("body", body);
+    // console.log("body", body);
 
     if (body.result === true) {
-      props.addToken(body.token);
       setUserExists(true);
+      setFirstName(body.user.firstName);
+      props.addToken(body.token);
     } else {
       setErrorsLogin(body.error);
     }
@@ -33,10 +36,19 @@ function LoginScreen() {
   if (userExists) {
     console.log("Page Map");
     props.navigation.navigate("Map");
+    props.onSubmitFirstName(firstName);
   }
 
   const tabErrorsLogin = listErrorsLogin.map((error, i) => {
-    return <Text>{error}</Text>;
+    return (
+      <Text
+        style={{
+          color: "red",
+        }}
+      >
+        {error}
+      </Text>
+    );
   });
 
   return (
@@ -55,13 +67,13 @@ function LoginScreen() {
       >
         Login
       </Text>
+      {tabErrorsLogin}
       <Input
         containerStyle={{ marginBottom: 25, width: "70%" }}
         inputStyle={{ marginLeft: 10 }}
         placeholder="Email"
         onChangeText={(val) => setEmail(val)}
       />
-      {tabErrorsLogin}
       <Input
         containerStyle={{ marginBottom: 25, width: "70%" }}
         inputStyle={{ marginLeft: 10 }}
@@ -81,4 +93,19 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+function mapDispatchToProps(dispatch) {
+  return {
+    onSubmitFirstName: function (firstName) {
+      // console.log("usduibvisdbibsdbi #1 firstName", firstName);
+      dispatch({
+        type: "savefirstName",
+        firstName: firstName,
+      });
+    },
+    addToken: function (token) {
+      dispatch({ type: "addToken", token: token });
+    },
+  };
+}
+
+export default connect(null, mapDispatchToProps)(LoginScreen);
