@@ -27,7 +27,6 @@ function MapScreen(props) {
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [count, setCount] = useState(0);
   const [hasPermission, setHasPermission] = useState(false);
 
   console.log("currentLattitude", currentLatitude);
