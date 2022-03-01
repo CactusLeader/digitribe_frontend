@@ -84,9 +84,9 @@ function CameraScreen(props) {
             }}
             onPress={() => {
               setFlash(
-                flash === Camera.Constants.FlashMode.torch
-                  ? Camera.Constants.FlashMode.off
-                  : Camera.Constants.FlashMode.torch
+                flash === Camera.Constants.FlashMode.off
+                  ? Camera.Constants.FlashMode.torch
+                  : Camera.Constants.FlashMode.off
               );
             }}
           />

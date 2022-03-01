@@ -1,8 +1,9 @@
 import React from "react";
 import { Button } from "react-native-elements";
-import { clickProps } from "react-native-web/dist/cjs/modules/forwardedProps";
 
-<DigiButtonIcon
+function DigiButtonIcon(props) {
+  return (
+  <Button
   buttonStyle={{
     backgroundColor: "#FFD440",
   }}
@@ -17,4 +18,7 @@ import { clickProps } from "react-native-web/dist/cjs/modules/forwardedProps";
   }
   title={props.title}
   onPress={() => onPressAddPoi()}
-/>;
+/>)
+};
+
+export default DigiButtonIcon;

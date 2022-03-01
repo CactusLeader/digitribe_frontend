@@ -16,10 +16,8 @@ import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
 const Stack = createStackNavigator();
-
-
 
 function MapScreen(props) {
   const [currentLatitude, setCurrentLatitude] = useState(48.866667);
@@ -96,13 +94,13 @@ function MapScreen(props) {
       const { status } = await Camera.requestPermissionsAsync();
       console.log("status", status);
       setHasPermission(status === "granted");
-      setVisible(false)
+      setVisible(false);
     })();
   };
 
   if (hasPermission) {
     props.navigation.navigate("Camera");
-  } 
+  }
 
   const tabListPOI = listPOI.map((poi, index) => {
     return (
@@ -123,7 +121,6 @@ function MapScreen(props) {
   });
 
   return (
-      
     <View
       style={{
         flex: 1,
@@ -191,8 +188,17 @@ function MapScreen(props) {
             onChangeText={(val) => InputDescChange(val)}
           />
           <View style={{ alignItems: "center" }}>
-            <Chip
+            <Button
               title="ajouter photo"
+              titleStyle={{
+                color: "black",
+                fontSize: 14,
+              }}
+              buttonStyle={{
+                color: "black",
+                borderRadius: 100,
+                borderColor: "black",
+              }}
               icon={{
                 name: "photo-camera",
                 type: "materialicon",
@@ -204,6 +210,7 @@ function MapScreen(props) {
               containerStyle={{
                 marginBottom: 20,
                 width: 150,
+                borderColor: "black",
               }}
             />
           </View>
@@ -224,10 +231,9 @@ function MapScreen(props) {
             title="Ajouter POI"
             onPress={() => onPressAddPoi()}
           />
-        </Overlay>    
-      </View> 
+        </Overlay>
+      </View>
     </View>
-    
   );
 }
 
