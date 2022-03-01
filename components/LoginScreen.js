@@ -4,11 +4,14 @@ import { Input } from "react-native-elements";
 
 import Button from "../utils/Button.js";
 
+import { connect } from "react-redux";
+
 function LoginScreen(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userExists, setUserExists] = useState(false);
   const [listErrorsLogin, setErrorsLogin] = useState([]);
+  const [firstName, setFirstName] = useState("");
 
   const MapSubmit = async () => {
     console.log("#1");
@@ -24,6 +27,7 @@ function LoginScreen(props) {
 
     if (body.result === true) {
       setUserExists(true);
+      setFirstName(body.user.firstName);
     } else {
       setErrorsLogin(body.error);
     }
@@ -32,6 +36,7 @@ function LoginScreen(props) {
   if (userExists) {
     console.log("Page Map");
     props.navigation.navigate("Map");
+    props.onSubmitFirstName(firstName);
   }
 
   const tabErrorsLogin = listErrorsLogin.map((error, i) => {
@@ -88,4 +93,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+function mapDispatchToProps(dispatch) {
+  return {
+    onSubmitFirstName: function (firstName) {
+      console.log("usduibvisdbibsdbi #1 firstName", firstName);
+      dispatch({ type: "savefirstName", firstName: firstName });
+    },
+  };
+}
+
+export default connect(null, mapDispatchToProps)(LoginScreen);

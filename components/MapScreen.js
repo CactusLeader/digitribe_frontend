@@ -8,26 +8,26 @@ import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 
-function MapScreen() {
+function MapScreen(props) {
   const [currentLatitude, setCurrentLatitude] = useState(48.866667);
   const [currentLongitude, setCurrentLongitude] = useState(2.333333);
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
 
-  console.log("currentLattitude", currentLatitude);
-  console.log("currentLongitude", currentLongitude);
-  console.log("addPOI", addPOI);
-  console.log("listPOI", listPOI);
+  // console.log("currentLattitude", currentLatitude);
+  // console.log("currentLongitude", currentLongitude);
+  // console.log("addPOI", addPOI);
+  // console.log("listPOI", listPOI);
 
   useEffect(() => {
     async function askPermissions() {
       var permissions = await Permissions.askAsync(Permissions.LOCATION);
-      console.log("permissions", permissions);
+      // console.log("permissions", permissions);
       if (permissions.status === "granted") {
         await Location.watchPositionAsync(
           { distanceInterval: 10 },
           (location) => {
-            console.log("location", location);
+            // console.log("location", location);
             setCurrentLatitude(location.coords.latitude);
             setCurrentLongitude(location.coords.longitude);
           }
@@ -42,14 +42,18 @@ function MapScreen() {
   };
 
   onPressScreen = (evt) => {
-    console.log("evt.nativeEvent", evt.nativeEvent);
+    // console.log("evt.nativeEvent", evt.nativeEvent);
     const lat = evt.nativeEvent.coordinate.latitude;
     const long = evt.nativeEvent.coordinate.longitude;
-    console.log("lat", lat);
-    console.log("long", long);
+    // console.log("lat", lat);
+    // console.log("long", long);
     if (addPOI) {
       setListPOI([...listPOI, { lat, long }]);
     }
+  };
+
+  const chatSubmit = () => {
+    props.navigation.navigate("Chat");
   };
 
   const tabListPOI = listPOI.map((poi, index) => {
@@ -118,6 +122,7 @@ function MapScreen() {
           }}
           onPress={() => onPressButton()}
         />
+        <Button title="Chat" onPress={() => chatSubmit()} />
       </View>
     </View>
   );
