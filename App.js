@@ -15,19 +15,13 @@ import FocusScreen from "./components/FocusScreen";
 import ProfileCreationScreen from "./components/ProfileCreationScreen";
 import MapScreen from "./components/MapScreen";
 import ChatScreen from "./components/ChatScreen";
-
-import { createStore, combineReducers } from "redux";
-import { Provider } from "react-redux";
+import CameraScreen from "./components/CameraScreen";
 
 import firstName from "./reducers/firstName";
 import token from "./reducers/token";
-
-const store = createStore(combineReducers({ firstName, token }));
-import CameraScreen from "./components/CameraScreen";
-
 import account from "./reducers/account";
 
-const store = createStore(combineReducers({ account }));
+const store = createStore(combineReducers({ firstName, token, account }));
 
 const Stack = createStackNavigator();
 

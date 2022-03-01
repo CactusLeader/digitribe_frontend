@@ -47,11 +47,6 @@ function FocusScreen(props) {
       check = false;
     }
 
-    const focusSubmit = () => {
-      props.navigation.navigate("ProfileCreation");
-      onPersonnalInfoClick(selectedInterests);
-    };
-
     return (
       <CheckBox
         key={index}
@@ -62,6 +57,11 @@ function FocusScreen(props) {
       />
     );
   });
+
+  const focusSubmit = () => {
+    props.navigation.navigate("ProfileCreation");
+    props.onPersonnalInfoClick(selectedInterests);
+  };
 
   return (
     <ImageBackground
