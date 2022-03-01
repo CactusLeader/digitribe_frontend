@@ -1,9 +1,12 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
+import { connect } from "react-redux";
 import { CheckBox } from "react-native-elements";
 import Button from "../utils/Button.js";
 
-export default function FocusScreen(props) {
+function FocusScreen(props) {
+  const [interestsList, setInterestsList] = useState([]);
+  const [resInterest, setResInterest] = useState(false);
   const [check1, setCheck1] = useState(false);
   const [check2, setCheck2] = useState(false);
   const [check3, setCheck3] = useState(false);
@@ -12,87 +15,110 @@ export default function FocusScreen(props) {
   const [check6, setCheck6] = useState(false);
   const [check7, setCheck7] = useState(false);
   const [check8, setCheck8] = useState(false);
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  console.log("selectedInterests", selectedInterests);
 
-  const focusSubmit = () => {
-    props.navigation.navigate("ProfileCreation");
+  useEffect(() => {
+    async function loadData() {
+      var rawResponse = await fetch("http://172.20.10.3:3000/signup");
+      var responseInterest = await rawResponse.json();
+      setInterestsList(responseInterest.interests);
+      // console.log(responseInterest);
+      // console.log("interestsList", interestsList);
+    }
+    loadData();
+  }, []);
+
+  const handleCheckInterests = (val) => {
+    console.log("val", val);
+    if (selectedInterests.includes(val)) {
+      setSelectedInterests(selectedInterests.filter((el) => el !== val));
+    } else {
+      setSelectedInterests([...selectedInterests, val]);
+    }
   };
 
+  const interests = interestsList.map((interest, index) => {
+    // console.log("interest ok");
+    let check = false;
+    if (selectedInterests.includes(interest._id)) {
+      check = true;
+    } else {
+      check = false;
+    }
+
+    const focusSubmit = () => {
+      props.navigation.navigate("ProfileCreation");
+      onPersonnalInfoClick(selectedInterests);
+    };
+
+    return (
+      <CheckBox
+        key={index}
+        title={interest.name}
+        checked={check}
+        checkedColor="#FFD440"
+        onPress={() => handleCheckInterests(interest._id)}
+      />
+    );
+  });
+
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require("../assets/home.jpg")}
+      style={styles.container}
+    >
       <View style={styles.header}>
-        <Text style={styles.innerHeader}>
-          Bienvenue "utilisateur" ! Quels sont vos centres d'intérêts ? ;)
+        <Text style={styles.innerHeader}>Bienvenue "utilisateur"!</Text>
+        <Text style={styles.innerSubHeader}>
+          Quels sont vos centres d'intérêts ? ;)
         </Text>
       </View>
-      <CheckBox
-        title="Sport"
-        checked={check1}
-        checkedColor="#FFD440"
-        onPress={() => setCheck1(!check1)}
-      />
-      <CheckBox
-        title="Cinema"
-        checked={check2}
-        checkedColor="#FFD440"
-        onPress={() => setCheck2(!check2)}
-      />
-      <CheckBox
-        title="Musique"
-        checked={check3}
-        checkedColor="#FFD440"
-        onPress={() => setCheck3(!check3)}
-      />
-      <CheckBox
-        title="Lecture"
-        checked={check4}
-        checkedColor="#FFD440"
-        onPress={() => setCheck4(!check4)}
-      />
-      <CheckBox
-        title="Théatre"
-        checked={check5}
-        checkedColor="#FFD440"
-        onPress={() => setCheck5(!check5)}
-      />
-      <CheckBox
-        title="Cuisine"
-        checked={check6}
-        checkedColor="#FFD440"
-        onPress={() => setCheck6(!check6)}
-      />
-      <CheckBox
-        title="Voyages"
-        checked={check7}
-        checkedColor="#FFD440"
-        onPress={() => setCheck7(!check7)}
-      />
-      <CheckBox
-        title="Programmation"
-        checked={check8}
-        checkedColor="#FFD440"
-        onPress={() => setCheck8(!check8)}
-      />
-      <Button title="Suivant" onPress={() => focusSubmit()} />
-    </View>
+      {interests}
+      <View style={styles.button}>
+        <Button
+          buttonStyle={{ justifyContent: "center" }}
+          title="Suivant"
+          onPress={() => focusSubmit()}
+        />
+      </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
+    // alignItems: "center",
   },
   header: {
-    marginTop: "12%",
+    marginTop: "15%",
   },
   innerHeader: {
     color: "#8525FF",
     fontSize: 28,
     fontWeight: "700",
-    marginBottom: 48,
+    marginBottom: 54,
+    textAlign: "center",
   },
-  checkbox: {
-    alignItems: "flex-start",
+  innerSubHeader: {
+    color: "#8525FF",
+    fontSize: 20,
+    fontWeight: "700",
+    marginBottom: 10,
+    textAlign: "center",
+  },
+  button: {
+    alignItems: "center",
   },
 });
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onPersonnalInfoClick: function (personnalInfo) {
+      dispatch({ type: "personnalInfo", personnalInfo });
+    },
+  };
+}
+
+export default connect(null, mapDispatchToProps)(FocusScreen);

@@ -8,13 +8,15 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  ImageBackground,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native-elements";
+import { connect } from "react-redux";
 import { Picker } from "@react-native-picker/picker";
 import ButtonDrop from "../utils/Button.js";
 
-export default function ImagePickerExample(props) {
+function ProfileCreationScreen(props) {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState();
@@ -45,7 +47,10 @@ export default function ImagePickerExample(props) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
+      <ImageBackground
+        source={require("../assets/home.jpg")}
+        style={styles.container}
+      >
         <View style={styles.header}>
           <Text style={styles.innerHeader}>Profil</Text>
         </View>
@@ -90,7 +95,7 @@ export default function ImagePickerExample(props) {
           </Picker>
         </View>
         <ButtonDrop title="Suivant" onPress={() => accountSubmit()} />
-      </View>
+      </ImageBackground>
     </TouchableWithoutFeedback>
   );
 }
@@ -98,11 +103,11 @@ export default function ImagePickerExample(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    // backgroundColor: "#fff",
     alignItems: "center",
   },
   header: {
-    marginTop: "12%",
+    marginTop: "15%",
     // alignItems: "center",
   },
   avatar: {
@@ -110,13 +115,13 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     alignItems: "center",
     marginLeft: "10%",
-    marginBottom: "8%",
+    marginBottom: "5%",
   },
   innerHeader: {
     color: "#8525FF",
     fontSize: 28,
     fontWeight: "700",
-    marginBottom: 48,
+    marginBottom: 65,
     // alignItems: "center",
   },
   button: {
@@ -126,7 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#8525FF",
   },
   input: {
-    height: "25%",
+    height: "20%",
     margin: 12,
     borderWidth: 1,
     padding: 10,
@@ -143,3 +148,13 @@ const styles = StyleSheet.create({
     // alignItems: "center",
   },
 });
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onPersonnalInfoClick: function () {
+      dispatch({ type: "personnalInfo" });
+    },
+  };
+}
+
+export default connect(null, mapDispatchToProps)(ProfileCreationScreen);
