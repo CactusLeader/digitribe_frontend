@@ -76,6 +76,10 @@ function MapScreen(props) {
     props.navigation.navigate("Chat");
   };
 
+  const contactsSubmit = () => {
+    props.navigation.navigate("Contacts");
+  };
+
   const toggleOverlay = () => {
     setVisible(!visible);
   };
@@ -177,7 +181,8 @@ function MapScreen(props) {
           }}
           onPress={() => onPressButton()}
         />
-        <Button title="Chat" onPress={() => chatSubmit()} />
+        {/* <Button title="Chat" onPress={() => chatSubmit()} /> */}
+        {/* <Button title="Contacts" onPress={() => contactsSubmit()} /> */}
         <Overlay
           isVisible={visible}
           onBackdropPress={toggleOverlay}

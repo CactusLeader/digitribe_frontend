@@ -16,6 +16,7 @@ import ProfileCreationScreen from "./components/ProfileCreationScreen";
 import MapScreen from "./components/MapScreen";
 import ChatScreen from "./components/ChatScreen";
 import CameraScreen from "./components/CameraScreen";
+import ContactsScreen from "./components/ContactsScreen";
 
 import firstName from "./reducers/firstName";
 import token from "./reducers/token";
@@ -44,6 +45,7 @@ export default function App() {
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
+          <Stack.Screen name="Contacts" component={ContactsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
