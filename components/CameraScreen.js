@@ -15,7 +15,7 @@ function CameraScreen(props) {
         base64: true,
         exif: true,
       });
-      props.navigation.navigate("Map")
+      props.navigation.navigate("Map");
       let data = new FormData();
       data.append("photo", {
         uri: photo.uri,
@@ -31,7 +31,6 @@ function CameraScreen(props) {
       console.log("response", response);
       console.log("response.url", response.url);
       props.onAddPhotoClick(response.url);
-     
     }
   };
 

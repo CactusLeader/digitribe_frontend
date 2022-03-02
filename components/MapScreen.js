@@ -50,7 +50,6 @@ function MapScreen(props) {
   }, []);
 
   const onPressButton = () => {
-    setAddPOI(true);
     setVisible(true);
   };
 
@@ -66,9 +65,9 @@ function MapScreen(props) {
         ...listPOI,
         { lat, long, title, description, photo: props.photo },
       ]),
-        setAddPOI(false);
+        props.onAddPoiOnMap(lat, long);
+      setAddPOI(false);
     }
-    props.onAddPoiOnMap(lat, long, title, description);
   };
 
   const chatSubmit = () => {
@@ -85,6 +84,9 @@ function MapScreen(props) {
 
   const onPressAddPoi = () => {
     setVisible(!visible);
+    const infoPOI = { title, description };
+    props.onAddInfoPOI(infoPOI);
+    setAddPOI(true);
   };
 
   const InputTitleChange = (val) => {
@@ -250,20 +252,20 @@ function MapScreen(props) {
 function mapDispatchToProps(dispatch) {
   console.log("#1mapDispatchToProps");
   return {
-    onAddPoiOnMap: function (lat, long, title, desc) {
+    onAddPoiOnMap: function (lat, long) {
       console.log("#1mapDispatchToProps#onClickAddPoi");
-      dispatch(
-        {
-          type: "addInfo",
-          title: title,
-          desc: desc,
-        },
-        {
-          type: "addCoord",
-          lat: lat,
-          long: long,
-        }
-      );
+      dispatch({
+        type: "addCoord",
+        lat: lat,
+        lon: long,
+      });
+    },
+    onAddInfoPOI: function (val) {
+      dispatch({
+        type: "addInfo",
+        title: val.title,
+        desc: val.description,
+      });
     },
   };
 }
