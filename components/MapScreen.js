@@ -29,13 +29,13 @@ function MapScreen(props) {
   const [description, setDescription] = useState("");
   const [hasPermission, setHasPermission] = useState(false);
 
-//   console.log("currentLattitude", currentLatitude);
-//   console.log("currentLongitude", currentLongitude);
-//   console.log("addPOI", addPOI);
-//   console.log("listPOI", listPOI);
-//   console.log("title", title);
-//   console.log("description", description);
-//   console.log("hasPermission", hasPermission);
+  //   console.log("currentLattitude", currentLatitude);
+  //   console.log("currentLongitude", currentLongitude);
+  //   console.log("addPOI", addPOI);
+  //   console.log("listPOI", listPOI);
+  //   console.log("title", title);
+  //   console.log("description", description);
+  //   console.log("hasPermission", hasPermission);
 
   useEffect(() => {
     async function askPermissions() {
@@ -177,7 +177,7 @@ function MapScreen(props) {
           }}
           onPress={() => onPressButton()}
         />
-        {/* <Button title="Chat" onPress={() => chatSubmit()} /> */}
+        <Button title="Chat" onPress={() => chatSubmit()} />
         <Overlay
           isVisible={visible}
           onBackdropPress={toggleOverlay}

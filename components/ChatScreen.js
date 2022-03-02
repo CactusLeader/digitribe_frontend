@@ -4,7 +4,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   StyleSheet,
-  ImageBackground,
+  Image,
   Text,
 } from "react-native";
 import { Button, ListItem, Input } from "react-native-elements";
@@ -20,14 +20,17 @@ const socket = socketIOClient("https://digitribebackend.herokuapp.com/");
 function ChatScreen(props) {
   const [currentMessage, setCurrentMessage] = useState();
   const [listMessage, setListMessage] = useState([]);
+  const [sendByUser, setSendByUser] = useState(false);
 
   useEffect(() => {
+    setSendByUser(false);
     socket.on("sendMessageToAll", (newMessageData) => {
       setListMessage([...listMessage, newMessageData]);
     });
   }, [listMessage]);
 
   const MessageSubmit = async () => {
+    setSendByUser(true);
     socket.emit("sendMessage", {
       message: currentMessage,
       firstName: firstName,
@@ -57,58 +60,135 @@ function ChatScreen(props) {
     msg = msg.replace(/:p/g, "\uD83D\uDE1B");
 
     msg = msg.replace(/[a-z]*fuck[a-z]*/gi, "\u2022\u2022\u2022");
-
-    return (
-      <ListItem key={i}>
-        <ListItem.Content>
-          <ListItem.Title>{msg}</ListItem.Title>
-          <ListItem.Subtitle>{messageData.firstName}</ListItem.Subtitle>
-        </ListItem.Content>
-      </ListItem>
-    );
+    //   <View
+    //     style={{
+    //       flex: 1,
+    //       alignItems: "flex-end",
+    //       width: "70%",
+    //       backgroundColor: "red",
+    //     }}
+    //   >
+    //     <Text>{msg}</Text>
+    //   </View>
+    // );
+    if (sendByUser === true) {
+      return (
+        <View
+          key={i}
+          style={{
+            marginHorizontal: 8,
+            marginVertical: 8,
+            borderRadius: 8,
+            justifyContent: "flex-end",
+            // borderColor: "black",
+            // borderWidth: 1,
+            alignSelf: "flex-end",
+            width: "auto",
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            backgroundColor: "#7D4FF4",
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
+          <Text style={{ color: "white", alignSelf: "flex-end" }}>
+            {messageData.firstName}
+          </Text>
+        </View>
+      );
+    } else {
+      return (
+        <View
+          key={i}
+          style={{
+            marginHorizontal: 8,
+            marginVertical: 8,
+            borderRadius: 8,
+            justifyContent: "flex-end",
+            // borderColor: "black",
+            // borderWidth: 1,
+            alignSelf: "flex-end",
+            width: "auto",
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+            backgroundColor: "#FFD440",
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
+          <Text style={{ color: "white", alignSelf: "flex-end" }}>
+            {messageData.firstName}
+          </Text>
+        </View>
+      );
+    }
   });
 
   const firstName = props.firstName;
 
   return (
-    <ImageBackground
-      source={require("../assets/home.jpg")}
-      style={styles.container}
-    >
-      <ScrollView style={{ flex: 1, marginTop: 50 }}>
-        {listMessageItem}
-      </ScrollView>
-
-      {/* <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      > */}
-      <Text
+    <View style={{ flex: 1 }}>
+      <View
         style={{
-          fontSize: 40,
-          fontWeight: "bold",
-          color: "#7D4FF4",
-          marginBottom: 30,
-          marginTop: -1000,
+          flexDirection: "row",
+          backgroundColor: "#E5E5E5",
+          justifyContent: "space-between",
+          height: 100,
+          paddingTop: 50,
+          paddingLeft: 10,
+          // padding: 20
         }}
       >
-        Chat
-      </Text>
-      <Input
-        containerStyle={{ marginBottom: 25, width: "70%" }}
-        inputStyle={{ marginLeft: 10 }}
-        placeholder="Ton message"
-        onChangeText={(msg) => setCurrentMessage(msg)}
-        value={currentMessage}
-      />
-      <Button
-        icon={<Icon name="envelope-o" size={20} color="#ffffff" />}
-        title="Send"
-        buttonStyle={{ backgroundColor: "#eb4d4b" }}
-        type="solid"
-        onPress={() => MessageSubmit()}
-      />
-      {/* </KeyboardAvoidingView> */}
-    </ImageBackground>
+        <Button
+          icon={<Icon name="arrow-left" size={20} color="black" />}
+          buttonStyle={{
+            backgroundColor: "#E5E5E5",
+            borderRadius: 100,
+            width: 35,
+            height: 35,
+          }}
+          type="solid"
+          onPress={() => props.navigation.navigate("Map")}
+        />
+        <Text style={{ fontSize: 25 }}>Monsieur Test</Text>
+        <Image
+          source={require("../assets/profile_avatar.png")}
+          style={{ width: 35, height: 35, borderRadius: 50, marginRight: 10 }}
+        />
+      </View>
+
+      <ScrollView style={{ flex: 1 }}>{listMessageItem}</ScrollView>
+
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            backgroundColor: "#E5E5E5",
+            borderRadius: 20,
+            justifyContent: "space-evenly",
+          }}
+        >
+          <Input
+            containerStyle={{ width: "85%", marginBottom: -16 }}
+            inputStyle={{ marginLeft: 10 }}
+            placeholder="Ton message"
+            onChangeText={(msg) => setCurrentMessage(msg)}
+            value={currentMessage}
+          />
+          <Button
+            icon={<Icon name="envelope-o" size={20} color="#ffffff" />}
+            buttonStyle={{
+              backgroundColor: "#7D4FF4",
+              borderRadius: 100,
+              width: 50,
+              height: 50,
+            }}
+            type="solid"
+            onPress={() => MessageSubmit()}
+          />
+        </View>
+      </KeyboardAvoidingView>
+    </View>
   );
 }
 

@@ -12,28 +12,7 @@ function DigiButtonRadius(props) {
       }}
       buttonStyle={{
         backgroundColor: props.backgroundColor,
-         <Button
-      icon={{
-        name: props.name,
-        type: props.type,
-        size: 35,
-        color: props.color,
-      }}
-      buttonStyle={{
-        backgroundColor: props.backgroundColor,
         borderRadius: 100,
-        borderColor: props.borderColor,
-        borderWidth: 2,
-        width: 65,
-        height: 65,
-      }}
-      containerStyle={{
-        marginVertical: 10,
-      }}
-      onPress={() => {}}
-    />
-  );
-}
         borderColor: props.borderColor,
         borderWidth: 2,
         width: 65,
