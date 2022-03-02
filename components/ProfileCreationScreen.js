@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Image,
   View,
-  Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableWithoutFeedback,
   Keyboard,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { Button } from "react-native-elements";
@@ -19,18 +19,21 @@ import ButtonDrop from "../utils/Button.js";
 function ProfileCreationScreen(props) {
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [selectedLanguage, setSelectedLanguage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const accountInfos = props.account;
+  // console.log("acountInfos", accountInfos);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);
@@ -41,8 +44,54 @@ function ProfileCreationScreen(props) {
     setDescription(val);
   };
 
-  const accountSubmit = () => {
-    props.navigation.navigate("Map");
+  const accountSubmit = async () => {
+    setLoading(true);
+    const data = new FormData();
+    data.append("avatar", {
+      uri: image,
+      type: "image/jpeg",
+      name: "user_avatar.jpg",
+    });
+    const rawResponse = await fetch(
+      "https://digitribebackend.herokuapp.com/signup/avatar",
+      {
+        method: "post",
+        body: data,
+      }
+    );
+    const response = await rawResponse.json();
+    console.log("response", response);
+
+    if (response.result === true) {
+      const personnalInfo = [];
+      personnalInfo.push(`lastname=${accountInfos.lastname}`);
+      personnalInfo.push(`firstname=${accountInfos.firstname}`);
+      personnalInfo.push(`email=${accountInfos.email}`);
+      personnalInfo.push(`password=${accountInfos.password}`);
+      personnalInfo.push(`birthdate=${accountInfos.birthdate}`);
+      personnalInfo.push(`photo=${response.url}`);
+      personnalInfo.push(`description=${description}`);
+      personnalInfo.push(`language=${selectedLanguage}`);
+      personnalInfo.push(`interestIds=${accountInfos.interestIds}`);
+      const pInfo = personnalInfo.join("&");
+      // console.log("personnalInfo", pInfo);
+      const data = await fetch(
+        "https://digitribebackend.herokuapp.com/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: pInfo,
+        }
+      );
+      const body = await data.json();
+      if (body.result === true) {
+        setLoading(false);
+        props.navigation.navigate("Map");
+      } else {
+        setLoading(false);
+        alert(body.error);
+      }
+    }
   };
 
   return (
@@ -51,50 +100,61 @@ function ProfileCreationScreen(props) {
         source={require("../assets/home.jpg")}
         style={styles.container}
       >
-        <View style={styles.header}>
-          <Text style={styles.innerHeader}>Profil</Text>
-        </View>
-        <View style={styles.avatar}>
-          {!image ? (
-            <Image
-              source={require("../assets/profile_avatar.png")}
-              style={{ width: 100, height: 100 }}
+        {loading ? (
+          <View style={styles.loading}>
+            <ActivityIndicator size="large" color="#8525FF" />
+            <Text>Votre profil est en cours de création</Text>
+          </View>
+        ) : (
+          <View style={styles.container}>
+            <View style={styles.header}>
+              <Text style={styles.innerHeader}>Profil</Text>
+            </View>
+            <View style={styles.avatar}>
+              {!image ? (
+                <Image
+                  source={require("../assets/profile_avatar.png")}
+                  style={{ width: 100, height: 100 }}
+                />
+              ) : (
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: 100, height: 100 }}
+                />
+              )}
+              <Button
+                title="+ Add Picture"
+                buttonStyle={styles.button}
+                onPress={pickImage}
+              />
+            </View>
+            <TextInput
+              multiline
+              value={description}
+              onChangeText={(val) => handleDescription(val)}
+              placeholder="Description"
+              style={styles.input}
+              maxLength={600}
             />
-          ) : (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 100, height: 100 }}
-            />
-          )}
-          <Button
-            title="+ Add Picture"
-            buttonStyle={styles.button}
-            onPress={pickImage}
-          />
-        </View>
-        <TextInput
-          multiline
-          value={description}
-          onChangeText={(val) => handleDescription(val)}
-          placeholder="Description"
-          style={styles.input}
-          maxLength={600}
-        />
-        <View style={styles.picker}>
-          <Picker
-            selectedValue={selectedLanguage}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedLanguage(itemValue)
-            }
-            mode="dropdown"
-            //   style={styles.picker}
-          >
-            <Picker.Item label="Please select your language" value="Unknown" />
-            <Picker.Item label="Français" value="Français" />
-            <Picker.Item label="English" value="English" />
-          </Picker>
-        </View>
-        <ButtonDrop title="Suivant" onPress={() => accountSubmit()} />
+            <View style={styles.picker}>
+              <Picker
+                selectedValue={selectedLanguage}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedLanguage(itemValue)
+                }
+                mode="dropdown"
+              >
+                <Picker.Item
+                  label="Please select your language"
+                  value="Unknown"
+                />
+                <Picker.Item label="Français" value="Français" />
+                <Picker.Item label="English" value="English" />
+              </Picker>
+              <ButtonDrop title="Suivant" onPress={() => accountSubmit()} />
+            </View>
+          </View>
+        )}
       </ImageBackground>
     </TouchableWithoutFeedback>
   );
@@ -103,31 +163,27 @@ function ProfileCreationScreen(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // backgroundColor: "#fff",
-    alignItems: "center",
   },
   header: {
     marginTop: "15%",
-    // alignItems: "center",
+    alignItems: "center",
   },
   avatar: {
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
-    marginLeft: "10%",
     marginBottom: "5%",
+    justifyContent: "center",
   },
   innerHeader: {
     color: "#8525FF",
     fontSize: 28,
     fontWeight: "700",
     marginBottom: 65,
-    // alignItems: "center",
   },
   button: {
     width: "auto",
     marginLeft: "10%",
-    // justifyContent: "center",
     backgroundColor: "#8525FF",
   },
   input: {
@@ -136,25 +192,20 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     width: "85%",
-  },
-  text: {
-    marginTop: "5%",
-    marginLeft: "10%",
-    fontSize: 16,
+    alignSelf: "center",
   },
   picker: {
-    width: "85%",
+    alignSelf: "center",
+  },
+  loading: {
+    flex: 1,
     justifyContent: "center",
-    // alignItems: "center",
+    alignItems: "center",
   },
 });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    onPersonnalInfoClick: function () {
-      dispatch({ type: "personnalInfo" });
-    },
-  };
+function mapStateToProps(state) {
+  return { account: state.account };
 }
 
-export default connect(null, mapDispatchToProps)(ProfileCreationScreen);
+export default connect(mapStateToProps, null)(ProfileCreationScreen);

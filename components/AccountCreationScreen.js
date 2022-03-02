@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Button from "../utils/Button.js";
 
 function AccountCreationScreen(props) {
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
   const [lastname, setLastname] = useState("");
   const [firstname, setFirstname] = useState("");
   const [email, setEmail] = useState("");
@@ -30,10 +30,6 @@ function AccountCreationScreen(props) {
     setVisible(!visible);
   };
 
-  const showPicker = () => {
-    setIsPickerShow(true);
-  };
-
   const onChange = (event, value) => {
     setBirthdate(value);
     if (Platform.OS === "android") {
@@ -41,30 +37,29 @@ function AccountCreationScreen(props) {
     }
   };
 
-  const handleUsername = (val) => {
-    setUsername(val);
-  };
+  // const handleUsername = (val) => {
+  //   setUsername(val);
+  // };
 
   const handleLastname = (val) => {
-    setLastname(val);
+    setLastname(val.trim());
   };
 
   const handleFirstname = (val) => {
-    setFirstname(val);
+    setFirstname(val.trim());
   };
 
   const handleEmail = (val) => {
-    setEmail(val);
+    setEmail(val.trim());
   };
 
   const handlePassword = (val) => {
-    setPassword(val);
+    setPassword(val.trim());
   };
 
   const accountSubmit = () => {
-    props.navigation.navigate("Focus");
     const personnalInfo = {
-      username,
+      // username,
       lastname,
       firstname,
       birthdate,
@@ -72,6 +67,25 @@ function AccountCreationScreen(props) {
       password,
     };
     props.onPersonnalInfoClick(personnalInfo);
+    if (!lastname.trim()) {
+      alert("Veuillez entrer votre nom !");
+      return;
+    }
+    if (!firstname.trim()) {
+      alert("Veuillez entrer votre prénom !");
+      return;
+    }
+    if (!email.trim()) {
+      alert("Veuillez entrer votre email !");
+      return;
+    }
+    if (!password.trim()) {
+      alert("Veuillez entrer un mot de passe !");
+      return;
+    }
+    if (lastname && firstname && birthdate && email && password) {
+      props.navigation.navigate("Focus");
+    }
   };
 
   const handleBirthdate = () => {
@@ -85,94 +99,96 @@ function AccountCreationScreen(props) {
       source={require("../assets/home.jpg")}
       style={styles.container}
     >
-      <KeyboardAvoidingView
-        //   behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-      >
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.inner}>
-            <Text style={styles.header}>Créer un compte</Text>
-            <Input
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <Text style={styles.header}>Créer un compte</Text>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+          >
+            <View style={styles.inner}>
+              {/* <Input
               value={username}
               onChangeText={(val) => handleUsername(val)}
               placeholder="Pseudo"
               leftIcon={<Ionicons name="body" size={24} color="#FFD440" />}
               label="Pseudo"
               labelStyle={styles.label}
-            />
-            <Input
-              value={lastname}
-              onChangeText={(val) => handleLastname(val)}
-              placeholder="Nom de famille"
-              leftIcon={
-                <Ionicons name="md-person-circle" size={24} color="#FFD440" />
-              }
-              label="Nom de famille"
-              labelStyle={styles.label}
-            />
-            <Input
-              value={firstname}
-              onChangeText={(val) => handleFirstname(val)}
-              placeholder="Prénom"
-              leftIcon={
-                <Ionicons
-                  name="md-person-circle-outline"
-                  size={24}
-                  color="#FFD440"
-                />
-              }
-              label="Prénom"
-              labelStyle={styles.label}
-            />
-            <Input
-              value={birthdate.toDateString()}
-              onFocus={() => handleBirthdate()}
-              placeholder="Date de naissance"
-              leftIcon={
-                <Ionicons
-                  name="md-person-circle-outline"
-                  size={24}
-                  color="#FFD440"
-                />
-              }
-              label="Date de naissance"
-              labelStyle={styles.label}
-            />
-            <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
-              {isPickerShow && (
-                <DateTimePicker
-                  locale="fr-fr"
-                  value={birthdate}
-                  mode={"date"}
-                  display={Platform.OS === "ios" ? "spinner" : "default"}
-                  is24Hour={true}
-                  onChange={onChange}
-                  style={styles.datePicker}
-                />
-              )}
-            </Overlay>
-            <Input
-              value={email}
-              onChangeText={(val) => handleEmail(val)}
-              placeholder="Email"
-              leftIcon={<Ionicons name="mail" size={24} color="#FFD440" />}
-              label="Email"
-              labelStyle={styles.label}
-            />
-            <Input
-              value={password}
-              onChangeText={(val) => handlePassword(val)}
-              placeholder="Mot de passe"
-              leftIcon={
-                <Ionicons name="lock-closed" size={24} color="#FFD440" />
-              }
-              label="Mot de passe"
-              labelStyle={styles.label}
-            />
-            <Button title="Suivant" onPress={() => accountSubmit()} />
-          </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
+            /> */}
+              <Input
+                value={lastname}
+                onChangeText={(val) => handleLastname(val)}
+                placeholder="Nom de famille"
+                leftIcon={
+                  <Ionicons name="md-person-circle" size={24} color="#FFD440" />
+                }
+                label="Nom de famille"
+                labelStyle={styles.label}
+              />
+              <Input
+                value={firstname}
+                onChangeText={(val) => handleFirstname(val)}
+                placeholder="Prénom"
+                leftIcon={
+                  <Ionicons
+                    name="md-person-circle-outline"
+                    size={24}
+                    color="#FFD440"
+                  />
+                }
+                label="Prénom"
+                labelStyle={styles.label}
+              />
+              <Input
+                value={birthdate.toDateString()}
+                onFocus={() => handleBirthdate()}
+                placeholder="Date de naissance"
+                leftIcon={
+                  <Ionicons
+                    name="md-person-circle-outline"
+                    size={24}
+                    color="#FFD440"
+                  />
+                }
+                label="Date de naissance"
+                labelStyle={styles.label}
+              />
+              <Overlay isVisible={visible} onBackdropPress={toggleOverlay}>
+                {isPickerShow && (
+                  <DateTimePicker
+                    locale="fr-fr"
+                    value={birthdate}
+                    mode={"date"}
+                    display={Platform.OS === "ios" ? "spinner" : "default"}
+                    is24Hour={true}
+                    onChange={onChange}
+                    style={styles.datePicker}
+                  />
+                )}
+              </Overlay>
+              <Input
+                value={email}
+                onChangeText={(val) => handleEmail(val)}
+                placeholder="Email"
+                leftIcon={<Ionicons name="mail" size={24} color="#FFD440" />}
+                label="Email"
+                labelStyle={styles.label}
+              />
+              <Input
+                value={password}
+                onChangeText={(val) => handlePassword(val)}
+                placeholder="Mot de passe"
+                leftIcon={
+                  <Ionicons name="lock-closed" size={24} color="#FFD440" />
+                }
+                label="Mot de passe"
+                labelStyle={styles.label}
+              />
+              <Button title="Suivant" onPress={() => accountSubmit()} />
+            </View>
+          </KeyboardAvoidingView>
+        </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   );
 }
@@ -183,11 +199,8 @@ const styles = StyleSheet.create({
   },
   inner: {
     flex: 1,
+    justifyContent: "space-around",
     alignItems: "center",
-    marginTop: "15%",
-  },
-  textInput: {
-    marginTop: "12%",
   },
   label: {
     color: "#FFD440",
@@ -197,6 +210,8 @@ const styles = StyleSheet.create({
     fontSize: 36,
     fontWeight: "700",
     marginBottom: 48,
+    alignSelf: "center",
+    marginTop: "15%",
   },
   datePicker: {
     width: 320,
@@ -209,8 +224,8 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onPersonnalInfoClick: function () {
-      dispatch({ type: "personnalInfo" });
+    onPersonnalInfoClick: function (personnalInfo) {
+      dispatch({ type: "addPersonnalInfo", personnalInfo });
     },
   };
 }
