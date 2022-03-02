@@ -53,14 +53,14 @@ function LoginScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/home.jpg")}
+      source={require("../assets/DigitribeBackground2.png")}
       style={styles.container}
     >
       <Text
         style={{
           fontSize: 40,
           fontWeight: "bold",
-          color: "#7D4FF4",
+          color: "#8B62AB",
           marginBottom: 30,
           marginTop: -50,
         }}

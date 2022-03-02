@@ -82,7 +82,7 @@ function AccountCreationScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/home.jpg")}
+      source={require("../assets/DigitribeBackground2.png")}
       style={styles.container}
     >
       <KeyboardAvoidingView
@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
   },
+
 });
 
 function mapDispatchToProps(dispatch) {

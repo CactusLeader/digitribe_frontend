@@ -11,7 +11,7 @@ function DigiButton(props) {
         marginVertical: 10,
       }}
       buttonStyle={{
-        backgroundColor: "#7D4FF4",
+        backgroundColor: "#8525FF",
       }}
       onPress={props.onPress}
     />

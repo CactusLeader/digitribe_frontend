@@ -21,8 +21,11 @@ import ContactsScreen from "./components/ContactsScreen";
 import firstName from "./reducers/firstName";
 import token from "./reducers/token";
 import account from "./reducers/account";
+import photo from "./reducers/photo";
+import dataModalList from "./reducers/dataModal"
+import poi from "./reducers/poi"
 
-const store = createStore(combineReducers({ firstName, token, account }));
+const store = createStore(combineReducers({ firstName, token, account, photo, dataModalList,poi }));
 
 const Stack = createStackNavigator();
 

@@ -1,22 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, ImageBackground, TouchableOpacity } from "react-native";
-import {
-  Button,
-  Overlay,
-  Input,
-  Icon,
-  Chip,
-  withTheme,
-  colors,
-} from "react-native-elements";
-import { Entypo } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
+import { View } from "react-native";
+import { Button, Overlay, Input, Icon } from "react-native-elements";
 import { Camera } from "expo-camera";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import { createStackNavigator } from "@react-navigation/stack";
+import { connect } from "react-redux";
+
 const Stack = createStackNavigator();
 
 function MapScreen(props) {
@@ -32,10 +24,12 @@ function MapScreen(props) {
   //   console.log("currentLattitude", currentLatitude);
   //   console.log("currentLongitude", currentLongitude);
   //   console.log("addPOI", addPOI);
-  //   console.log("listPOI", listPOI);
+  // console.log("listPOI", listPOI);
   //   console.log("title", title);
   //   console.log("description", description);
   //   console.log("hasPermission", hasPermission);
+
+  console.log("#1");
 
   useEffect(() => {
     async function askPermissions() {
@@ -61,15 +55,20 @@ function MapScreen(props) {
   };
 
   onPressScreen = (evt) => {
+    "#1mapDispatchToProps#onClickAddPoi#onPressScreen";
     // console.log("evt.nativeEvent", evt.nativeEvent);
     const lat = evt.nativeEvent.coordinate.latitude;
     const long = evt.nativeEvent.coordinate.longitude;
     // console.log("lat", lat);
     // console.log("long", long);
     if (addPOI) {
-      setListPOI([...listPOI, { lat, long }]);
-      setAddPOI(false);
+      setListPOI([
+        ...listPOI,
+        { lat, long, title, description, photo: props.photo },
+      ]),
+        setAddPOI(false);
     }
+    props.onAddPoiOnMap(lat, long, title, description);
   };
 
   const chatSubmit = () => {
@@ -103,17 +102,19 @@ function MapScreen(props) {
       setHasPermission(status === "granted");
       setVisible(false);
     })();
+    props.navigation.navigate("Camera");
   };
 
-  if (hasPermission) {
-    props.navigation.navigate("Camera");
-  }
+  // if (hasPermission) {
+  //   ;
+  // }
 
   const tabListPOI = listPOI.map((poi, index) => {
+    // console.log("props.photo", props.photo);
+    // console.log("props.modal", props.modal);
     return (
-      <View>
+      <View key={index}>
         <Marker
-          key={index}
           coordinate={{
             latitude: poi.lat,
             longitude: poi.long,
@@ -121,7 +122,7 @@ function MapScreen(props) {
           pinColor="#FFD440"
           title={title}
           description={description}
-          //   photo=""
+          photo={props.urlToDisplay}
         />
       </View>
     );
@@ -246,4 +247,32 @@ function MapScreen(props) {
   );
 }
 
-export default MapScreen;
+function mapDispatchToProps(dispatch) {
+  console.log("#1mapDispatchToProps");
+  return {
+    onAddPoiOnMap: function (lat, long, title, desc) {
+      console.log("#1mapDispatchToProps#onClickAddPoi");
+      dispatch(
+        {
+          type: "addInfo",
+          title: title,
+          desc: desc,
+        },
+        {
+          type: "addCoord",
+          lat: lat,
+          long: long,
+        }
+      );
+    },
+  };
+}
+
+function mapStateToProps(state) {
+  console.log("mapStateToProps");
+  return {
+    modal: state.dataModalList,
+    photo: state.photo,
+  };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
