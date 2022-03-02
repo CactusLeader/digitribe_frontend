@@ -20,9 +20,11 @@ import CameraScreen from "./components/CameraScreen";
 import firstName from "./reducers/firstName";
 import token from "./reducers/token";
 import account from "./reducers/account";
-import urlPhoto from "./reducers/urlPhoto";
+import photo from "./reducers/photo";
+import dataModalList from "./reducers/dataModal"
+import poi from "./reducers/poi"
 
-const store = createStore(combineReducers({ firstName, token, account, urlPhoto }));
+const store = createStore(combineReducers({ firstName, token, account, photo, dataModalList,poi }));
 
 const Stack = createStackNavigator();
 
