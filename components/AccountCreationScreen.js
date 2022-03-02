@@ -82,7 +82,7 @@ function AccountCreationScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/home.jpg")}
+      source={require("../assets/DigitribeBackground2.png")}
       style={styles.container}
     >
       <KeyboardAvoidingView

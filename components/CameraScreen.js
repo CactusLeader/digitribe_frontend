@@ -55,14 +55,14 @@ function CameraScreen(props) {
             icon={{
               name: "flip-camera-ios",
               type: "material-icons",
-              size: 25,
-              color: "#FFD440",
+              size: 30,
+              color: "white",
             }}
             buttonStyle={{
-              backgroundColor: "transparent",
+              backgroundColor: "#FFD440",
               borderRadius: 100,
               borderColor: "#FFD440",
-              borderWidth: 6,
+            //   borderWidth: 6,
               width: 70,
               height: 70,
               marginLeft: 15,
@@ -89,13 +89,13 @@ function CameraScreen(props) {
               name: "add-a-photo",
               type: "material-icons",
               size: 35,
-              color: "#8525FF",
+              color: "white",
             }}
             buttonStyle={{
-              backgroundColor: "transparent",
+              backgroundColor: "#8525FF",
               borderRadius: 100,
-              borderColor: "#8525FF",
-              borderWidth: 6,
+              borderColor: "white",
+            //   borderWidth: 6,
               width: 85,
               height: 85,
               marginVertical: 30,
@@ -114,14 +114,14 @@ function CameraScreen(props) {
             icon={{
               name: "flash",
               type: "font-awesome",
-              size: 25,
-              color: "#FFD440",
+              size: 30,
+              color: "white",
             }}
             buttonStyle={{
-              backgroundColor: "transparent",
+              backgroundColor: "#FFD440",
               borderRadius: 100,
               borderColor: "#FFD440",
-              borderWidth: 6,
+            //   borderWidth: 6,
               width: 70,
               height: 70,
               marginVertical: 5,

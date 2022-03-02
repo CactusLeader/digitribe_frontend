@@ -48,7 +48,7 @@ function ProfileCreationScreen(props) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ImageBackground
-        source={require("../assets/home.jpg")}
+        source={require("../assets/DigitribeBackground2.png")}
         style={styles.container}
       >
         <View style={styles.header}>

@@ -98,11 +98,13 @@ function MapScreen(props) {
       console.log("status", status);
       setHasPermission(status === "granted");
       setVisible(false);
-    })();
-    if (hasPermission) {
-      props.navigation.navigate("Camera");
-    }
+    })(); 
+    props.navigation.navigate("Camera")
   };
+
+  // if (hasPermission) {
+  //   ;
+  // }
 
   const tabListPOI = listPOI.map((poi, index) => {
     return (
