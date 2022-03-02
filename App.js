@@ -22,10 +22,12 @@ import firstName from "./reducers/firstName";
 import token from "./reducers/token";
 import account from "./reducers/account";
 import photo from "./reducers/photo";
-import dataModalList from "./reducers/dataModal"
-import poi from "./reducers/poi"
+import dataModalList from "./reducers/dataModal";
+import poi from "./reducers/poi";
 
-const store = createStore(combineReducers({ firstName, token, account, photo, dataModalList,poi }));
+const store = createStore(
+  combineReducers({ firstName, token, account, photo, dataModalList, poi })
+);
 
 const Stack = createStackNavigator();
 
@@ -48,7 +50,7 @@ export default function App() {
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
-          <Stack.Screen name="Contacts" component={ContactsScreen} />
+          {/* <Stack.Screen name="Contacts" component={ContactsScreen} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
