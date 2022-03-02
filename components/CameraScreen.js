@@ -1,7 +1,8 @@
 import { Camera } from "expo-camera";
-import { View, TouchableOpacity, DatePickerIOSBase } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { Button } from "react-native-elements";
+import { connect } from "react-redux";
 
 function CameraScreen(props) {
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -14,6 +15,7 @@ function CameraScreen(props) {
         base64: true,
         exif: true,
       });
+      props.navigation.navigate("Map")
       let data = new FormData();
       data.append("photo", {
         uri: photo.uri,
@@ -27,6 +29,9 @@ function CameraScreen(props) {
       });
       var response = await rawResponse.json();
       console.log("response", response);
+      console.log("response.url", response.url);
+      props.onAddPhotoClick(response.url);
+     
     }
   };
 
@@ -62,7 +67,7 @@ function CameraScreen(props) {
               backgroundColor: "#FFD440",
               borderRadius: 100,
               borderColor: "#FFD440",
-            //   borderWidth: 6,
+              //   borderWidth: 6,
               width: 70,
               height: 70,
               marginLeft: 15,
@@ -95,7 +100,7 @@ function CameraScreen(props) {
               backgroundColor: "#8525FF",
               borderRadius: 100,
               borderColor: "white",
-            //   borderWidth: 6,
+              //   borderWidth: 6,
               width: 85,
               height: 85,
               marginVertical: 30,
@@ -121,7 +126,7 @@ function CameraScreen(props) {
               backgroundColor: "#FFD440",
               borderRadius: 100,
               borderColor: "#FFD440",
-            //   borderWidth: 6,
+              //   borderWidth: 6,
               width: 70,
               height: 70,
               marginVertical: 5,
@@ -142,4 +147,17 @@ function CameraScreen(props) {
   );
 }
 
-export default CameraScreen;
+function mapDispatchToProps(dispatch) {
+  console.log("#1mapDispatchToProps");
+  return {
+    onAddPhotoClick: function (urlPhoto) {
+      console.log("#1mapDispatchToProps-onAddPhotoClick");
+      dispatch({
+        type: "addPhoto",
+        photo: urlPhoto,
+      });
+    },
+  };
+}
+
+export default connect(null, mapDispatchToProps)(CameraScreen);

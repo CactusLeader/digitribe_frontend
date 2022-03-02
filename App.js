@@ -20,8 +20,9 @@ import CameraScreen from "./components/CameraScreen";
 import firstName from "./reducers/firstName";
 import token from "./reducers/token";
 import account from "./reducers/account";
+import urlPhoto from "./reducers/urlPhoto";
 
-const store = createStore(combineReducers({ firstName, token, account }));
+const store = createStore(combineReducers({ firstName, token, account, urlPhoto }));
 
 const Stack = createStackNavigator();
 
