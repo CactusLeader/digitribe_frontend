@@ -25,12 +25,15 @@ function ChatScreen(props) {
   useEffect(() => {
     setSendByUser(false);
     socket.on("sendMessageToAll", (newMessageData) => {
+      console.log("newMessageData", newMessageData);
+      console.log("prenom de l utilisateur", props.firstName);
       setListMessage([...listMessage, newMessageData]);
     });
   }, [listMessage]);
 
+  let tokenUser = "";
+
   const MessageSubmit = async () => {
-    setSendByUser(true);
     socket.emit("sendMessage", {
       message: currentMessage,
       firstName: firstName,
@@ -51,6 +54,11 @@ function ChatScreen(props) {
     );
     const body = await data.json();
 
+    tokenUser = body.token;
+
+    // if (body.token === props.token) {
+    //   setSendByUser(true);
+    // }
     // console.log("body", body);
   };
 
@@ -60,66 +68,44 @@ function ChatScreen(props) {
     msg = msg.replace(/:p/g, "\uD83D\uDE1B");
 
     msg = msg.replace(/[a-z]*fuck[a-z]*/gi, "\u2022\u2022\u2022");
-    //   <View
-    //     style={{
-    //       flex: 1,
-    //       alignItems: "flex-end",
-    //       width: "70%",
-    //       backgroundColor: "red",
-    //     }}
-    //   >
-    //     <Text>{msg}</Text>
-    //   </View>
-    // );
-    if (sendByUser === true) {
-      return (
-        <View
-          key={i}
-          style={{
-            marginHorizontal: 8,
-            marginVertical: 8,
-            borderRadius: 8,
-            justifyContent: "flex-end",
-            // borderColor: "black",
-            // borderWidth: 1,
-            alignSelf: "flex-end",
-            width: "auto",
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            backgroundColor: "#7D4FF4",
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-          <Text style={{ color: "white", alignSelf: "flex-end" }}>
-            {messageData.firstName}
-          </Text>
-        </View>
-      );
-    } else {
-      return (
-        <View
-          key={i}
-          style={{
-            marginHorizontal: 8,
-            marginVertical: 8,
-            borderRadius: 8,
-            justifyContent: "flex-end",
-            // borderColor: "black",
-            // borderWidth: 1,
-            alignSelf: "flex-end",
-            width: "auto",
-            paddingHorizontal: 10,
-            paddingVertical: 5,
-            backgroundColor: "#FFD440",
-          }}
-        >
-          <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-          <Text style={{ color: "white", alignSelf: "flex-end" }}>
-            {messageData.firstName}
-          </Text>
-        </View>
-      );
+
+    let styleMessage = {
+      marginHorizontal: 8,
+      marginVertical: 8,
+      borderRadius: 8,
+      alignSelf: "flex-start",
+      width: "auto",
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      backgroundColor: "#FFD440",
+    };
+
+    if (tokenUser === props.token) {
+      setSendByUser(true);
     }
+
+    if (sendByUser === true) {
+      styleMessage = {
+        marginHorizontal: 8,
+        marginVertical: 8,
+        borderRadius: 8,
+        justifyContent: "flex-end",
+        alignSelf: "flex-end",
+        width: "auto",
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        backgroundColor: "#7D4FF4",
+      };
+    }
+
+    return (
+      <View key={i} style={styleMessage}>
+        <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
+        <Text style={{ color: "white", alignSelf: "flex-end" }}>
+          {messageData.firstName}
+        </Text>
+      </View>
+    );
   });
 
   const firstName = props.firstName;
