@@ -50,7 +50,7 @@ export default function App() {
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
-          {/* <Stack.Screen name="Contacts" component={ContactsScreen} /> */}
+          <Stack.Screen name="Contacts" component={ContactsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

@@ -1,8 +1,8 @@
-export default function (firstName = "", action) {
+export default function (firstname = "", action) {
   // console.log("#2 Ca passe dedans action", action);
-  if (action.type === "savefirstName") {
-    return action.firstName;
+  if (action.type === "saveFirstname") {
+    return action.firstname;
   } else {
-    return firstName;
+    return firstname;
   }
 }

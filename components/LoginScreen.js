@@ -11,7 +11,7 @@ function LoginScreen(props) {
   const [password, setPassword] = useState("");
   const [userExists, setUserExists] = useState(false);
   const [listErrorsLogin, setErrorsLogin] = useState([]);
-  const [firstName, setFirstName] = useState("");
+  const [firstname, setFirstname] = useState("");
 
   const MapSubmit = async () => {
     const data = await fetch("https://digitribebackend.herokuapp.com/login", {
@@ -26,7 +26,7 @@ function LoginScreen(props) {
 
     if (body.result === true) {
       setUserExists(true);
-      setFirstName(body.user.firstName);
+      setFirstname(body.user.firstname);
       props.addToken(body.token);
     } else {
       setErrorsLogin(body.error);
@@ -36,7 +36,7 @@ function LoginScreen(props) {
   if (userExists) {
     console.log("Page Map");
     props.navigation.navigate("Map");
-    props.onSubmitFirstName(firstName);
+    props.onSubmitFirstname(firstname);
   }
 
   const tabErrorsLogin = listErrorsLogin.map((error, i) => {
@@ -95,11 +95,11 @@ const styles = StyleSheet.create({
 
 function mapDispatchToProps(dispatch) {
   return {
-    onSubmitFirstName: function (firstName) {
-      // console.log("usduibvisdbibsdbi #1 firstName", firstName);
+    onSubmitFirstname: function (firstname) {
+      // console.log("usduibvisdbibsdbi #1 firstName", firstname);
       dispatch({
-        type: "savefirstName",
-        firstName: firstName,
+        type: "saveFirstname",
+        firstname: firstname,
       });
     },
     addToken: function (token) {
