@@ -22,6 +22,7 @@ function MapScreen(props) {
   const [hasPermission, setHasPermission] = useState(false);
   const [hasPhoto, setHasPhoto] = useState(false);
   const [seePhoto, setSeePhoto] = useState(false);
+  const [getCoordinate, setGetCoordinate] = useState(false);
 
   //   console.log("currentLattitude", currentLatitude);
   //   console.log("currentLongitude", currentLongitude);
@@ -31,6 +32,8 @@ function MapScreen(props) {
   //   console.log("description", description);
   //   console.log("hasPermission", hasPermission);
   //   console.log("hasPhoto", hasPhoto);
+  // console.log("getCoordinate", getCoordinate);
+
   console.log("seePhotoI", seePhoto);
   console.log("seePhoto typeof", typeof seePhoto);
 
@@ -64,6 +67,7 @@ function MapScreen(props) {
     const long = evt.nativeEvent.coordinate.longitude;
     // console.log("lat", lat);
     // console.log("long", long);
+    setGetCoordinate(true);
     if (addPOI) {
       setListPOI([
         ...listPOI,
@@ -130,7 +134,6 @@ function MapScreen(props) {
     } else {
       setSeePhoto(true);
     }
-    // setSeePhoto(!seePhoto);
   };
 
   let image = null;
@@ -167,21 +170,23 @@ function MapScreen(props) {
 
   const tabListPOI = props.poi.map((poi, index) => {
     poiPhoto = poi.photo;
-    return (
-      <View key={index}>
-        <Marker
-          onPress={() => onPressMarker()}
-          coordinate={{
-            latitude: poi.lat,
-            longitude: poi.lon,
-          }}
-          pinColor="#FFD440"
-          title={poi.title}
-          description={poi.desc}
-          // source={{uri:poi.photo}}
-        ></Marker>
-      </View>
-    );
+    if (getCoordinate) {
+      return (
+        <View key={index}>
+          <Marker
+            onPress={() => onPressMarker()}
+            coordinate={{
+              latitude: poi.lat,
+              longitude: poi.lon,
+            }}
+            pinColor="#FFD440"
+            title={poi.title}
+            description={poi.desc}
+            // source={{uri:poi.photo}}
+          ></Marker>
+        </View>
+      );
+    }
   });
 
   return (
@@ -192,12 +197,6 @@ function MapScreen(props) {
     >
       <MapView
         onPress={(evt) => onPressScreen(evt)}
-        // initialRegion={{
-        //   latitude: currentLatitude,
-        //   longitude: currentLongitude,
-        //   latitudeDelta: 0.0922,
-        //   longitudeDelta: 0.0421,
-        // }}
         region={{
           latitude: currentLatitude,
           longitude: currentLongitude,
@@ -206,7 +205,6 @@ function MapScreen(props) {
         }}
         style={{
           flex: 1,
-          // flexDirection:"row",
           alignItems: "flex-start",
           justifyContent: "flex-start",
         }}

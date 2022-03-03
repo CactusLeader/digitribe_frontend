@@ -9,9 +9,9 @@ import { connect } from "react-redux";
 function LoginScreen(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userExists, setUserExists] = useState(false);
+  // const [userExists, setUserExists] = useState(false);
   const [listErrorsLogin, setErrorsLogin] = useState([]);
-  const [firstname, setFirstname] = useState("");
+  // const [firstname, setFirstname] = useState("");
 
   const MapSubmit = async () => {
     const data = await fetch("https://digitribebackend.herokuapp.com/login", {
@@ -25,19 +25,19 @@ function LoginScreen(props) {
     // console.log("body", body);
 
     if (body.result === true) {
-      setUserExists(true);
-      setFirstname(body.user.firstname);
+      // setUserExists(true);
+      // setFirstname(body.user.firstname);
       props.addToken(body.token);
+      props.onSubmitFirstname(body.user.firstname);
+      props.navigation.navigate("Map");
     } else {
       setErrorsLogin(body.error);
     }
   };
 
-  if (userExists) {
-    console.log("Page Map");
-    props.navigation.navigate("Map");
-    props.onSubmitFirstname(firstname);
-  }
+  // if (userExists) {
+  //   console.log("Page Map");
+  // }
 
   const tabErrorsLogin = listErrorsLogin.map((error, i) => {
     return (
