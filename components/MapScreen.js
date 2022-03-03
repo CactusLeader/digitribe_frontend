@@ -138,26 +138,24 @@ function MapScreen(props) {
           width: "100%",
           backgroundColor: "transparent",
           position: "absolute",
-         
         }}
       >
         <Image
           source={{
-            uri:"https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg"
+            uri: "http://t3.gstatic.com/licensed-image?q=tbn:ANd9GcTaVxmReIERhZm0qn7HqZbb5ie-jRKzGUYQhhrOcXtY59o5vSwDCPxGjes9c1mJHJbnQ13Aaa5VNPZObt6FIP0",
           }}
           style={{
-            height: "70%",
-            width: "70%",
+            height: "65%",
+            width: "85%",
             marginHorizontal: "30%",
-            marginVertical: "30%",
-            resizeMode: 'cover',
-            aspectRatio: 3/2
+            marginVertical: "35%",
+            resizeMode: "cover",
+            aspectRatio: 3 / 2,
           }}
         />
       </View>
     );
   }
-
 
   // if (hasPermission) {
   //   ;
@@ -180,7 +178,6 @@ function MapScreen(props) {
         ></Marker>
       </View>
     );
-   
   });
 
   return (
