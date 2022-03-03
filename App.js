@@ -16,7 +16,8 @@ import ProfileCreationScreen from "./components/ProfileCreationScreen";
 import MapScreen from "./components/MapScreen";
 import ChatScreen from "./components/ChatScreen";
 import CameraScreen from "./components/CameraScreen";
-import ContactsScreen from "./components/ContactsScreen";
+import PeopleScreen from "./components/PeopleScreen";
+import PeopleProfileScreen from "./components/PeopleProfileScreen";
 
 import firstName from "./reducers/firstName";
 import token from "./reducers/token";
@@ -24,9 +25,18 @@ import account from "./reducers/account";
 import photo from "./reducers/photo";
 import dataModalList from "./reducers/dataModal";
 import poi from "./reducers/poi";
+import people from "./reducers/people";
 
 const store = createStore(
-  combineReducers({ firstName, token, account, photo, dataModalList, poi })
+  combineReducers({
+    firstName,
+    token,
+    account,
+    photo,
+    dataModalList,
+    poi,
+    people,
+  })
 );
 
 const Stack = createStackNavigator();
@@ -36,6 +46,8 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="People" component={PeopleScreen} />
+          <Stack.Screen name="PeopleProfile" component={PeopleProfileScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen

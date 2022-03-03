@@ -10,11 +10,13 @@ function FocusScreen(props) {
 
   useEffect(() => {
     async function loadData() {
-      var rawResponse = await fetch("http://172.20.10.3:3000/signup");
+      var rawResponse = await fetch(
+        "https://digitribebackend.herokuapp.com/signup"
+      );
       var responseInterest = await rawResponse.json();
       setInterestsList(responseInterest.interests);
-      // console.log(responseInterest);
-      // console.log("interestsList", interestsList);
+      console.log(responseInterest);
+      console.log("interestsList", interestsList);
     }
     loadData();
   }, []);

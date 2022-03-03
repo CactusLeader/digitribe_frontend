@@ -15,7 +15,7 @@ function CameraScreen(props) {
         base64: true,
         exif: true,
       });
-      props.navigation.navigate("Map")
+      props.navigation.navigate("Map");
       let data = new FormData();
       data.append("photo", {
         uri: photo.uri,
@@ -23,15 +23,17 @@ function CameraScreen(props) {
         name: "photo.jpg",
       });
       console.log("photo.uri", photo.uri);
-      var rawResponse = await fetch("http://172.20.10.5:3000/place", {
-        method: "post",
-        body: data,
-      });
+      var rawResponse = await fetch(
+        "https://digitribebackend.herokuapp.com/place",
+        {
+          method: "post",
+          body: data,
+        }
+      );
       var response = await rawResponse.json();
       console.log("response", response);
       console.log("response.url", response.url);
       props.onAddPhotoClick(response.url);
-     
     }
   };
 
