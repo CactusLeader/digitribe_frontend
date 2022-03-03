@@ -44,11 +44,11 @@ function ChatScreen(props) {
     const date = new Date().getDate();
 
     const data = await fetch(
-      "https://digitribebackend.herokuapp.com/messages",
+      `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `message=${currentMessage}&date=${date}&tokenUser=${props.token}`,
+        body: `message=${currentMessage}&date=${date}`,
         //&recipientId=${}
       }
     );
@@ -191,6 +191,7 @@ function mapStateToProps(state) {
   return {
     firstName: state.firstName,
     token: state.token,
+    id: state.people,
   };
 }
 
