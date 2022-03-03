@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { Button, Overlay, Input, Icon } from "react-native-elements";
+import { Button, Overlay, Input, Icon, Image } from "react-native-elements";
 import { Camera } from "expo-camera";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
@@ -21,6 +21,7 @@ function MapScreen(props) {
   const [description, setDescription] = useState("");
   const [hasPermission, setHasPermission] = useState(false);
   const [hasPhoto, setHasPhoto] = useState(false);
+  const [seePhoto, setSeePhoto] = useState(false);
 
   //   console.log("currentLattitude", currentLatitude);
   //   console.log("currentLongitude", currentLongitude);
@@ -30,6 +31,8 @@ function MapScreen(props) {
   //   console.log("description", description);
   //   console.log("hasPermission", hasPermission);
   //   console.log("hasPhoto", hasPhoto);
+  console.log("seePhotoI", seePhoto);
+  console.log("seePhoto typeof", typeof seePhoto);
 
   useEffect(() => {
     async function askPermissions() {
@@ -51,7 +54,7 @@ function MapScreen(props) {
 
   const onPressButton = () => {
     setVisible(true);
-    setHasPhoto(false)
+    setHasPhoto(false);
   };
 
   onPressScreen = (evt) => {
@@ -114,27 +117,100 @@ function MapScreen(props) {
     props.navigation.navigate("Camera");
   };
 
+  let poiPhoto;
+  const onPressMarker = () => {
+    console.log("#onpressmarker");
+    console.log("seePhoto", seePhoto);
+    // if (seePhoto) {
+    //   setSeePhoto(false);
+    // } else {
+    //   setSeePhoto(true);
+    // }
+    setSeePhoto(!seePhoto);
+  };
+
+  let image = null;
+  if (seePhoto) {
+    image = (
+      <View
+        style={{
+          // flex:1,
+          // flexDirection: "row",
+          height: 25,
+          width: 100,
+          backgroundColor: "white",
+          position:"absolute"
+        }}
+      >
+        <Image
+          source={{
+            uri: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
+          }}
+          style={{
+            height: "100%",
+            width: "70%",
+            marginHorizontal: "15%",
+          }}
+        />
+      </View>
+    );
+  } 
+
+  // return(
+  //   <Image
+  //   source = {{
+  //     uri:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.femmeactuelle.fr%2Fsante%2Fnews-sante%2Fvue-mer-ameliore-moral-29734&psig=AOvVaw0pjTyJhFxIsbQWFHaI9rxx&ust=1646395923993000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCICN-oH1qfYCFQAAAAAdAAAAABAN"
+  //   }}
+  //   style={{
+  //     height: 100,
+  //     marginTop: 10,
+  //     width: 100,
+  //     }}
+  //   />)
+
   // if (hasPermission) {
   //   ;
   // }
 
-  const tabListPOI = listPOI.map((poi, index) => {
-    // console.log("props.photo", props.photo);
-    // console.log("props.modal", props.modal);
+  const tabListPOI = props.poi.map((poi, index) => {
+    poiPhoto = poi.photo;
+    // if(poi) {
     return (
       <View key={index}>
         <Marker
+          onPress={() => onPressMarker()}
           coordinate={{
             latitude: poi.lat,
-            longitude: poi.long,
+            longitude: poi.lon,
           }}
           pinColor="#FFD440"
-          title={title}
-          description={description}
-          photo={props.urlToDisplay}
-        />
+          title={poi.title}
+          description={poi.desc}
+          // source={{uri:poi.photo}}
+        ></Marker>
+
+        {/* <Image
+              source = {{
+                uri:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.femmeactuelle.fr%2Fsante%2Fnews-sante%2Fvue-mer-ameliore-moral-29734&psig=AOvVaw0pjTyJhFxIsbQWFHaI9rxx&ust=1646395923993000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCICN-oH1qfYCFQAAAAAdAAAAABAN"
+              }}
+              style={{
+                height: 100,
+                marginTop: 10,
+                width: 100,
+                }}
+              /> */}
+
+        {/* <Image
+          source={{uri:poi.photo}}
+          style={{
+            height: 100,
+            marginTop: 10,
+            width: 100,
+            }}
+        /> */}
       </View>
     );
+    // }
   });
 
   return (
@@ -143,12 +219,26 @@ function MapScreen(props) {
         flex: 1,
       }}
     >
+      
       <MapView
         onPress={(evt) => onPressScreen(evt)}
+        initialRegion={{
+          latitude: currentLatitude,
+          longitude: currentLongitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
+        region={{
+          latitude: currentLatitude,
+          longitude: currentLongitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
         style={{
           flex: 1,
-          alignItems: "flex-end",
-          justifyContent: "flex-end",
+          // flexDirection:"row",
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
         }}
       >
         <Marker
@@ -162,7 +252,7 @@ function MapScreen(props) {
         />
         {tabListPOI}
       </MapView>
-
+      {image}
       <View
         style={{
           position: "absolute",
@@ -280,8 +370,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
   console.log("mapStateToProps");
   return {
-    modal: state.dataModalList,
-    photo: state.photo,
+    poi: state.poi,
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
