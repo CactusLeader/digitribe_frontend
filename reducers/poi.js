@@ -9,10 +9,10 @@ export default function (poi = [], action) {
       poiCopy[poiCopy.length - 1].photo = action.photo;
       return poiCopy;
     case "addCoord":
-        poiCopy = [...poi];
-      poiCopy[poiCopy.length - 1].lat = action.lat;
-      poiCopy[poiCopy.length - 1].lon = action.lon;
-      return poiCopy;
+      let poiCopyCoord = [...poi];
+      poiCopyCoord[poiCopyCoord.length - 1].lat = action.lat;
+      poiCopyCoord[poiCopyCoord.length - 1].lon = action.lon;
+      return poiCopyCoord;
     default:
       return poi;
   }

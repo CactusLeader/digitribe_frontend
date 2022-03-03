@@ -20,6 +20,7 @@ function MapScreen(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [hasPermission, setHasPermission] = useState(false);
+  const [hasPhoto, setHasPhoto] = useState(false);
 
   //   console.log("currentLattitude", currentLatitude);
   //   console.log("currentLongitude", currentLongitude);
@@ -28,8 +29,7 @@ function MapScreen(props) {
   //   console.log("title", title);
   //   console.log("description", description);
   //   console.log("hasPermission", hasPermission);
-
-  console.log("#1");
+  //   console.log("hasPhoto", hasPhoto);
 
   useEffect(() => {
     async function askPermissions() {
@@ -51,6 +51,7 @@ function MapScreen(props) {
 
   const onPressButton = () => {
     setVisible(true);
+    setHasPhoto(false)
   };
 
   onPressScreen = (evt) => {
@@ -84,9 +85,11 @@ function MapScreen(props) {
 
   const onPressAddPoi = () => {
     setVisible(!visible);
-    const infoPOI = { title, description };
-    props.onAddInfoPOI(infoPOI);
     setAddPOI(true);
+    if (hasPhoto === false) {
+      const infoPOI = { title, description };
+      props.onAddInfoPOI(infoPOI);
+    }
   };
 
   const InputTitleChange = (val) => {
@@ -98,11 +101,15 @@ function MapScreen(props) {
   };
 
   const onPressAddPhoto = () => {
+    const infoPOI = { title, description };
+    props.onAddInfoPOI(infoPOI);
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
       console.log("status", status);
       setHasPermission(status === "granted");
       setVisible(false);
+      setAddPOI(true);
+      setHasPhoto(true);
     })();
     props.navigation.navigate("Camera");
   };
