@@ -13,7 +13,7 @@ import { connect } from "react-redux";
 import { Input } from "react-native-elements";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
-import Button from "../utils/Button.js";
+import Button from "../utils/ButtonFinal.js";
 
 function AccountCreationScreen(props) {
   // const [username, setUsername] = useState("");

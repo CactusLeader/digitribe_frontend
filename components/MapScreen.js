@@ -250,8 +250,32 @@ function MapScreen(props) {
           onPress={() => onPressButton()}
         />
         {/* <Button title="Chat" onPress={() => chatSubmit()} /> */}
-        <Button title="Contacts" onPress={() => contactsSubmit()} />
-        <Button title="Profile" onPress={() => profilesSubmit()} />
+        <Button 
+        title="Contacts" 
+        onPress={() => contactsSubmit()}
+        titleStyle={{
+          color: "white",
+          fontSize: 20,
+        }}
+        buttonStyle={{
+          backgroundColor: "#8525FF",
+          borderRadius: 100,
+        }} 
+        containerStyle={{
+          marginBottom: 5
+        }}
+        />
+        <Button 
+        title="Profile"
+         onPress={() => profilesSubmit()}
+         titleStyle={{
+          color: "white",
+          fontSize: 20,
+        }}
+        buttonStyle={{
+          backgroundColor: "#8525FF",
+          borderRadius: 100,
+        }} />
         <Overlay
           isVisible={visible}
           onBackdropPress={toggleOverlay}
@@ -296,6 +320,7 @@ function MapScreen(props) {
             buttonStyle={{
               color: "#8525FF",
               backgroundColor: "#FFD440",
+              borderRadius: 100,
             }}
             icon={
               <Icon
