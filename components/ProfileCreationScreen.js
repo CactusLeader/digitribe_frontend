@@ -23,7 +23,6 @@ function ProfileCreationScreen(props) {
   const [loading, setLoading] = useState(false);
 
   const accountInfos = props.account;
-  // console.log("acountInfos", accountInfos);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -32,8 +31,6 @@ function ProfileCreationScreen(props) {
       allowsEditing: true,
       quality: 1,
     });
-
-    // console.log(result);
 
     if (!result.cancelled) {
       setImage(result.uri);

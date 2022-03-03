@@ -31,7 +31,6 @@ function FocusScreen(props) {
   };
 
   const interests = interestsList.map((interest, index) => {
-    // console.log("interest ok");
     let check = false;
     if (selectedInterests.includes(interest._id)) {
       check = true;
