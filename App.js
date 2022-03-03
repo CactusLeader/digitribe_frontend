@@ -18,6 +18,7 @@ import ChatScreen from "./components/ChatScreen";
 import CameraScreen from "./components/CameraScreen";
 import PeopleScreen from "./components/PeopleScreen";
 import PeopleProfileScreen from "./components/PeopleProfileScreen";
+import ContactsScreen from "./components/ContactsScreen";
 
 import firstName from "./reducers/firstName";
 import token from "./reducers/token";
@@ -46,8 +47,6 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="People" component={PeopleScreen} />
-          <Stack.Screen name="PeopleProfile" component={PeopleProfileScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen
@@ -63,6 +62,8 @@ export default function App() {
           <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
           <Stack.Screen name="Contacts" component={ContactsScreen} />
+          <Stack.Screen name="People" component={PeopleScreen} />
+          <Stack.Screen name="PeopleProfile" component={PeopleProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
