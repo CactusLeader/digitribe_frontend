@@ -121,12 +121,12 @@ function MapScreen(props) {
   const onPressMarker = () => {
     console.log("#onpressmarker");
     console.log("seePhoto", seePhoto);
-    // if (seePhoto) {
-    //   setSeePhoto(false);
-    // } else {
-    //   setSeePhoto(true);
-    // }
-    setSeePhoto(!seePhoto);
+    if (seePhoto) {
+      setSeePhoto(false);
+    } else {
+      setSeePhoto(true);
+    }
+    // setSeePhoto(!seePhoto);
   };
 
   let image = null;
@@ -134,39 +134,30 @@ function MapScreen(props) {
     image = (
       <View
         style={{
-          // flex:1,
-          // flexDirection: "row",
-          height: 25,
-          width: 100,
-          backgroundColor: "white",
-          position:"absolute"
+          height: "25%",
+          width: "100%",
+          backgroundColor: "transparent",
+          position: "absolute",
+         
         }}
       >
         <Image
           source={{
-            uri: "https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg",
+            uri:"https://interactive-examples.mdn.mozilla.net/media/cc0-images/grapefruit-slice-332-332.jpg"
           }}
           style={{
-            height: "100%",
+            height: "70%",
             width: "70%",
-            marginHorizontal: "15%",
+            marginHorizontal: "30%",
+            marginVertical: "30%",
+            resizeMode: 'cover',
+            aspectRatio: 3/2
           }}
         />
       </View>
     );
-  } 
+  }
 
-  // return(
-  //   <Image
-  //   source = {{
-  //     uri:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.femmeactuelle.fr%2Fsante%2Fnews-sante%2Fvue-mer-ameliore-moral-29734&psig=AOvVaw0pjTyJhFxIsbQWFHaI9rxx&ust=1646395923993000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCICN-oH1qfYCFQAAAAAdAAAAABAN"
-  //   }}
-  //   style={{
-  //     height: 100,
-  //     marginTop: 10,
-  //     width: 100,
-  //     }}
-  //   />)
 
   // if (hasPermission) {
   //   ;
@@ -174,7 +165,6 @@ function MapScreen(props) {
 
   const tabListPOI = props.poi.map((poi, index) => {
     poiPhoto = poi.photo;
-    // if(poi) {
     return (
       <View key={index}>
         <Marker
@@ -188,29 +178,9 @@ function MapScreen(props) {
           description={poi.desc}
           // source={{uri:poi.photo}}
         ></Marker>
-
-        {/* <Image
-              source = {{
-                uri:"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.femmeactuelle.fr%2Fsante%2Fnews-sante%2Fvue-mer-ameliore-moral-29734&psig=AOvVaw0pjTyJhFxIsbQWFHaI9rxx&ust=1646395923993000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCICN-oH1qfYCFQAAAAAdAAAAABAN"
-              }}
-              style={{
-                height: 100,
-                marginTop: 10,
-                width: 100,
-                }}
-              /> */}
-
-        {/* <Image
-          source={{uri:poi.photo}}
-          style={{
-            height: 100,
-            marginTop: 10,
-            width: 100,
-            }}
-        /> */}
       </View>
     );
-    // }
+   
   });
 
   return (
@@ -219,15 +189,14 @@ function MapScreen(props) {
         flex: 1,
       }}
     >
-      
       <MapView
         onPress={(evt) => onPressScreen(evt)}
-        initialRegion={{
-          latitude: currentLatitude,
-          longitude: currentLongitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
+        // initialRegion={{
+        //   latitude: currentLatitude,
+        //   longitude: currentLongitude,
+        //   latitudeDelta: 0.0922,
+        //   longitudeDelta: 0.0421,
+        // }}
         region={{
           latitude: currentLatitude,
           longitude: currentLongitude,
