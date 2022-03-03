@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { Button, Overlay, Input, Icon } from "react-native-elements";
+import { Button, Overlay, Input, Icon, Image } from "react-native-elements";
 import { Camera } from "expo-camera";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
@@ -20,6 +20,8 @@ function MapScreen(props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [hasPermission, setHasPermission] = useState(false);
+  const [hasPhoto, setHasPhoto] = useState(false);
+  const [seePhoto, setSeePhoto] = useState(false);
 
   //   console.log("currentLattitude", currentLatitude);
   //   console.log("currentLongitude", currentLongitude);
@@ -28,8 +30,9 @@ function MapScreen(props) {
   //   console.log("title", title);
   //   console.log("description", description);
   //   console.log("hasPermission", hasPermission);
-
-  console.log("#1");
+  //   console.log("hasPhoto", hasPhoto);
+  console.log("seePhotoI", seePhoto);
+  console.log("seePhoto typeof", typeof seePhoto);
 
   useEffect(() => {
     async function askPermissions() {
@@ -50,8 +53,8 @@ function MapScreen(props) {
   }, []);
 
   const onPressButton = () => {
-    setAddPOI(true);
     setVisible(true);
+    setHasPhoto(false);
   };
 
   onPressScreen = (evt) => {
@@ -66,9 +69,9 @@ function MapScreen(props) {
         ...listPOI,
         { lat, long, title, description, photo: props.photo },
       ]),
-        setAddPOI(false);
+        props.onAddPoiOnMap(lat, long);
+      setAddPOI(false);
     }
-    props.onAddPoiOnMap(lat, long, title, description);
   };
 
   const chatSubmit = () => {
@@ -89,6 +92,11 @@ function MapScreen(props) {
 
   const onPressAddPoi = () => {
     setVisible(!visible);
+    setAddPOI(true);
+    if (hasPhoto === false) {
+      const infoPOI = { title, description };
+      props.onAddInfoPOI(infoPOI);
+    }
   };
 
   const InputTitleChange = (val) => {
@@ -100,34 +108,78 @@ function MapScreen(props) {
   };
 
   const onPressAddPhoto = () => {
+    const infoPOI = { title, description };
+    props.onAddInfoPOI(infoPOI);
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
       console.log("status", status);
       setHasPermission(status === "granted");
       setVisible(false);
+      setAddPOI(true);
+      setHasPhoto(true);
     })();
     props.navigation.navigate("Camera");
   };
+
+  let poiPhoto;
+  const onPressMarker = () => {
+    console.log("#onpressmarker");
+    console.log("seePhoto", seePhoto);
+    if (seePhoto) {
+      setSeePhoto(false);
+    } else {
+      setSeePhoto(true);
+    }
+    // setSeePhoto(!seePhoto);
+  };
+
+  let image = null;
+  if (seePhoto) {
+    image = (
+      <View
+        style={{
+          height: "25%",
+          width: "100%",
+          backgroundColor: "transparent",
+          position: "absolute",
+        }}
+      >
+        <Image
+          source={{
+            uri: "http://t3.gstatic.com/licensed-image?q=tbn:ANd9GcTaVxmReIERhZm0qn7HqZbb5ie-jRKzGUYQhhrOcXtY59o5vSwDCPxGjes9c1mJHJbnQ13Aaa5VNPZObt6FIP0",
+          }}
+          style={{
+            height: "65%",
+            width: "85%",
+            marginHorizontal: "30%",
+            marginVertical: "35%",
+            resizeMode: "cover",
+            aspectRatio: 3 / 2,
+          }}
+        />
+      </View>
+    );
+  }
 
   // if (hasPermission) {
   //   ;
   // }
 
-  const tabListPOI = listPOI.map((poi, index) => {
-    // console.log("props.photo", props.photo);
-    // console.log("props.modal", props.modal);
+  const tabListPOI = props.poi.map((poi, index) => {
+    poiPhoto = poi.photo;
     return (
       <View key={index}>
         <Marker
+          onPress={() => onPressMarker()}
           coordinate={{
             latitude: poi.lat,
-            longitude: poi.long,
+            longitude: poi.lon,
           }}
           pinColor="#FFD440"
-          title={title}
-          description={description}
-          photo={props.urlToDisplay}
-        />
+          title={poi.title}
+          description={poi.desc}
+          // source={{uri:poi.photo}}
+        ></Marker>
       </View>
     );
   });
@@ -140,10 +192,23 @@ function MapScreen(props) {
     >
       <MapView
         onPress={(evt) => onPressScreen(evt)}
+        // initialRegion={{
+        //   latitude: currentLatitude,
+        //   longitude: currentLongitude,
+        //   latitudeDelta: 0.0922,
+        //   longitudeDelta: 0.0421,
+        // }}
+        region={{
+          latitude: currentLatitude,
+          longitude: currentLongitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }}
         style={{
           flex: 1,
-          alignItems: "flex-end",
-          justifyContent: "flex-end",
+          // flexDirection:"row",
+          alignItems: "flex-start",
+          justifyContent: "flex-start",
         }}
       >
         <Marker
@@ -157,7 +222,7 @@ function MapScreen(props) {
         />
         {tabListPOI}
       </MapView>
-
+      {image}
       <View
         style={{
           position: "absolute",
@@ -255,20 +320,20 @@ function MapScreen(props) {
 function mapDispatchToProps(dispatch) {
   console.log("#1mapDispatchToProps");
   return {
-    onAddPoiOnMap: function (lat, long, title, desc) {
+    onAddPoiOnMap: function (lat, long) {
       console.log("#1mapDispatchToProps#onClickAddPoi");
-      dispatch(
-        {
-          type: "addInfo",
-          title: title,
-          desc: desc,
-        },
-        {
-          type: "addCoord",
-          lat: lat,
-          long: long,
-        }
-      );
+      dispatch({
+        type: "addCoord",
+        lat: lat,
+        lon: long,
+      });
+    },
+    onAddInfoPOI: function (val) {
+      dispatch({
+        type: "addInfo",
+        title: val.title,
+        desc: val.description,
+      });
     },
   };
 }
@@ -276,8 +341,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
   console.log("mapStateToProps");
   return {
-    modal: state.dataModalList,
-    photo: state.photo,
+    poi: state.poi,
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
