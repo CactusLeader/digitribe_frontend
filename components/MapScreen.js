@@ -183,7 +183,7 @@ function MapScreen(props) {
           onPress={() => onPressButton()}
         />
         {/* <Button title="Chat" onPress={() => chatSubmit()} /> */}
-        {/* <Button title="Contacts" onPress={() => contactsSubmit()} /> */}
+        <Button title="Contacts" onPress={() => contactsSubmit()} />
         <Overlay
           isVisible={visible}
           onBackdropPress={toggleOverlay}
