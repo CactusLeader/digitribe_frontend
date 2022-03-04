@@ -4,18 +4,19 @@ import { StyleSheet, View, Text, ScrollView } from "react-native";
 
 import { ListItem, Icon, Avatar } from "react-native-elements";
 
-function ContactsScreen() {
+import { connect } from "react-redux";
+
+function ContactsScreen(props) {
   const [contactsList, setContactsList] = useState([]);
 
   useEffect(() => {
     async function loadData() {
       var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/contact"
+        `https://digitribebackend.herokuapp.com/contact/users/${props.token}`
       );
       var responseContact = await rawResponse.json();
-      setContactsList(responseContact.contact);
+      // setContactsList(responseContact.contact);
       console.log(responseContact);
-      console.log("contactsList", contactsList);
     }
     loadData();
   }, []);
@@ -28,10 +29,10 @@ function ContactsScreen() {
     );
   });
 
-  const tablistContacts = contactsList.map((user, i) => {
+  const tablistContacts = contactsList.map((user, index) => {
     return (
       <ListItem
-        key={i}
+        key={index}
         containerStyle={{
           marginHorizontal: 16,
           marginVertical: 8,
@@ -98,12 +99,13 @@ function ContactsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+function mapStateToProps(state) {
+  //   console.log("#3 reception blabla state", state);
+  return {
+    firstName: state.firstName,
+    token: state.token,
+    id: state.people,
+  };
+}
 
-export default ContactsScreen;
+export default connect(mapStateToProps, null)(ContactsScreen);
