@@ -31,8 +31,8 @@ function CameraScreen(props) {
         }
       );
       var response = await rawResponse.json();
-      console.log("response", response);
-      console.log("response.url", response.url);
+      // console.log("response", response);
+      // console.log("response.url", response.url);
       props.onAddPhotoClick(response.url);
     }
   };
@@ -153,7 +153,7 @@ function mapDispatchToProps(dispatch) {
   console.log("#1mapDispatchToProps");
   return {
     onAddPhotoClick: function (urlPhoto) {
-      console.log("#1mapDispatchToProps-onAddPhotoClick");
+      // console.log("#1mapDispatchToProps-onAddPhotoClick");
       dispatch({
         type: "addPhoto",
         photo: urlPhoto,

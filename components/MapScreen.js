@@ -34,8 +34,8 @@ function MapScreen(props) {
   //   console.log("hasPhoto", hasPhoto);
   // console.log("getCoordinate", getCoordinate);
 
-  console.log("seePhotoI", seePhoto);
-  console.log("seePhoto typeof", typeof seePhoto);
+  // console.log("seePhotoI", seePhoto);
+  // console.log("seePhoto typeof", typeof seePhoto);
 
   useEffect(() => {
     async function askPermissions() {
@@ -127,8 +127,8 @@ function MapScreen(props) {
 
   let poiPhoto;
   const onPressMarker = () => {
-    console.log("#onpressmarker");
-    console.log("seePhoto", seePhoto);
+    // console.log("#onpressmarker");
+    // console.log("seePhoto", seePhoto);
     if (seePhoto) {
       setSeePhoto(false);
     } else {
@@ -319,7 +319,7 @@ function mapDispatchToProps(dispatch) {
   console.log("#1mapDispatchToProps");
   return {
     onAddPoiOnMap: function (lat, long) {
-      console.log("#1mapDispatchToProps#onClickAddPoi");
+      // console.log("#1mapDispatchToProps#onClickAddPoi");
       dispatch({
         type: "addCoord",
         lat: lat,
@@ -337,7 +337,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  console.log("mapStateToProps");
+  // console.log("mapStateToProps");
   return {
     poi: state.poi,
   };

@@ -14,34 +14,65 @@ import socketIOClient from "socket.io-client";
 
 import { connect } from "react-redux";
 
-// Pensez à changer l'adresse ci-dessous avec votre IP locale !
 const socket = socketIOClient("https://digitribebackend.herokuapp.com/");
 
 function ChatScreen(props) {
   const [currentMessage, setCurrentMessage] = useState();
   const [listMessage, setListMessage] = useState([]);
-  const [sendByUser, setSendByUser] = useState(false);
+  const [nameUser, setNameUser] = useState("");
+  const [urlUser, setUrlUser] = useState("");
+  const [listMessageFromBack, setListMessageFromBack] = useState([]);
+  const [dataUserId, setDataUserId] = useState("");
+
+  console.log("listMessageFromBack", listMessageFromBack);
 
   useEffect(() => {
-    setSendByUser(false);
     socket.on("sendMessageToAll", (newMessageData) => {
-      console.log("newMessageData", newMessageData);
-      console.log("prenom de l utilisateur", props.firstName);
+      // console.log("newMessageData", newMessageData);
+      // console.log("prenom de l utilisateur", props.firstName);
       setListMessage([...listMessage, newMessageData]);
     });
   }, [listMessage]);
 
-  let tokenUser = "";
+  useEffect(() => {
+    async function loadData() {
+      // console.log("#iqhsbfjkhbjvhbjhdcbvjhbfdhjqvbjhdfbjvbjhdfbjhvbdfjbvhj");
+      const rawResponse = await fetch(
+        `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`
+      );
+      const responseMessage = await rawResponse.json();
+
+      // console.log("responseMessage", responseMessage);
+
+      const tabMessage = [
+        ...responseMessage.dataMessagesEmit,
+        ...responseMessage.dataMessagesReception,
+      ];
+
+      tabFinalMessage = tabMessage.sort(function (a, b) {
+        return new Date(a.date) - new Date(b.date);
+      });
+
+      setNameUser(responseMessage.dataRecipient.firstname);
+      setUrlUser(responseMessage.dataRecipient.photo);
+      setListMessageFromBack(tabFinalMessage);
+      setDataUserId(responseMessage.id);
+    }
+    loadData();
+  }, []);
+
+  const firstName = props.firstName;
 
   const MessageSubmit = async () => {
     socket.emit("sendMessage", {
       message: currentMessage,
       firstName: firstName,
+      tokenSocket: props.token,
     });
 
     setCurrentMessage("");
 
-    const date = new Date().getDate();
+    const date = new Date();
 
     const data = await fetch(
       `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`,
@@ -49,18 +80,59 @@ function ChatScreen(props) {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `message=${currentMessage}&date=${date}`,
-        //&recipientId=${}
       }
     );
     const body = await data.json();
 
-    tokenUser = body.token;
-
-    // if (body.token === props.token) {
-    //   setSendByUser(true);
-    // }
     // console.log("body", body);
   };
+
+  const baseStyleMessage = {
+    marginHorizontal: 8,
+    marginVertical: 8,
+    borderRadius: 8,
+    alignSelf: "flex-start",
+    width: "auto",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    backgroundColor: "#FFD440",
+  };
+
+  const emitStyleMessage = {
+    justifyContent: "flex-end",
+    alignSelf: "flex-end",
+    backgroundColor: "#7D4FF4",
+  };
+
+  const ReceivStyleMessage = {
+    alignSelf: "flex-start",
+    backgroundColor: "#FFD440",
+  };
+
+  const listMessageItemBack = listMessageFromBack.map((messageData, i) => {
+    let msg = messageData.text.replace(/:\)/g, "\u263A");
+    msg = msg.replace(/:\(/g, "\u2639");
+    msg = msg.replace(/:p/g, "\uD83D\uDE1B");
+
+    msg = msg.replace(/[a-z]*fuck[a-z]*/gi, "\u2022\u2022\u2022");
+
+    let styleMessage = {};
+    let name = "";
+    if (dataUserId === messageData.userIdEmit) {
+      styleMessage = { ...baseStyleMessage, ...emitStyleMessage };
+      name = props.firstName;
+    } else {
+      styleMessage = { ...baseStyleMessage, ...ReceivStyleMessage };
+      name = nameUser;
+    }
+
+    return (
+      <View key={i} style={styleMessage}>
+        <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
+        <Text style={{ color: "white", alignSelf: "flex-end" }}>{name}</Text>
+      </View>
+    );
+  });
 
   const listMessageItem = listMessage.map((messageData, i) => {
     let msg = messageData.message.replace(/:\)/g, "\u263A");
@@ -69,46 +141,23 @@ function ChatScreen(props) {
 
     msg = msg.replace(/[a-z]*fuck[a-z]*/gi, "\u2022\u2022\u2022");
 
-    let styleMessage = {
-      marginHorizontal: 8,
-      marginVertical: 8,
-      borderRadius: 8,
-      alignSelf: "flex-start",
-      width: "auto",
-      paddingHorizontal: 10,
-      paddingVertical: 5,
-      backgroundColor: "#FFD440",
-    };
-
-    if (tokenUser === props.token) {
-      setSendByUser(true);
-    }
-
-    if (sendByUser === true) {
-      styleMessage = {
-        marginHorizontal: 8,
-        marginVertical: 8,
-        borderRadius: 8,
-        justifyContent: "flex-end",
-        alignSelf: "flex-end",
-        width: "auto",
-        paddingHorizontal: 10,
-        paddingVertical: 5,
-        backgroundColor: "#7D4FF4",
-      };
+    let styleMessage = {};
+    let name = "";
+    if (messageData.tokenSocket === props.token) {
+      styleMessage = { ...baseStyleMessage, ...emitStyleMessage };
+      name = props.firstName;
+    } else {
+      styleMessage = { ...baseStyleMessage, ...ReceivStyleMessage };
+      name = nameUser;
     }
 
     return (
       <View key={i} style={styleMessage}>
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-        <Text style={{ color: "white", alignSelf: "flex-end" }}>
-          {messageData.firstName}
-        </Text>
+        <Text style={{ color: "white", alignSelf: "flex-end" }}>{name}</Text>
       </View>
     );
   });
-
-  const firstName = props.firstName;
 
   return (
     <View style={{ flex: 1 }}>
@@ -120,7 +169,6 @@ function ChatScreen(props) {
           height: 100,
           paddingTop: 50,
           paddingLeft: 10,
-          // padding: 20
         }}
       >
         <Button
@@ -134,14 +182,19 @@ function ChatScreen(props) {
           type="solid"
           onPress={() => props.navigation.navigate("Map")}
         />
-        <Text style={{ fontSize: 25 }}>Monsieur Test</Text>
+        <Text style={{ fontSize: 25 }}>{nameUser}</Text>
         <Image
-          source={require("../assets/profile_avatar.png")}
+          source={{
+            uri: urlUser,
+          }}
           style={{ width: 35, height: 35, borderRadius: 50, marginRight: 10 }}
         />
       </View>
 
-      <ScrollView style={{ flex: 1 }}>{listMessageItem}</ScrollView>
+      <ScrollView style={{ flex: 1 }}>
+        {listMessageItemBack}
+        {listMessageItem}
+      </ScrollView>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -177,14 +230,6 @@ function ChatScreen(props) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
 
 function mapStateToProps(state) {
   //   console.log("#3 reception blabla state", state);
