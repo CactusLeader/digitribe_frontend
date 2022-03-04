@@ -24,8 +24,6 @@ function ChatScreen(props) {
   const [listMessageFromBack, setListMessageFromBack] = useState([]);
   const [dataUserId, setDataUserId] = useState("");
 
-  console.log("listMessageFromBack", listMessageFromBack);
-
   useEffect(() => {
     socket.on("sendMessageToAll", (newMessageData) => {
       // console.log("newMessageData", newMessageData);
