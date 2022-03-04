@@ -7,6 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { Card, Icon, Button } from "react-native-elements";
+import { LinearGradient } from "expo";
 import { connect } from "react-redux";
 
 function PeopleScreen(props) {
@@ -30,30 +31,33 @@ function PeopleScreen(props) {
     props.navigation.navigate("PeopleProfile");
   };
 
+  function getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  }
+
   const cardList = peopleList.map((people, index) => {
     return (
-      <Card containerStyle={styles.card} key={index}>
+      <Card containerStyle={[styles.card, styles.shadowProp]} key={index}>
         <Card.Image
-          style={{ padding: 0 }}
+          style={styles.cardImage}
           source={{
             uri: people.photo,
           }}
-          // onPress={() => handleProfile()}
-        />
-        <Card.Divider />
-        <Card.Title>{people.firstname}</Card.Title>
-
-        <Text style={{ marginBottom: 10 }}>{people.description}</Text>
-        <Button
-          buttonStyle={{
-            borderRadius: 0,
-            marginLeft: 0,
-            marginRight: 0,
-            marginBottom: 0,
-          }}
-          title="Voir profil"
           onPress={() => handleProfile(people._id)}
         />
+        <Card.Divider />
+        <Card.Title>
+          {people.firstname}, {getAge(people.birthdate)} ans
+        </Card.Title>
+
+        <Text style={styles.cardText}>{people.description}</Text>
       </Card>
     );
   });
@@ -66,7 +70,9 @@ function PeopleScreen(props) {
       <View style={styles.header}>
         <Text style={styles.innerHeader}>Autour de moi...</Text>
       </View>
-      <ScrollView>{cardList}</ScrollView>
+      <ScrollView contentContainerStyle={styles.cardContainer}>
+        {cardList}
+      </ScrollView>
     </ImageBackground>
   );
 }
@@ -85,11 +91,36 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     textAlign: "center",
   },
+  cardContainer: {
+    // flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "flex-start",
+  },
   card: {
-    width: "50%",
+    width: "40%",
+    borderWidth: 5,
+    borderRadius: 15,
+    borderColor: "#FFD440",
+    backgroundColor: "white",
+    padding: 0,
+  },
+  cardImage: {
+    padding: 0,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  cardText: {
+    margin: 10,
   },
   button: {
     alignItems: "center",
+  },
+  shadowProp: {
+    shadowColor: "#171717",
+    shadowOffset: { width: -2, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
   },
 });
 
