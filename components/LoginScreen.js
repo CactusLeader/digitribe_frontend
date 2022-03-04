@@ -53,7 +53,7 @@ function LoginScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/DigiBackground2.png")}
+      source={require("../assets/2.png")}
       style={styles.container}
     >
       <Text
