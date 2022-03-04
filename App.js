@@ -47,7 +47,7 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          {/* <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen
             name="AccountCreation"
@@ -61,7 +61,7 @@ export default function App() {
           <Stack.Screen name="Chat" component={ChatScreen} />
           <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
-          <Stack.Screen name="Contacts" component={ContactsScreen} /> */}
+          <Stack.Screen name="Contacts" component={ContactsScreen} />
           <Stack.Screen name="People" component={PeopleScreen} />
           <Stack.Screen name="PeopleProfile" component={PeopleProfileScreen} />
         </Stack.Navigator>
