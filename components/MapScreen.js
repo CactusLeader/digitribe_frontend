@@ -24,13 +24,13 @@ function MapScreen(props) {
   const [seePhoto, setSeePhoto] = useState(false);
   const [getCoordinate, setGetCoordinate] = useState(false);
 
-// console.log("currentLatitude", currentLatitude)
-// console.log("currentLongitude", currentLongitude)
+  // console.log("currentLatitude", currentLatitude)
+  // console.log("currentLongitude", currentLongitude)
   //   console.log("addPOI", addPOI);
   // console.log("listPOI", listPOI);
   //   console.log("title", title);
   //   console.log("description", description);
-    // console.log("hasPermission", hasPermission);
+  // console.log("hasPermission", hasPermission);
   //   console.log("hasPhoto", hasPhoto);
   // console.log("getCoordinate", getCoordinate);
 
@@ -50,40 +50,39 @@ function MapScreen(props) {
             setCurrentLongitude(location.coords.longitude);
           }
         );
-        if(currentLatitude && currentLongitude){
-        let rawData = await fetch(
-              'http://172.20.10.5:3000/map', 
-              {
+        if (currentLatitude && currentLongitude) {
+          let rawData = await fetch(
+            "https://digitribebackend.herokuapp.com/map",
+            {
               method: "POST",
               headers: { "Content-Type": "application/x-www-form-urlencoded" },
               body: `currentLatitude=${currentLatitude}&currentLongitude=${currentLongitude}&token=${props.token}`,
-            }); 
-            let data = await rawData.json();
-            console.log('data', data)
-            console.log('data.location', data.location)
-      }}
+            }
+          );
+          let data = await rawData.json();
+          console.log("data", data);
+          console.log("data.location", data.location);
+        }
+      }
     }
     askPermissions();
   }, []);
 
- 
-// useEffect (() => {
-//   const loadData = async () => {
-//   let rawData = await fetch(
-//     'https://digitribebackend.herokuapp.com/map', 
-//     {
-//     method: "POST",
-//     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-//     body: `lat=${currentLatitude}&lon=${currentLongitude}`,
-//   }); 
-//   let data = await rawData.json();
-//   console.log('data', data)
-//   console.log('data.location', data.location)
-// }
-// loadData()
-// }, [])
-
-
+  // useEffect (() => {
+  //   const loadData = async () => {
+  //   let rawData = await fetch(
+  //     'https://digitribebackend.herokuapp.com/map',
+  //     {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  //     body: `lat=${currentLatitude}&lon=${currentLongitude}`,
+  //   });
+  //   let data = await rawData.json();
+  //   console.log('data', data)
+  //   console.log('data.location', data.location)
+  // }
+  // loadData()
+  // }, [])
 
   const onPressButton = () => {
     setVisible(true);
@@ -92,10 +91,10 @@ function MapScreen(props) {
 
   const onPressScreen = (evt) => {
     "#1mapDispatchToProps#onClickAddPoi#onPressScreen";
-    
+
     const lat = evt.nativeEvent.coordinate.latitude;
     const long = evt.nativeEvent.coordinate.longitude;
-   
+
     setGetCoordinate(true);
     if (addPOI) {
       setListPOI([
@@ -106,7 +105,6 @@ function MapScreen(props) {
       setAddPOI(false);
     }
   };
-
 
   const chatSubmit = () => {
     props.navigation.navigate("Chat");
@@ -217,12 +215,12 @@ function MapScreen(props) {
   // const getCoordSubmit = async () => {
   //   console.log('onogetCoordSubmit')
   //   let rawData = await fetch(
-  //     'http://localhost:3000/map', 
+  //     'http://localhost:3000/map',
   //     {
   //     method: "POST",
   //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
   //     body: `lat=${currentLatitude}&lon=${currentLongitude}`,
-  //   }); 
+  //   });
   //   let data = await rawData.json();
   //   console.log('data', data)
   //   console.log('data.location', data.location)
@@ -295,7 +293,6 @@ function MapScreen(props) {
         <Button title="Profile" onPress={() => profilesSubmit()} />
 
         {/* <Button title="getCoord" onPress={() => getCoordSubmit()} /> */}
-
 
         <Overlay
           isVisible={visible}
@@ -385,7 +382,7 @@ function mapStateToProps(state) {
   console.log("mapStateToProps");
   return {
     poi: state.poi,
-    token:state.token
+    token: state.token,
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
