@@ -24,12 +24,14 @@ function ChatScreen(props) {
   const [listMessageFromBack, setListMessageFromBack] = useState([]);
   const [dataUserId, setDataUserId] = useState("");
 
+  const onMessagesToAll = (newMessageData) => {
+    // console.log("newMessageData", newMessageData);
+    // console.log("prenom de l utilisateur", props.firstName);
+    setListMessage([...listMessage, newMessageData]);
+  };
+
   useEffect(() => {
-    socket.on("sendMessageToAll", (newMessageData) => {
-      // console.log("newMessageData", newMessageData);
-      // console.log("prenom de l utilisateur", props.firstName);
-      setListMessage([...listMessage, newMessageData]);
-    });
+    socket.on("sendMessageToAll", onMessagesToAll);
   }, [listMessage]);
 
   useEffect(() => {
@@ -67,6 +69,7 @@ function ChatScreen(props) {
       firstName: firstName,
       tokenSocket: props.token,
     });
+    socket.off("sendMessageToAll", onMessagesToAll);
 
     setCurrentMessage("");
 
