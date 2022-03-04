@@ -137,38 +137,39 @@ function MapScreen(props) {
   };
 
   let image = null;
-  if (seePhoto) {
-    image = (
-      <View
-        style={{
-          height: "25%",
-          width: "100%",
-          backgroundColor: "transparent",
-          position: "absolute",
-        }}
-      >
-        <Image
-          source={{
-            uri: "http://t3.gstatic.com/licensed-image?q=tbn:ANd9GcTaVxmReIERhZm0qn7HqZbb5ie-jRKzGUYQhhrOcXtY59o5vSwDCPxGjes9c1mJHJbnQ13Aaa5VNPZObt6FIP0",
-          }}
-          style={{
-            height: "65%",
-            width: "85%",
-            marginHorizontal: "30%",
-            marginVertical: "35%",
-            resizeMode: "cover",
-            aspectRatio: 3 / 2,
-          }}
-        />
-      </View>
-    );
-  }
-
-  // if (hasPermission) {
-  //   ;
-  // }
 
   const tabListPOI = props.poi.map((poi, index) => {
+    if (seePhoto) {
+      image = (
+        <View
+          style={{
+            height: "25%",
+            width: "100%",
+            backgroundColor: "transparent",
+            position: "absolute",
+          }}
+        >
+          <Image
+            source={{
+              uri: poi.photo,
+            }}
+            style={{
+              height: "65%",
+              width: "85%",
+              marginHorizontal: "30%",
+              marginVertical: "35%",
+              resizeMode: "cover",
+              aspectRatio: 3 / 2,
+            }}
+          />
+        </View>
+      );
+    }
+
+    // if (hasPermission) {
+    //   ;
+    // }
+
     poiPhoto = poi.photo;
     if (getCoordinate) {
       return (
@@ -182,7 +183,6 @@ function MapScreen(props) {
             pinColor="#FFD440"
             title={poi.title}
             description={poi.desc}
-            // source={{uri:poi.photo}}
           ></Marker>
         </View>
       );
@@ -250,32 +250,9 @@ function MapScreen(props) {
           onPress={() => onPressButton()}
         />
         {/* <Button title="Chat" onPress={() => chatSubmit()} /> */}
-        <Button 
-        title="Contacts" 
-        onPress={() => contactsSubmit()}
-        titleStyle={{
-          color: "white",
-          fontSize: 20,
-        }}
-        buttonStyle={{
-          backgroundColor: "#8525FF",
-          borderRadius: 100,
-        }} 
-        containerStyle={{
-          marginBottom: 5
-        }}
-        />
-        <Button 
-        title="Profile"
-         onPress={() => profilesSubmit()}
-         titleStyle={{
-          color: "white",
-          fontSize: 20,
-        }}
-        buttonStyle={{
-          backgroundColor: "#8525FF",
-          borderRadius: 100,
-        }} />
+
+        <Button title="Contacts" onPress={() => contactsSubmit()} />
+        <Button title="Profile" onPress={() => profilesSubmit()} />
         <Overlay
           isVisible={visible}
           onBackdropPress={toggleOverlay}
@@ -320,7 +297,6 @@ function MapScreen(props) {
             buttonStyle={{
               color: "#8525FF",
               backgroundColor: "#FFD440",
-              borderRadius: 100,
             }}
             icon={
               <Icon
