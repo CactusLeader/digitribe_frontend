@@ -84,6 +84,8 @@ function ProfileCreationScreen(props) {
       if (body.result === true) {
         setLoading(false);
         props.navigation.navigate("Map");
+        props.onTokenEmit(body.token);
+        props.onFirstnameEmit(body.saveUser.firstname);
       } else {
         setLoading(false);
         alert(body.error);
@@ -205,4 +207,18 @@ function mapStateToProps(state) {
   return { account: state.account };
 }
 
-export default connect(mapStateToProps, null)(ProfileCreationScreen);
+function mapDispatchToProps(dispatch) {
+  return {
+    onTokenEmit: function (token) {
+      dispatch({ type: "addToken", token });
+    },
+    onFirstnameEmit: function (firstname) {
+      dispatch({ type: "saveFirstname", firstname });
+    },
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProfileCreationScreen);
