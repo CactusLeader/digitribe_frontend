@@ -24,7 +24,7 @@ function CameraScreen(props) {
       });
       console.log("photo.uri", photo.uri);
       var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/place",
+        "https://digitribebackend.herokuapp.com/map",
         {
           method: "post",
           body: data,

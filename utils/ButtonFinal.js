@@ -6,26 +6,18 @@ function DigiButtonFinal(props) {
     <Button
       title={props.title}
       titleStyle={{
-        color: props,
-        fontSize: 14,
+        color: "white",
+        fontSize: 25,
       }}
       buttonStyle={{
-        color: "black",
+        backgroundColor: "#8525FF",
         borderRadius: 100,
-        borderColor: "black",
-      }}
-      icon={{
-        name: "photo-camera",
-        type: "materialicon",
-        size: 20,
-        color: "black",
       }}
       onPress={props.onPress}
       type="outline"
       containerStyle={{
         marginBottom: 20,
-        width: 150,
-        borderColor: props.borderColor,
+        width: 300,
       }}
     />
   );

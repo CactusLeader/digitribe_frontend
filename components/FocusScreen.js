@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import { connect } from "react-redux";
 import { CheckBox } from "react-native-elements";
-import Button from "../utils/Button.js";
+import Button from "../utils/ButtonFinal.js";
 
 function FocusScreen(props) {
   const [interestsList, setInterestsList] = useState([]);

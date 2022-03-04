@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, ImageBackground, Text, View } from "react-native";
 import { Input } from "react-native-elements";
 
-import Button from "../utils/Button.js";
+import Button from "../utils/ButtonFinal.js";
 
 import { connect } from "react-redux";
 
@@ -13,14 +13,14 @@ function LoginScreen(props) {
   const [listErrorsLogin, setErrorsLogin] = useState([]);
   // const [firstname, setFirstname] = useState("");
 
-  const MapSubmit = async () => {
-    const data = await fetch("https://digitribebackend.herokuapp.com/login", {
+  const MapSubmit = async () => { const data = await fetch("https://digitribebackend.herokuapp.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `email=${email}&password=${password}`,
     });
 
     const body = await data.json();
+   
 
     // console.log("body", body);
 
@@ -53,14 +53,14 @@ function LoginScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/DigitribeBackground2.png")}
+      source={require("../assets/DigiBackground2.png")}
       style={styles.container}
     >
       <Text
         style={{
           fontSize: 40,
           fontWeight: "bold",
-          color: "#8B62AB",
+          color: "#8525FF",
           marginBottom: 30,
           marginTop: -50,
         }}
