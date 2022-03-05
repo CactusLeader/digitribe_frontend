@@ -64,7 +64,7 @@ function PeopleScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/DigitribeBackground2.png")}
+      source={require("../assets/3.png")}
       style={styles.container}
     >
       <View style={styles.header}>
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     marginTop: "15%",
   },
   innerHeader: {
-    color: "#8525FF",
+    color: "white",
     fontSize: 28,
     fontWeight: "700",
     marginBottom: 40,

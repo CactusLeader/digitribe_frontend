@@ -11,7 +11,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
-import { Button } from "react-native-elements";
+import Button from "../utils/ButtonFinal.js";
 import { connect } from "react-redux";
 import { Picker } from "@react-native-picker/picker";
 import ButtonDrop from "../utils/Button.js";
@@ -96,7 +96,7 @@ function ProfileCreationScreen(props) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <ImageBackground
-        source={require("../assets/DigitribeBackground2.png")}
+        source={require("../assets/2.png")}
         style={styles.container}
       >
         {loading ? (
@@ -123,7 +123,15 @@ function ProfileCreationScreen(props) {
               )}
               <Button
                 title="+ Add Picture"
+                titleStyle={{
+                  color: "white",
+                  fontSize: 20,
+                }}
                 buttonStyle={styles.button}
+                containerStyle={{
+                  marginLeft: 20,
+                  width: 150,
+                }}
                 onPress={pickImage}
               />
             </View>
@@ -150,7 +158,18 @@ function ProfileCreationScreen(props) {
                 <Picker.Item label="Français" value="Français" />
                 <Picker.Item label="English" value="English" />
               </Picker>
-              <ButtonDrop title="Suivant" onPress={() => accountSubmit()} />
+              <Button
+                title="Suivant"
+                containerStyle={{
+                  width: 300,
+                  marginTop:40
+                }}
+                titleStyle={{
+                  color: "white",
+                  fontSize: 25,
+                }}
+                onPress={() => accountSubmit()}
+              />
             </View>
           </View>
         )}
@@ -175,7 +194,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   innerHeader: {
-    color: "#8525FF",
+    color: "white",
     fontSize: 28,
     fontWeight: "700",
     marginBottom: 65,
@@ -200,6 +219,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    
   },
 });
 
