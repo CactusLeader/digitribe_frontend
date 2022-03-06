@@ -191,6 +191,14 @@ function AccountCreationScreen(props) {
                   color: "white",
                   fontSize: 25,
                 }}
+                containerStyle={{
+                  width: 270,
+                  marginVertical:40
+                }}
+                titleStyle={{
+                  color: "white",
+                  fontSize: 25,
+                }}
               />
             </View>
           </KeyboardAvoidingView>

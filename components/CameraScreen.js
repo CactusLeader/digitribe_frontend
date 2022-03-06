@@ -22,9 +22,9 @@ function CameraScreen(props) {
         type: "image/jpeg",
         name: "photo.jpg",
       });
-      // console.log("photo.uri", photo.uri);
+      console.log("photo.uri", photo.uri);
       var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/place",
+        "https://digitribebackend.herokuapp.com/upload",
         {
           method: "post",
           body: data,
@@ -153,7 +153,7 @@ function mapDispatchToProps(dispatch) {
   console.log("#1mapDispatchToProps");
   return {
     onAddPhotoClick: function (urlPhoto) {
-      // console.log("#1mapDispatchToProps-onAddPhotoClick", urlPhoto);
+      // console.log("#1mapDispatchToProps-onAddPhotoClick");
       dispatch({
         type: "addPhoto",
         photo: urlPhoto,
