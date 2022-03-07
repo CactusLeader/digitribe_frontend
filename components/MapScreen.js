@@ -13,8 +13,8 @@ import { BorderlessButton } from "react-native-gesture-handler";
 const Stack = createStackNavigator();
 
 function MapScreen(props) {
-  const [currentLatitude, setCurrentLatitude] = useState(48.866667);
-  const [currentLongitude, setCurrentLongitude] = useState(2.333333);
+  const [currentLatitude, setCurrentLatitude] = useState();
+  const [currentLongitude, setCurrentLongitude] = useState();
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -23,8 +23,11 @@ function MapScreen(props) {
   const [hasPhoto, setHasPhoto] = useState(false);
   const [seePhoto, setSeePhoto] = useState(false);
   const [getCoordinate, setGetCoordinate] = useState(false);
+  const [placeList, setPlaceList] = useState([]);
 
-  console.log("props.poi", props.poi);
+  console.log("placeList", placeList);
+
+  // console.log("props.poi", props.poi);
 
   useEffect(() => {
     async function askPermissions() {
@@ -57,6 +60,16 @@ function MapScreen(props) {
     askPermissions();
   }, []);
 
+  useEffect(() => {
+    async function loadData() {
+      var rawResponse = await fetch("http://172.20.10.5:3000/place");
+      var response = await rawResponse.json();
+      console.log("response", response);
+      setPlaceList(response.place);
+    }
+    loadData();
+  }, []);
+
   const onPressButton = () => {
     setVisible(true);
     setHasPhoto(false);
@@ -71,6 +84,7 @@ function MapScreen(props) {
     console.log("long", long);
 
     setGetCoordinate(true);
+
     if (addPOI) {
       setListPOI([
         ...listPOI,
@@ -91,18 +105,33 @@ function MapScreen(props) {
       poiInfo.push(`token=${props.token}`);
       const pInfo = poiInfo.join("&");
 
-      useEffect(() => {
-        async function loadData() {
       let rawData = await fetch("http://172.20.10.5:3000/place", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: pInfo,
       });
       let dataFinal = await rawData.json();
-      console.log("data", dataFinal);
+      console.log("dataFinal", dataFinal);
+      console.log("dataFinal.newPlace", dataFinal.newPlace);
     }
-    loadData()
-  }, []);
+  };
+
+  const newPlaceList = placeList.map((place, index) => {
+    return (
+      <View key={index}>
+        <Marker
+          onPress={() => onPressMarker()}
+          coordinate={{
+            latitude: place.coordinate.lat,
+            longitude: place.coordinate.lon,
+          }}
+          pinColor="#FFD440"
+          title={place.title}
+          description={place.description}
+        ></Marker>
+      </View>
+    );
+  });
 
   const chatSubmit = () => {
     props.navigation.navigate("Chat");
@@ -146,25 +175,6 @@ function MapScreen(props) {
     props.navigation.navigate("Camera");
   };
 
-  // const onClickMiniature = () => {
-  //   return(
-  //   <View
-  //     style={{
-  //       flex: 1,
-  //       alignItems: "stretch",
-  //     }}
-  //   >
-  //     <Image
-  //       source={{
-  //         uri: poi.photo,
-  //       }}
-  //       style={{
-  //         flex: 1,
-  //       }}
-  //     />
-  //   </View>)
-  // };
-
   const onPressMarker = () => {
     // console.log("#onpressmarker");
     // console.log("seePhoto", seePhoto);
@@ -203,29 +213,7 @@ function MapScreen(props) {
               height: 200,
               resizeMode: "contain",
             }}
-            // onPress={() => onClickMiniature()}
           />
-          {/* <View
-            style={{
-              alignSelf: "flex-end",
-              justifyContent: "flex-start",
-              flexBasis:"auto"
-            }}
-          >
-            <Text
-              style={{
-                fontSize: "16",
-                fontWeight: "bold",
-              }}
-            >
-              {poi.title}
-            </Text>
-            <Text
-            style={{
-              fontSize: "16",
-              fontWeight: "bold",
-            }}>{poi.desc}</Text>
-          </View> */}
         </View>
       );
     }
@@ -278,6 +266,7 @@ function MapScreen(props) {
           pinColor="#8525FF"
         />
         {tabListPOI}
+        {newPlaceList}
       </MapView>
       {image}
       <View
