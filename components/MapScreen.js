@@ -27,7 +27,7 @@ function MapScreen(props) {
   const [userList, setUserList] = useState([]);
 
   // console.log("placeList", placeList);
-  console.log("userList", userList);
+  // console.log("userList", userList);
 
   // console.log("props.poi", props.poi);
 
@@ -66,7 +66,7 @@ function MapScreen(props) {
     async function loadData() {
       var rawResponse = await fetch("http://172.20.10.5:3000/place");
       var response = await rawResponse.json();
-      console.log("response", response);
+      // console.log("response", response);
       setPlaceList(response.place);
     }
     loadData();
@@ -76,7 +76,7 @@ function MapScreen(props) {
     async function loadData() {
       var rawResponse2 = await fetch("http://172.20.10.5:3000/map");
       var responseUser = await rawResponse2.json();
-      console.log("responseUser.user", responseUser.user);
+      // console.log("responseUser.user", responseUser.user);
       setUserList(responseUser.user)
     }
     loadData();
