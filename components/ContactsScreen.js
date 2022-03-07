@@ -8,15 +8,28 @@ import { connect } from "react-redux";
 
 function ContactsScreen(props) {
   const [contactsList, setContactsList] = useState([]);
+  const [messagesList, setMessagesList] = useState([]);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     async function loadData() {
-      var rawResponse = await fetch(
+      const rawResponse = await fetch(
         `https://digitribebackend.herokuapp.com/contact/users/${props.token}`
       );
-      var responseContact = await rawResponse.json();
-      // setContactsList(responseContact.contact);
-      console.log(responseContact);
+      const responseContact = await rawResponse.json();
+
+      const tabMessage = [
+        ...responseContact.dataMessagesEmit,
+        ...responseContact.dataMessagesReceive,
+      ];
+
+      let tabFinalMessage = tabMessage.sort(function (a, b) {
+        return new Date(b.date) - new Date(a.date);
+      });
+
+      setContactsList(responseContact.dataUserFilteredFinal);
+      setMessagesList(tabFinalMessage);
+      setUserId(responseContact.id);
     }
     loadData();
   }, []);
@@ -30,6 +43,18 @@ function ContactsScreen(props) {
   });
 
   const tablistContacts = contactsList.map((user, index) => {
+    let test = "";
+    for (let i = 0; i < messagesList.length; i++) {
+      if (
+        (user._id === messagesList[i].userIdEmit &&
+          userId === messagesList[i].userIdReception) ||
+        (user._id === messagesList[i].userIdReception &&
+          userId === messagesList[i].userIdEmit)
+      ) {
+        test = messagesList[i].text;
+        break;
+      }
+    }
     return (
       <ListItem
         key={index}
@@ -42,7 +67,7 @@ function ContactsScreen(props) {
         <Avatar rounded source={{ uri: user.photo }} />
         <ListItem.Content>
           <ListItem.Title>{user.firstname}</ListItem.Title>
-          <ListItem.Subtitle>{user.description}</ListItem.Subtitle>
+          <ListItem.Subtitle>{test}</ListItem.Subtitle>
         </ListItem.Content>
         <ListItem.Chevron />
       </ListItem>

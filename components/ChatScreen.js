@@ -49,7 +49,7 @@ function ChatScreen(props) {
         ...responseMessage.dataMessagesReception,
       ];
 
-      tabFinalMessage = tabMessage.sort(function (a, b) {
+      let tabFinalMessage = tabMessage.sort(function (a, b) {
         return new Date(a.date) - new Date(b.date);
       });
 
