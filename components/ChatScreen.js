@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Button, ListItem, Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Ionicons } from "@expo/vector-icons";
 
 import socketIOClient from "socket.io-client";
 
@@ -110,6 +111,9 @@ function ChatScreen(props) {
     backgroundColor: "#FFD440",
   };
 
+  let iconName = "checkmark-outline";
+  let colorIcon = "black";
+
   const listMessageItemBack = listMessageFromBack.map((messageData, i) => {
     let msg = messageData.text.replace(/:\)/g, "\u263A");
     msg = msg.replace(/:\(/g, "\u2639");
@@ -127,10 +131,18 @@ function ChatScreen(props) {
       name = nameUser;
     }
 
+    // if (messageData.read === true) {
+    //   iconName = "checkmark-done-outline";
+    //   colorIcon = "green";
+    // }
+
     return (
       <View key={i} style={styleMessage}>
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-        <Text style={{ color: "white", alignSelf: "flex-end" }}>{name}</Text>
+        <Text style={{ color: "white", alignSelf: "flex-end" }}>
+          {name}
+          {/* <Ionicons name={iconName} size={15} color={colorIcon} /> */}
+        </Text>
       </View>
     );
   });
