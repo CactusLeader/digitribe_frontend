@@ -96,7 +96,7 @@ function AccountCreationScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/DigitribeBackground2.png")}
+      source={require("../assets/2.png")}
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -120,7 +120,7 @@ function AccountCreationScreen(props) {
                 onChangeText={(val) => handleLastname(val)}
                 placeholder="Nom de famille"
                 leftIcon={
-                  <Ionicons name="md-person-circle" size={24} color="#FFD440" />
+                  <Ionicons name="md-person-circle" size={24} color="#8525FF" />
                 }
                 label="Nom de famille"
                 labelStyle={styles.label}
@@ -133,7 +133,7 @@ function AccountCreationScreen(props) {
                   <Ionicons
                     name="md-person-circle-outline"
                     size={24}
-                    color="#FFD440"
+                    color="#8525FF"
                   />
                 }
                 label="Prénom"
@@ -147,7 +147,7 @@ function AccountCreationScreen(props) {
                   <Ionicons
                     name="md-person-circle-outline"
                     size={24}
-                    color="#FFD440"
+                    color="#8525FF"
                   />
                 }
                 label="Date de naissance"
@@ -170,7 +170,7 @@ function AccountCreationScreen(props) {
                 value={email}
                 onChangeText={(val) => handleEmail(val)}
                 placeholder="Email"
-                leftIcon={<Ionicons name="mail" size={24} color="#FFD440" />}
+                leftIcon={<Ionicons name="mail" size={24} color="#8525FF" />}
                 label="Email"
                 labelStyle={styles.label}
               />
@@ -179,12 +179,27 @@ function AccountCreationScreen(props) {
                 onChangeText={(val) => handlePassword(val)}
                 placeholder="Mot de passe"
                 leftIcon={
-                  <Ionicons name="lock-closed" size={24} color="#FFD440" />
+                  <Ionicons name="lock-closed" size={24} color="#8525FF" />
                 }
                 label="Mot de passe"
                 labelStyle={styles.label}
               />
-              <Button title="Suivant" onPress={() => accountSubmit()} />
+              <Button
+                title="Suivant"
+                onPress={() => accountSubmit()}
+                titleStyle={{
+                  color: "white",
+                  fontSize: 25,
+                }}
+                containerStyle={{
+                  width: 270,
+                  marginVertical:40
+                }}
+                titleStyle={{
+                  color: "white",
+                  fontSize: 25,
+                }}
+              />
             </View>
           </KeyboardAvoidingView>
         </View>
@@ -203,15 +218,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   label: {
-    color: "#FFD440",
+    color: "#8525FF",
   },
   header: {
-    color: "#8525FF",
+    color: "white",
     fontSize: 36,
     fontWeight: "700",
     marginBottom: 48,
     alignSelf: "center",
-    marginTop: "15%",
+    marginTop: "20%",
   },
   datePicker: {
     width: 320,
@@ -220,7 +235,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
   },
-
 });
 
 function mapDispatchToProps(dispatch) {
