@@ -35,15 +35,18 @@ function CameraScreen(props) {
         name: "photo.jpg",
       });
       console.log("photo.uri", photo.uri);
-      var rawResponse = await fetch("http://172.20.10.5:3000/upload", {
-        method: "post",
-        body: data,
-      });
+      var rawResponse = await fetch(
+        "https://digitribebackend.herokuapp.com/upload",
+        {
+          method: "post",
+          body: data,
+        }
+      );
       var response = await rawResponse.json();
 
       if (response.url) {
         setLoading(false);
-        props.navigation.navigate("Map");
+        props.navigation.navigate("BottomNavigator", { screen: "Map" });
         console.log("response", response);
         console.log("response.url", response.url);
         props.onAddPhotoClick(response.url);
