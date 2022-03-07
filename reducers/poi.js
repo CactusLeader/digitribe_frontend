@@ -1,6 +1,6 @@
 export default function (poi = [], action) {
-  // console.log("#2poi", poi);
-  // console.log("#2action", action);
+  console.log("#2poi", poi);
+  console.log("#2action", action);
   switch (action.type) {
     case "addInfo":
       return [...poi, { desc: action.desc, title: action.title }];

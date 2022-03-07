@@ -1,12 +1,21 @@
 import { Camera } from "expo-camera";
 import { View, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 
 function CameraScreen(props) {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+  const [hasPermission, setHasPermission] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      console.log("status", status);
+      setHasPermission(status === "granted");
+    })();
+  });
 
   const onPressPhoto = async () => {
     if (cameraRef) {
@@ -23,19 +32,25 @@ function CameraScreen(props) {
         name: "photo.jpg",
       });
       console.log("photo.uri", photo.uri);
-      var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/upload",
-        {
-          method: "post",
-          body: data,
-        }
-      );
+      var rawResponse = await fetch("http://172.20.10.5:3000/upload", {
+        method: "post",
+        body: data,
+      });
       var response = await rawResponse.json();
       // console.log("response", response);
-      // console.log("response.url", response.url);
+      console.log("response.url", response.url);
       props.onAddPhotoClick(response.url);
     }
   };
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+
+  if (hasPermission === false) {
+    props.navigation.navigate("map");
+    return <Text>Aucun accès à la caméra</Text>;
+  }
 
   return (
     <Camera

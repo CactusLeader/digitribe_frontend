@@ -20,23 +20,11 @@ function MapScreen(props) {
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [hasPermission, setHasPermission] = useState(false);
   const [hasPhoto, setHasPhoto] = useState(false);
   const [seePhoto, setSeePhoto] = useState(false);
   const [getCoordinate, setGetCoordinate] = useState(false);
 
-  console.log("currentLatitude", currentLatitude)
-  console.log("currentLongitude", currentLongitude)
-  //   console.log("addPOI", addPOI);
-  // console.log("listPOI", listPOI);
-  //   console.log("title", title);
-  //   console.log("description", description);
-  // console.log("hasPermission", hasPermission);
-  //   console.log("hasPhoto", hasPhoto);
-  // console.log("getCoordinate", getCoordinate);
-
-  // console.log("seePhotoI", seePhoto);
-  // console.log("seePhoto typeof", typeof seePhoto);
+  console.log("props.poi", props.poi);
 
   useEffect(() => {
     async function askPermissions() {
@@ -61,8 +49,8 @@ function MapScreen(props) {
             }
           );
           let data = await rawData.json();
-          console.log("data", data);
-          console.log("data.location", data.location);
+          // console.log("data", data);
+          // console.log("data.location", data.location);
         }
       }
     }
@@ -79,8 +67,8 @@ function MapScreen(props) {
 
     const lat = evt.nativeEvent.coordinate.latitude;
     const long = evt.nativeEvent.coordinate.longitude;
-    console.log("lat", lat)
-    console.log("long", long)
+    console.log("lat", lat);
+    console.log("long", long);
 
     setGetCoordinate(true);
     if (addPOI) {
@@ -90,19 +78,31 @@ function MapScreen(props) {
       ]),
         props.onAddPoiOnMap(lat, long);
       setAddPOI(false);
-      // let rawData = await fetch(
-      //   "http://172.20.10.5:3000/place",
-      //   {
-      //     method: "POST",
-      //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      //     body: `photo=${props.photo}&description=${description}&title=${title}&latitude=${lat},longitude=${long},userId=${_id}`,
-      //   }
-      // );
-      // let data = await rawData.json();
-      // console.log("data", data);
-      
+
+      const poi = props.poi;
+
+      const poiInfo = [];
+      poiInfo.push(`photo=${poi[poi.length - 1].photo}`);
+      poiInfo.push(`description=${poi[poi.length - 1].desc}`);
+      poiInfo.push(`title=${poi[poi.length - 1].title}`);
+      poiInfo.push(`latitude=${poi[poi.length - 1].lat}`);
+      poiInfo.push(`longitude=${poi[poi.length - 1].lon}`);
+      // poiInfo.push(`userId=${}`);
+      poiInfo.push(`token=${props.token}`);
+      const pInfo = poiInfo.join("&");
+
+      useEffect(() => {
+        async function loadData() {
+      let rawData = await fetch("http://172.20.10.5:3000/place", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: pInfo,
+      });
+      let dataFinal = await rawData.json();
+      console.log("data", dataFinal);
     }
-  };
+    loadData()
+  }, []);
 
   const chatSubmit = () => {
     props.navigation.navigate("Chat");
@@ -140,17 +140,10 @@ function MapScreen(props) {
   const onPressAddPhoto = () => {
     const infoPOI = { title, description };
     props.onAddInfoPOI(infoPOI);
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      console.log("status", status);
-      setHasPermission(status === "granted");
-      setVisible(false);
-      setAddPOI(true);
-      setHasPhoto(true);
-    })();
-    // if(hasPermission) {
+    setVisible(false);
+    setAddPOI(true);
+    setHasPhoto(true);
     props.navigation.navigate("Camera");
-    // }
   };
 
   // const onClickMiniature = () => {
@@ -172,7 +165,6 @@ function MapScreen(props) {
   //   </View>)
   // };
 
-  let poiPhoto;
   const onPressMarker = () => {
     // console.log("#onpressmarker");
     // console.log("seePhoto", seePhoto);
@@ -239,7 +231,6 @@ function MapScreen(props) {
     }
 
     if (getCoordinate) {
-      
       return (
         <View key={index}>
           <Marker
@@ -413,6 +404,7 @@ function mapStateToProps(state) {
   return {
     poi: state.poi,
     token: state.token,
+    // id: state.people,
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);
