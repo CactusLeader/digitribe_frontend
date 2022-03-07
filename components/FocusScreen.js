@@ -50,7 +50,7 @@ function FocusScreen(props) {
   });
 
   const focusSubmit = () => {
-    if (selectedInterests.length === 1) {
+    if (selectedInterests.length === 0) {
       alert("Veuillez séléctionner au moins un centre d'intérêt !");
     } else {
       props.navigation.navigate("ProfileCreation");

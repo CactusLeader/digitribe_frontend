@@ -14,6 +14,9 @@ function DigiButton(props) {
         backgroundColor: "#8525FF",
       }}
       onPress={props.onPress}
+      icon={props.icon}
+      iconContainerStyle={props.iconContainerStyle}
+      titleStyle={props.titleStyle}
     />
   );
 }

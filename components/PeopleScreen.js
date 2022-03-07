@@ -9,6 +9,7 @@ import {
 import { Card, Icon, Button } from "react-native-elements";
 import { LinearGradient } from "expo";
 import { connect } from "react-redux";
+import getAge from "../utils/age";
 
 function PeopleScreen(props) {
   const [peopleList, setPeopleList] = useState([]);
@@ -31,16 +32,16 @@ function PeopleScreen(props) {
     props.navigation.navigate("PeopleProfile");
   };
 
-  function getAge(dateString) {
-    var today = new Date();
-    var birthDate = new Date(dateString);
-    var age = today.getFullYear() - birthDate.getFullYear();
-    var m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  }
+  // function getAge(dateString) {
+  //   var today = new Date();
+  //   var birthDate = new Date(dateString);
+  //   var age = today.getFullYear() - birthDate.getFullYear();
+  //   var m = today.getMonth() - birthDate.getMonth();
+  //   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+  //     age--;
+  //   }
+  //   return age;
+  // }
 
   const cardList = peopleList.map((people, index) => {
     return (
