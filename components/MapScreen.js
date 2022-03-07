@@ -13,8 +13,8 @@ import { BorderlessButton } from "react-native-gesture-handler";
 const Stack = createStackNavigator();
 
 function MapScreen(props) {
-  const [currentLatitude, setCurrentLatitude] = useState();
-  const [currentLongitude, setCurrentLongitude] = useState();
+  const [currentLatitude, setCurrentLatitude] = useState(0);
+  const [currentLongitude, setCurrentLongitude] = useState(0);
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -24,8 +24,10 @@ function MapScreen(props) {
   const [seePhoto, setSeePhoto] = useState(false);
   const [getCoordinate, setGetCoordinate] = useState(false);
   const [placeList, setPlaceList] = useState([]);
+  const [userList, setUserList] = useState([]);
 
-  console.log("placeList", placeList);
+  // console.log("placeList", placeList);
+  console.log("userList", userList);
 
   // console.log("props.poi", props.poi);
 
@@ -69,6 +71,17 @@ function MapScreen(props) {
     }
     loadData();
   }, []);
+
+  useEffect(() => {
+    async function loadData() {
+      var rawResponse2 = await fetch("http://172.20.10.5:3000/map");
+      var responseUser = await rawResponse2.json();
+      console.log("responseUser.user", responseUser.user);
+      setUserList(responseUser.user)
+    }
+    loadData();
+  }, []);
+
 
   const onPressButton = () => {
     setVisible(true);
@@ -132,6 +145,17 @@ function MapScreen(props) {
       </View>
     );
   });
+
+  const newUserList = userList.map((user,index) => {
+        return ( <Marker key={index}
+          coordinate={{
+            latitude: user.location.lat,
+            longitude: user.location.lon,
+          }}
+          description="I am here"
+          pinColor="#8525FF"
+        /> )
+  })
 
   const chatSubmit = () => {
     props.navigation.navigate("Chat");
@@ -256,15 +280,7 @@ function MapScreen(props) {
           justifyContent: "flex-start",
         }}
       >
-        <Marker
-          coordinate={{
-            latitude: currentLatitude,
-            longitude: currentLongitude,
-          }}
-          title="Hello"
-          description="I am here"
-          pinColor="#8525FF"
-        />
+        {newUserList}
         {tabListPOI}
         {newPlaceList}
       </MapView>
