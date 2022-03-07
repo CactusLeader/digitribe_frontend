@@ -2,34 +2,77 @@ import React, { useState, useEffect } from "react";
 
 import { StyleSheet, View, Text, ScrollView } from "react-native";
 
-import { ListItem, Icon, Avatar } from "react-native-elements";
+import { ListItem, Icon, Avatar, Badge } from "react-native-elements";
 
 import { connect } from "react-redux";
 
 function ContactsScreen(props) {
   const [contactsList, setContactsList] = useState([]);
+  const [messagesList, setMessagesList] = useState([]);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     async function loadData() {
-      var rawResponse = await fetch(
+      const rawResponse = await fetch(
         `https://digitribebackend.herokuapp.com/contact/users/${props.token}`
       );
-      var responseContact = await rawResponse.json();
-      // setContactsList(responseContact.contact);
-      console.log(responseContact);
+      const responseContact = await rawResponse.json();
+
+      const tabMessage = [
+        ...responseContact.dataMessagesEmit,
+        ...responseContact.dataMessagesReceive,
+      ];
+
+      let tabFinalMessage = tabMessage.sort(function (a, b) {
+        return new Date(b.date) - new Date(a.date);
+      });
+
+      setContactsList(responseContact.dataUserFilteredFinal);
+      setMessagesList(tabFinalMessage);
+      setUserId(responseContact.id);
     }
     loadData();
   }, []);
 
-  const tablistNewContacts = contactsList.map((user, i) => {
-    return (
-      <View style={{ marginHorizontal: 5 }}>
-        <Avatar key={i} size="medium" rounded source={{ uri: user.photo }} />
-      </View>
-    );
-  });
+  const handleContact = (id) => {
+    props.onContactClick(id);
+    props.navigation.navigate("Chat");
+  };
 
   const tablistContacts = contactsList.map((user, index) => {
+    let nonLu = 0;
+    let message = "";
+
+    for (let i = 0; i < messagesList.length; i++) {
+      if (
+        (user._id === messagesList[i].userIdEmit &&
+          userId === messagesList[i].userIdReception) ||
+        (user._id === messagesList[i].userIdReception &&
+          userId === messagesList[i].userIdEmit)
+      ) {
+        message = messagesList[i].text;
+        break;
+      }
+    }
+
+    for (let i = 0; i < messagesList.length; i++) {
+      if (
+        (user._id === messagesList[i].userIdEmit &&
+          userId === messagesList[i].userIdReception &&
+          messagesList[i].read === false) ||
+        (user._id === messagesList[i].userIdReception &&
+          userId === messagesList[i].userIdEmit &&
+          messagesList[i].read === false)
+      ) {
+        nonLu++;
+      }
+    }
+
+    let valeur = "error";
+    if (nonLu === 0) {
+      valeur = "success";
+    }
+
     return (
       <ListItem
         key={index}
@@ -38,14 +81,34 @@ function ContactsScreen(props) {
           marginVertical: 8,
           borderRadius: 8,
         }}
+        onPress={() => handleContact(user._id)}
       >
         <Avatar rounded source={{ uri: user.photo }} />
+        <Badge
+          status={valeur}
+          value={nonLu}
+          containerStyle={{ position: "absolute", top: 12, left: 40 }}
+        />
         <ListItem.Content>
           <ListItem.Title>{user.firstname}</ListItem.Title>
-          <ListItem.Subtitle>{user.description}</ListItem.Subtitle>
+          <ListItem.Subtitle>{message}</ListItem.Subtitle>
         </ListItem.Content>
         <ListItem.Chevron />
       </ListItem>
+    );
+  });
+
+  const tablistNewContacts = contactsList.map((user, i) => {
+    return (
+      <View style={{ marginHorizontal: 5 }}>
+        <Avatar
+          key={i}
+          size="medium"
+          rounded
+          source={{ uri: user.photo }}
+          onPress={() => handleContact(user._id)}
+        />
+      </View>
     );
   });
 
@@ -99,6 +162,14 @@ function ContactsScreen(props) {
   );
 }
 
+function mapDispatchToProps(dispatch) {
+  return {
+    onContactClick: function (id) {
+      dispatch({ type: "seeProfile", id });
+    },
+  };
+}
+
 function mapStateToProps(state) {
   //   console.log("#3 reception blabla state", state);
   return {
@@ -108,4 +179,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(ContactsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ContactsScreen);

@@ -43,7 +43,7 @@ function HomeScreen(props) {
           type="outline"
           containerStyle={{
             marginBottom: 20,
-            width: 200,
+            width: 225,
           }}
         />
         <Button
@@ -60,8 +60,7 @@ function HomeScreen(props) {
           onPress={() => loginSubmit()}
           type="outline"
           containerStyle={{
-            marginBottom: 20,
-            width: 200,
+            width: 225,
           }}
         />
       </View>

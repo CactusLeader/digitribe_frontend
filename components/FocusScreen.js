@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import { connect } from "react-redux";
-import { CheckBox } from "react-native-elements";
-import Button from "../utils/ButtonFinal.js";
+import { CheckBox, Button } from "react-native-elements";
+// import Button from "../utils/ButtonFinal.js";
 
 function FocusScreen(props) {
   const [interestsList, setInterestsList] = useState([]);
@@ -60,7 +60,7 @@ function FocusScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/DigitribeBackground2.png")}
+      source={require("../assets/3.png")}
       style={styles.container}
     >
       <View style={styles.header}>
@@ -71,11 +71,25 @@ function FocusScreen(props) {
       </View>
       {interests}
       <View style={styles.button}>
-        <Button
-          buttonStyle={{ justifyContent: "center" }}
-          title="Suivant"
-          onPress={() => focusSubmit()}
-        />
+      <Button
+      title="Suivant"
+      titleStyle={{
+        color: "white",
+        fontSize: 25,
+      }}
+      buttonStyle={{
+        backgroundColor: "#FFD440",
+        borderRadius: 100,
+        borderColor: "white",
+        borderWidth: 0.5,
+      }}
+      onPress={() => focusSubmit()}
+      type="outline"
+      containerStyle={{
+        marginBottom: 200,
+        width: 250,
+      }}
+    />
       </View>
     </ImageBackground>
   );
@@ -89,21 +103,22 @@ const styles = StyleSheet.create({
     marginTop: "15%",
   },
   innerHeader: {
-    color: "#8525FF",
+    color: "white",
     fontSize: 28,
     fontWeight: "700",
-    marginBottom: 70,
+    marginBottom: 90,
     textAlign: "center",
   },
   innerSubHeader: {
-    color: "#8525FF",
+    color: "#FFD440",
     fontSize: 20,
     fontWeight: "700",
-    marginBottom: 10,
+    marginBottom: 20,
     textAlign: "center",
   },
   button: {
     alignItems: "center",
+    marginVertical: 170,
   },
 });
 

@@ -75,12 +75,23 @@ function LoginScreen(props) {
         onChangeText={(val) => setEmail(val)}
       />
       <Input
-        containerStyle={{ marginBottom: 25, width: "70%" }}
+        containerStyle={{ marginVertical: 25, width: "70%" }}
         inputStyle={{ marginLeft: 10 }}
         placeholder="Password"
         onChangeText={(val) => setPassword(val)}
       />
-      <Button title="Se login et continuer" onPress={() => MapSubmit()} />
+      <Button
+        title="Se login et continuer"
+        containerStyle={{
+          width: 270,
+          marginTop: 50,
+        }}
+        titleStyle={{
+          color: "white",
+          fontSize: 25,
+        }}
+        onPress={() => MapSubmit()}
+      />
     </ImageBackground>
   );
 }

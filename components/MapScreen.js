@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { Button, Overlay, Input, Icon, Image } from "react-native-elements";
 import { Camera } from "expo-camera";
 import MapView from "react-native-maps";
@@ -12,30 +12,23 @@ import { connect } from "react-redux";
 const Stack = createStackNavigator();
 
 function MapScreen(props) {
-  const [currentLatitude, setCurrentLatitude] = useState(48.866667);
-  const [currentLongitude, setCurrentLongitude] = useState(2.333333);
+  const [currentLatitude, setCurrentLatitude] = useState(0);
+  const [currentLongitude, setCurrentLongitude] = useState(0);
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
   const [visible, setVisible] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [hasPermission, setHasPermission] = useState(false);
   const [hasPhoto, setHasPhoto] = useState(false);
   const [seePhoto, setSeePhoto] = useState(false);
   const [getCoordinate, setGetCoordinate] = useState(false);
+  const [placeList, setPlaceList] = useState([]);
+  const [userList, setUserList] = useState([]);
 
-  // console.log("currentLatitude", currentLatitude)
-  // console.log("currentLongitude", currentLongitude)
-  //   console.log("addPOI", addPOI);
-  // console.log("listPOI", listPOI);
-  //   console.log("title", title);
-  //   console.log("description", description);
-  // console.log("hasPermission", hasPermission);
-  //   console.log("hasPhoto", hasPhoto);
-  // console.log("getCoordinate", getCoordinate);
+  // console.log("placeList", placeList);
+  // console.log("userList", userList);
 
-  // console.log("seePhotoI", seePhoto);
-  // console.log("seePhoto typeof", typeof seePhoto);
+  // console.log("props.poi", props.poi);
 
   useEffect(() => {
     async function askPermissions() {
@@ -60,42 +53,53 @@ function MapScreen(props) {
             }
           );
           let data = await rawData.json();
-          console.log("data", data);
-          console.log("data.location", data.location);
+          // console.log("data", data);
+          // console.log("data.location", data.location);
         }
       }
     }
     askPermissions();
   }, []);
 
-  // useEffect (() => {
-  //   const loadData = async () => {
-  //   let rawData = await fetch(
-  //     'https://digitribebackend.herokuapp.com/map',
-  //     {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  //     body: `lat=${currentLatitude}&lon=${currentLongitude}`,
-  //   });
-  //   let data = await rawData.json();
-  //   console.log('data', data)
-  //   console.log('data.location', data.location)
-  // }
-  // loadData()
-  // }, [])
+  useEffect(() => {
+    async function loadData() {
+      var rawResponse = await fetch(
+        "https://digitribebackend.herokuapp.com/place"
+      );
+      var response = await rawResponse.json();
+      // console.log("response", response);
+      setPlaceList(response.place);
+    }
+    loadData();
+  }, []);
+
+  useEffect(() => {
+    async function loadData() {
+      var rawResponse2 = await fetch(
+        "https://digitribebackend.herokuapp.com/map"
+      );
+      var responseUser = await rawResponse2.json();
+      // console.log("responseUser.user", responseUser.user);
+      setUserList(responseUser.user);
+    }
+    loadData();
+  }, []);
 
   const onPressButton = () => {
     setVisible(true);
     setHasPhoto(false);
   };
 
-  const onPressScreen = (evt) => {
+  const onPressScreen = async (evt) => {
     "#1mapDispatchToProps#onClickAddPoi#onPressScreen";
 
     const lat = evt.nativeEvent.coordinate.latitude;
     const long = evt.nativeEvent.coordinate.longitude;
+    console.log("lat", lat);
+    console.log("long", long);
 
     setGetCoordinate(true);
+
     if (addPOI) {
       setListPOI([
         ...listPOI,
@@ -103,8 +107,63 @@ function MapScreen(props) {
       ]),
         props.onAddPoiOnMap(lat, long);
       setAddPOI(false);
+
+      const poi = props.poi;
+
+      const poiInfo = [];
+      poiInfo.push(`photo=${poi[poi.length - 1].photo}`);
+      poiInfo.push(`description=${poi[poi.length - 1].desc}`);
+      poiInfo.push(`title=${poi[poi.length - 1].title}`);
+      poiInfo.push(`latitude=${poi[poi.length - 1].lat}`);
+      poiInfo.push(`longitude=${poi[poi.length - 1].lon}`);
+      // poiInfo.push(`userId=${}`);
+      poiInfo.push(`token=${props.token}`);
+      const pInfo = poiInfo.join("&");
+
+      let rawData = await fetch(
+        "https://digitribebackend.herokuapp.com/place",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: pInfo,
+        }
+      );
+      let dataFinal = await rawData.json();
+      console.log("dataFinal", dataFinal);
+      console.log("dataFinal.newPlace", dataFinal.newPlace);
     }
   };
+
+  const newPlaceList = placeList.map((place, index) => {
+    return (
+      <View key={index}>
+        <Marker
+          onPress={() => onPressMarker()}
+          coordinate={{
+            latitude: place.coordinate.lat,
+            longitude: place.coordinate.lon,
+          }}
+          pinColor="#FFD440"
+          title={place.title}
+          description={place.description}
+        ></Marker>
+      </View>
+    );
+  });
+
+  const newUserList = userList.map((user, index) => {
+    return (
+      <Marker
+        key={index}
+        coordinate={{
+          latitude: user.location.lat,
+          longitude: user.location.lon,
+        }}
+        description="I am here"
+        pinColor="#8525FF"
+      />
+    );
+  });
 
   const toggleOverlay = () => {
     setVisible(!visible);
@@ -130,18 +189,12 @@ function MapScreen(props) {
   const onPressAddPhoto = () => {
     const infoPOI = { title, description };
     props.onAddInfoPOI(infoPOI);
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      console.log("status", status);
-      setHasPermission(status === "granted");
-      setVisible(false);
-      setAddPOI(true);
-      setHasPhoto(true);
-    })();
+    setVisible(false);
+    setAddPOI(true);
+    setHasPhoto(true);
     props.navigation.navigate("Camera");
   };
 
-  let poiPhoto;
   const onPressMarker = () => {
     // console.log("#onpressmarker");
     // console.log("seePhoto", seePhoto);
@@ -155,14 +208,20 @@ function MapScreen(props) {
   let image = null;
 
   const tabListPOI = props.poi.map((poi, index) => {
-    if (seePhoto) {
+    if (seePhoto && hasPhoto) {
       image = (
         <View
           style={{
             height: "25%",
             width: "100%",
-            backgroundColor: "transparent",
+            backgroundColor: "#FFD440",
             position: "absolute",
+            justifyContent: "center",
+            alignItems: "center",
+            borderColor: "white",
+            borderTopStartRadius: 50,
+            borderTopEndRadius: 50,
+            borderWidth: 5,
           }}
         >
           <Image
@@ -170,12 +229,9 @@ function MapScreen(props) {
               uri: poi.photo,
             }}
             style={{
-              height: "65%",
-              width: "85%",
-              marginHorizontal: "30%",
-              marginVertical: "35%",
-              resizeMode: "cover",
-              aspectRatio: 3 / 2,
+              width: 200,
+              height: 200,
+              resizeMode: "contain",
             }}
           />
         </View>
@@ -200,21 +256,6 @@ function MapScreen(props) {
     }
   });
 
-  // const getCoordSubmit = async () => {
-  //   console.log('onogetCoordSubmit')
-  //   let rawData = await fetch(
-  //     'http://localhost:3000/map',
-  //     {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  //     body: `lat=${currentLatitude}&lon=${currentLongitude}`,
-  //   });
-  //   let data = await rawData.json();
-  //   console.log('data', data)
-  //   console.log('data.location', data.location)
-
-  // }
-
   return (
     <View
       style={{
@@ -235,16 +276,9 @@ function MapScreen(props) {
           justifyContent: "flex-start",
         }}
       >
-        <Marker
-          coordinate={{
-            latitude: currentLatitude,
-            longitude: currentLongitude,
-          }}
-          title="Hello"
-          description="I am here"
-          pinColor="#8525FF"
-        />
+        {newUserList}
         {tabListPOI}
+        {newPlaceList}
       </MapView>
       {image}
       <View
@@ -364,6 +398,7 @@ function mapStateToProps(state) {
   return {
     poi: state.poi,
     token: state.token,
+    // id: state.people,
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);

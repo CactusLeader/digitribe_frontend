@@ -1,41 +1,79 @@
 import { Camera } from "expo-camera";
-import { View, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { View, TouchableOpacity, ActivityIndicator, Text } from "react-native";
+import { useState, useEffect } from "react";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
 
 function CameraScreen(props) {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [flash, setFlash] = useState(Camera.Constants.FlashMode.off);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  console.log("loading", loading);
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      console.log("status", status);
+      setHasPermission(status === "granted");
+    })();
+  });
 
   const onPressPhoto = async () => {
+    setLoading(true);
     if (cameraRef) {
       let photo = await cameraRef.takePictureAsync({
         quality: 0.7,
         base64: true,
         exif: true,
       });
-      props.navigation.navigate("Map");
       let data = new FormData();
       data.append("photo", {
         uri: photo.uri,
         type: "image/jpeg",
         name: "photo.jpg",
       });
-      // console.log("photo.uri", photo.uri);
-      var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/place",
-        {
-          method: "post",
-          body: data,
-        }
-      );
+      console.log("photo.uri", photo.uri);
+      var rawResponse = await fetch("http://172.20.10.5:3000/upload", {
+        method: "post",
+        body: data,
+      });
       var response = await rawResponse.json();
-      // console.log("response", response);
-      // console.log("response.url", response.url);
-      props.onAddPhotoClick(response.url);
+
+      if (response.url) {
+        setLoading(false);
+        props.navigation.navigate("Map");
+        console.log("response", response);
+        console.log("response.url", response.url);
+        props.onAddPhotoClick(response.url);
+      }
     }
   };
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+
+  if (hasPermission === false) {
+    props.navigation.navigate("map");
+    return <Text>Aucun accès à la caméra</Text>;
+  }
+
+  if (loading === true) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <ActivityIndicator size="large" color="#8525FF" />
+        <Text>loading</Text>
+      </View>
+    );
+  }
 
   return (
     <Camera
@@ -147,13 +185,14 @@ function CameraScreen(props) {
       </TouchableOpacity>
     </Camera>
   );
+  // }
 }
 
 function mapDispatchToProps(dispatch) {
   console.log("#1mapDispatchToProps");
   return {
     onAddPhotoClick: function (urlPhoto) {
-      // console.log("#1mapDispatchToProps-onAddPhotoClick", urlPhoto);
+      // console.log("#1mapDispatchToProps-onAddPhotoClick");
       dispatch({
         type: "addPhoto",
         photo: urlPhoto,

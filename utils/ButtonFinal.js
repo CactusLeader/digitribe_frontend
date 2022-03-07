@@ -5,20 +5,16 @@ function DigiButtonFinal(props) {
   return (
     <Button
       title={props.title}
-      titleStyle={{
-        color: "white",
-        fontSize: 25,
-      }}
+      titleStyle={props.titleStyle}
       buttonStyle={{
         backgroundColor: "#8525FF",
         borderRadius: 100,
+        borderColor: "white",
+        borderWidth: 0.5,
       }}
       onPress={props.onPress}
       type="outline"
-      containerStyle={{
-        marginBottom: 20,
-        width: 300,
-      }}
+      containerStyle={props.containerStyle}
     />
   );
 }
