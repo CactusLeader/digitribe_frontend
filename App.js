@@ -7,6 +7,8 @@ import { createStore, combineReducers } from "redux";
 
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
+import { Ionicons } from "@expo/vector-icons";
 
 import HomeScreen from "./components/HomeScreen";
 import LoginScreen from "./components/LoginScreen";
@@ -23,8 +25,6 @@ import ContactsScreen from "./components/ContactsScreen";
 import firstName from "./reducers/firstName";
 import token from "./reducers/token";
 import account from "./reducers/account";
-import photo from "./reducers/photo";
-import dataModalList from "./reducers/dataModal";
 import poi from "./reducers/poi";
 import people from "./reducers/people";
 
@@ -33,14 +33,64 @@ const store = createStore(
     firstName,
     token,
     account,
-    photo,
-    dataModalList,
     poi,
     people,
   })
 );
 
 const Stack = createStackNavigator();
+const Tab = createMaterialBottomTabNavigator();
+
+const BottomNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color }) => {
+          let iconName;
+
+          if (route.name == "Map") {
+            iconName = "ios-navigate";
+          } else if (route.name == "People") {
+            iconName = "people";
+          } else if (route.name === "Contacts") {
+            iconName = "chatbox-ellipses";
+          }
+
+          return <Ionicons name={iconName} size={25} color={color} />;
+        },
+      })}
+      // activeColor= "#FFD440"
+      // inactiveColor= "#FFFFFF"
+      barStyle={{
+        backgroundColor: "#8525FF",
+      }}
+      shifting={true}
+    >
+      <Tab.Screen
+        options={{
+          tabBarColor: "#8525FF",
+        }}
+        name="Map"
+        component={MapScreen}
+      />
+      <Tab.Screen
+        options={{ tabBarColor: "#FFD440" }}
+        name="People"
+        component={PeopleScreen}
+      />
+      <Tab.Screen
+        options={{ tabBarColor: "#FB33FF" }}
+        name="Contacts"
+        component={ContactsScreen}
+      />
+      {/* <Tab.Screen
+        options={{ tabBarColor: "#1932FF" }}
+        name="City"
+        component={CityScreen}
+      /> */}
+    </Tab.Navigator>
+  );
+};
 
 export default function App() {
   return (
@@ -58,11 +108,9 @@ export default function App() {
             name="ProfileCreation"
             component={ProfileCreationScreen}
           />
+          <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
           <Stack.Screen name="Chat" component={ChatScreen} />
-          <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Camera" component={CameraScreen} />
-          <Stack.Screen name="Contacts" component={ContactsScreen} />
-          <Stack.Screen name="People" component={PeopleScreen} />
           <Stack.Screen name="PeopleProfile" component={PeopleProfileScreen} />
         </Stack.Navigator>
       </NavigationContainer>

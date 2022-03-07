@@ -106,18 +106,6 @@ function MapScreen(props) {
     }
   };
 
-  const chatSubmit = () => {
-    props.navigation.navigate("Chat");
-  };
-
-  const contactsSubmit = () => {
-    props.navigation.navigate("Contacts");
-  };
-
-  const profilesSubmit = () => {
-    props.navigation.navigate("People");
-  };
-
   const toggleOverlay = () => {
     setVisible(!visible);
   };
@@ -287,13 +275,6 @@ function MapScreen(props) {
           }}
           onPress={() => onPressButton()}
         />
-        {/* <Button title="Chat" onPress={() => chatSubmit()} /> */}
-
-        <Button title="Contacts" onPress={() => contactsSubmit()} />
-        <Button title="Profile" onPress={() => profilesSubmit()} />
-
-        {/* <Button title="getCoord" onPress={() => getCoordSubmit()} /> */}
-
         <Overlay
           isVisible={visible}
           onBackdropPress={toggleOverlay}

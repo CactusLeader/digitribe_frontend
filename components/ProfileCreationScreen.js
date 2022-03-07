@@ -72,15 +72,18 @@ function ProfileCreationScreen(props) {
       personnalInfo.push(`interestIds=${accountInfos.interestIds}`);
       const pInfo = personnalInfo.join("&");
       // console.log("personnalInfo", pInfo);
-      const data = await fetch("http://172.20.10.3:3000/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: pInfo,
-      });
+      const data = await fetch(
+        "https://digitribebackend.herokuapp.com/signup",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: pInfo,
+        }
+      );
       const body = await data.json();
       if (body.result === true) {
         setLoading(false);
-        props.navigation.navigate("Map");
+        props.navigation.navigate("BottomNavigator", { screen: "Map" });
         props.onTokenEmit(body.token);
         props.onFirstnameEmit(body.saveUser.firstname);
       } else {

@@ -6,7 +6,7 @@ import {
   ImageBackground,
   ScrollView,
 } from "react-native";
-import { Card, Icon, Button } from "react-native-elements";
+import { Card } from "react-native-elements";
 import { LinearGradient } from "expo";
 import { connect } from "react-redux";
 import getAge from "../utils/age";
@@ -32,20 +32,16 @@ function PeopleScreen(props) {
     props.navigation.navigate("PeopleProfile");
   };
 
-  // function getAge(dateString) {
-  //   var today = new Date();
-  //   var birthDate = new Date(dateString);
-  //   var age = today.getFullYear() - birthDate.getFullYear();
-  //   var m = today.getMonth() - birthDate.getMonth();
-  //   if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-  //     age--;
-  //   }
-  //   return age;
-  // }
-
   const cardList = peopleList.map((people, index) => {
     return (
-      <Card containerStyle={[styles.card, styles.shadowProp]} key={index}>
+      // <LinearGradient
+      //   start={[0, 0.5]}
+      //   end={[1, 0.5]}
+      //   colors={["#EFBB35", "#4AAE9B"]}
+      //   style={{ borderRadius: 5 }}
+      //   key={index}
+      // >
+      <Card containerStyle={[styles.card, styles.shadowProp]}>
         <Card.Image
           style={styles.cardImage}
           source={{
@@ -60,6 +56,7 @@ function PeopleScreen(props) {
 
         <Text style={styles.cardText}>{people.description}</Text>
       </Card>
+      // </LinearGradient>
     );
   });
 
@@ -93,10 +90,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   cardContainer: {
-    // flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "flex-start",
+    justifyContent: "center",
   },
   card: {
     width: "40%",

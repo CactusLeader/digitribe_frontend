@@ -13,14 +13,14 @@ function LoginScreen(props) {
   const [listErrorsLogin, setErrorsLogin] = useState([]);
   // const [firstname, setFirstname] = useState("");
 
-  const MapSubmit = async () => { const data = await fetch("https://digitribebackend.herokuapp.com/login", {
+  const MapSubmit = async () => {
+    const data = await fetch("https://digitribebackend.herokuapp.com/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `email=${email}&password=${password}`,
     });
 
     const body = await data.json();
-   
 
     // console.log("body", body);
 
@@ -29,7 +29,7 @@ function LoginScreen(props) {
       // setFirstname(body.user.firstname);
       props.addToken(body.token);
       props.onSubmitFirstname(body.user.firstname);
-      props.navigation.navigate("Map");
+      props.navigation.navigate("BottomNavigator", { screen: "Map" });
     } else {
       setErrorsLogin(body.error);
     }
