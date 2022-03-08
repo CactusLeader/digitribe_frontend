@@ -12,8 +12,8 @@ import { connect } from "react-redux";
 const Stack = createStackNavigator();
 
 function MapScreen(props) {
-  const [currentLatitude, setCurrentLatitude] = useState("10");
-  const [currentLongitude, setCurrentLongitude] = useState("10.5");
+  const [currentLatitude, setCurrentLatitude] = useState(10);
+  const [currentLongitude, setCurrentLongitude] = useState(10.5);
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -219,11 +219,11 @@ function MapScreen(props) {
           style={{
             height: "25%",
             width: "100%",
-            backgroundColor: "#FFD440",
+            backgroundColor: "white",
             position: "absolute",
             justifyContent: "center",
             alignItems: "center",
-            borderColor: "white",
+            borderColor: "#FFD440",
             borderTopStartRadius: 50,
             borderTopEndRadius: 50,
             borderWidth: 5,
@@ -234,8 +234,8 @@ function MapScreen(props) {
               uri: poi.photo,
             }}
             style={{
-              width: 200,
-              height: 200,
+              width: 180,
+              height: 180,
               resizeMode: "contain",
             }}
           />
@@ -281,6 +281,14 @@ function MapScreen(props) {
           justifyContent: "flex-start",
         }}
       >
+         <Marker
+          coordinate={{
+            latitude: currentLatitude,
+            longitude: currentLongitude,
+          }}
+          description="I am here"
+          pinColor="#FB33FF"
+        />
         {newUserList}
         {tabListPOI}
         {newPlaceList}
