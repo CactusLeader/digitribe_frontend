@@ -30,6 +30,8 @@ function MapScreen(props) {
 
   // console.log("props.poi", props.poi);
 
+  // 08/03 ==> Modif commune Elo et Max
+
   useEffect(() => {
     async function askPermissions() {
       var permissions = await Permissions.askAsync(Permissions.LOCATION);
@@ -61,29 +63,29 @@ function MapScreen(props) {
     askPermissions();
   }, []);
 
-  // useEffect(() => {
-  //   async function loadData() {
-  //     var rawResponse = await fetch(
-  //       "https://digitribebackend.herokuapp.com/place"
-  //     );
-  //     var response = await rawResponse.json();
-  //     // console.log("response", response);
-  //     setPlaceList(response.place);
-  //   }
-  //   loadData();
-  // }, []);
+  useEffect(() => {
+    async function loadData() {
+      var rawResponse = await fetch(
+        "https://digitribebackend.herokuapp.com/place"
+      );
+      var response = await rawResponse.json();
+      // console.log("response", response);
+      setPlaceList(response.place);
+    }
+    loadData();
+  }, []);
 
-  // useEffect(() => {
-  //   async function loadData() {
-  //     var rawResponse2 = await fetch(
-  //       "https://digitribebackend.herokuapp.com/map"
-  //     );
-  //     var responseUser = await rawResponse2.json();
-  //     // console.log("responseUser.user", responseUser.user);
-  //     setUserList(responseUser.user);
-  //   }
-  //   loadData();
-  // }, []);
+  useEffect(() => {
+    async function loadData() {
+      var rawResponse2 = await fetch(
+        "https://digitribebackend.herokuapp.com/map"
+      );
+      var responseUser = await rawResponse2.json();
+      // console.log("responseUser.user", responseUser.user);
+      setUserList(responseUser.user);
+    }
+    loadData();
+  }, []);
 
   const onPressButton = () => {
     setVisible(true);
