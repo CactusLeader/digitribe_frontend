@@ -125,9 +125,6 @@ function ChatScreen(props) {
     backgroundColor: "#FFD440",
   };
 
-  // let iconName = "checkmark-outline";
-  // let colorIcon = "black";
-
   const listMessageItemBack = listMessageFromBack.map((messageData, i) => {
     let msg = messageData.text.replace(/:\)/g, "\u263A");
     msg = msg.replace(/:\(/g, "\u2639");
@@ -193,8 +190,6 @@ function ChatScreen(props) {
       name = nameUser;
     }
 
-    //BRAVO ELO, C'EST TA FAUTE
-
     if (messageData.read === true) {
       iconName = "checkmark-done-outline";
       colorIcon = "green";
@@ -232,12 +227,14 @@ function ChatScreen(props) {
             height: 35,
           }}
           type="solid"
-          onPress={() => props.navigation.navigate("Map")}
+          onPress={() =>
+            props.navigation.navigate("BottomNavigator", { screen: "Contacts" })
+          }
         />
         <Text style={{ fontSize: 25 }}>{nameUser}</Text>
         <Image
           source={{
-            uri: urlUser,
+            uri: urlUser ? urlUser : "../assets/profile_avatar.png",
           }}
           style={{ width: 35, height: 35, borderRadius: 50, marginRight: 10 }}
         />
