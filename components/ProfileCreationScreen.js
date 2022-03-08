@@ -185,6 +185,7 @@ const styles = StyleSheet.create({
   header: {
     marginTop: "15%",
     alignItems: "center",
+    
   },
   avatar: {
     flexDirection: "row",
@@ -195,9 +196,10 @@ const styles = StyleSheet.create({
   },
   innerHeader: {
     color: "white",
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: "700",
     marginBottom: 65,
+    fontFamily: 'Poppins_900Black' 
   },
   button: {
     width: "auto",

@@ -11,6 +11,7 @@ function DigiButtonFinal(props) {
         borderRadius: 100,
         borderColor: "white",
         borderWidth: 0.5,
+        fontFamily: 'Roboto_900Black' 
       }}
       onPress={props.onPress}
       type="outline"

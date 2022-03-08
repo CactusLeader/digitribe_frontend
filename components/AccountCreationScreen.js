@@ -190,14 +190,11 @@ function AccountCreationScreen(props) {
                 titleStyle={{
                   color: "white",
                   fontSize: 25,
+                  fontFamily: 'normal' 
                 }}
                 containerStyle={{
                   width: 270,
                   marginVertical:40
-                }}
-                titleStyle={{
-                  color: "white",
-                  fontSize: 25,
                 }}
               />
             </View>
@@ -219,14 +216,15 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "#8525FF",
+    fontFamily: 'normal' 
   },
   header: {
     color: "white",
-    fontSize: 36,
-    fontWeight: "700",
+    fontSize: 32,
     marginBottom: 48,
     alignSelf: "center",
     marginTop: "20%",
+    fontFamily: 'bold' 
   },
   datePicker: {
     width: 320,

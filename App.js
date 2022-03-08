@@ -28,6 +28,13 @@ import account from "./reducers/account";
 import poi from "./reducers/poi";
 import people from "./reducers/people";
 
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+} from "@expo-google-fonts/roboto";
+
+import fonts from "./utils/global";
+
 const store = createStore(
   combineReducers({
     firstName,
@@ -93,27 +100,36 @@ const BottomNavigator = () => {
 };
 
 export default function App() {
-  return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen
-            name="AccountCreation"
-            component={AccountCreationScreen}
-          />
-          <Stack.Screen name="Focus" component={FocusScreen} />
-          <Stack.Screen
-            name="ProfileCreation"
-            component={ProfileCreationScreen}
-          />
-          <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
-          <Stack.Screen name="Chat" component={ChatScreen} />
-          <Stack.Screen name="Camera" component={CameraScreen} />
-          <Stack.Screen name="PeopleProfile" component={PeopleProfileScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
-  );
+  let [fontsLoaded] = useFonts(fonts);
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen
+              name="AccountCreation"
+              component={AccountCreationScreen}
+            />
+            <Stack.Screen name="Focus" component={FocusScreen} />
+            <Stack.Screen
+              name="ProfileCreation"
+              component={ProfileCreationScreen}
+            />
+            <Stack.Screen name="BottomNavigator" component={BottomNavigator} />
+            <Stack.Screen name="Chat" component={ChatScreen} />
+            <Stack.Screen name="Camera" component={CameraScreen} />
+            <Stack.Screen
+              name="PeopleProfile"
+              component={PeopleProfileScreen}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+    );
+  }
 }
