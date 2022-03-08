@@ -10,6 +10,7 @@ function ContactsScreen(props) {
   const [contactsList, setContactsList] = useState([]);
   const [messagesList, setMessagesList] = useState([]);
   const [userId, setUserId] = useState("");
+  const [contactsListFinal, setContactsListFinal] = useState([]);
 
   useEffect(() => {
     async function loadData() {
@@ -39,7 +40,37 @@ function ContactsScreen(props) {
     props.navigation.navigate("Chat");
   };
 
-  const tablistContacts = contactsList.map((user, index, j) => {
+  let nonLu2 = 0;
+  useEffect(() => {
+    async function loadData2() {
+      // console.log("#2");
+      const tabContact = [...contactsList];
+      for (let j = 0; j < tabContact.length; j++) {
+        // console.log(" contactsList.length", contactsList.length);
+        for (let i = 0; i < messagesList.length; i++) {
+          // console.log(" messagesList", messagesList.length);
+          if (
+            contactsList[j]._id === messagesList[i].userIdEmit &&
+            userId === messagesList[i].userIdReception &&
+            messagesList[i].read === false
+          ) {
+            nonLu2++;
+          }
+          tabContact[j].nonLu = nonLu2;
+        }
+        // console.log("tabContact", tabContact);
+
+        let tabFinalContact = tabContact.sort(function (a, b) {
+          return b.nonLu - a.nonLu;
+        });
+
+        setContactsListFinal(tabFinalContact);
+      }
+    }
+    loadData2();
+  }, [contactsList]);
+
+  const tablistContacts = contactsListFinal.map((user, index) => {
     let nonLu = 0;
     let message = "";
 
@@ -55,21 +86,8 @@ function ContactsScreen(props) {
       }
     }
 
-    for (let i = 0; i < messagesList.length; i++) {
-      if (
-        (user._id === messagesList[i].userIdEmit &&
-          userId === messagesList[i].userIdReception &&
-          messagesList[i].read === false) ||
-        (user._id === messagesList[i].userIdReception &&
-          userId === messagesList[i].userIdEmit &&
-          messagesList[i].read === false)
-      ) {
-        nonLu++;
-      }
-    }
-
     let valeur = "error";
-    if (nonLu === 0) {
+    if (user.nonLu === 0) {
       valeur = "success";
     }
 
@@ -86,7 +104,7 @@ function ContactsScreen(props) {
         <Avatar rounded source={{ uri: user.photo }} />
         <Badge
           status={valeur}
-          value={nonLu}
+          value={user.nonLu}
           containerStyle={{ position: "absolute", top: 12, left: 40 }}
         />
         <ListItem.Content>
@@ -120,10 +138,11 @@ function ContactsScreen(props) {
           height: 100,
           paddingTop: 50,
           paddingLeft: 10,
-          // padding: 20
         }}
       >
-        <Text style={{ fontSize: 18 }}>Nouveaux Contacts :</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+          Nouveaux Contacts
+        </Text>
       </View>
       <View
         style={{
@@ -131,7 +150,7 @@ function ContactsScreen(props) {
           backgroundColor: "#E5E5E5",
           height: 100,
           paddingLeft: 10,
-          borderBottomColor: "#8525FF",
+          borderBottomColor: "#FB33FF",
           borderBottomWidth: 2,
         }}
       >
@@ -146,7 +165,7 @@ function ContactsScreen(props) {
           paddingLeft: 10,
         }}
       >
-        <Text style={{ fontSize: 18 }}>Messages :</Text>
+        <Text style={{ fontSize: 18, fontWeight: "bold" }}>Messages</Text>
       </View>
       <ScrollView
         style={{
