@@ -281,7 +281,7 @@ function MapScreen(props) {
           justifyContent: "flex-start",
         }}
       >
-         <Marker
+        <Marker
           coordinate={{
             latitude: currentLatitude,
             longitude: currentLongitude,

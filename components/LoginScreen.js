@@ -58,11 +58,11 @@ function LoginScreen(props) {
     >
       <Text
         style={{
-          fontSize: 40,
-          fontWeight: "bold",
+          fontSize: 50,
           color: "#8525FF",
           marginBottom: 30,
           marginTop: -50,
+          fontFamily: "bold",
         }}
       >
         Login
@@ -83,12 +83,13 @@ function LoginScreen(props) {
       <Button
         title="Se login et continuer"
         containerStyle={{
-          width: 270,
+          width: 300,
           marginTop: 50,
         }}
         titleStyle={{
           color: "white",
           fontSize: 25,
+          fontFamily: "normal",
         }}
         onPress={() => MapSubmit()}
       />

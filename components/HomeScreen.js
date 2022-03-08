@@ -17,12 +17,11 @@ function HomeScreen(props) {
       source={require("../assets/DigiBackground1.png")}
       style={styles.container}
     >
-      
       <View
         style={{
           flex: 1,
-          justifyContent :'center',
-          marginTop:250
+          justifyContent: "center",
+          marginTop: 250,
         }}
       >
         {/* <Button title="Sign up" onPress={() => signupSubmit()} />
@@ -33,12 +32,12 @@ function HomeScreen(props) {
           titleStyle={{
             color: "white",
             fontSize: 25,
+            fontFamily: "normal",
           }}
           buttonStyle={{
             backgroundColor: "#8525FF",
             borderRadius: 100,
           }}
-          
           onPress={() => signupSubmit()}
           type="outline"
           containerStyle={{
@@ -51,12 +50,12 @@ function HomeScreen(props) {
           titleStyle={{
             color: "white",
             fontSize: 25,
+            fontFamily: "normal",
           }}
           buttonStyle={{
             borderRadius: 100,
             backgroundColor: "#8525FF",
           }}
-    
           onPress={() => loginSubmit()}
           type="outline"
           containerStyle={{
