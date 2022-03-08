@@ -14,7 +14,7 @@ function ContactsScreen(props) {
   useEffect(() => {
     async function loadData() {
       const rawResponse = await fetch(
-        `https://digitribebackend.herokuapp.com/contact/users/${props.token}`
+        `http://digitribebackend.herokuapp.com/contact/users/${props.token}`
       );
       const responseContact = await rawResponse.json();
 
@@ -32,14 +32,14 @@ function ContactsScreen(props) {
       setUserId(responseContact.id);
     }
     loadData();
-  }, []);
+  }, [contactsList]);
 
   const handleContact = (id) => {
     props.onContactClick(id);
     props.navigation.navigate("Chat");
   };
 
-  const tablistContacts = contactsList.map((user, index) => {
+  const tablistContacts = contactsList.map((user, index, j) => {
     let nonLu = 0;
     let message = "";
 
@@ -100,9 +100,8 @@ function ContactsScreen(props) {
 
   const tablistNewContacts = contactsList.map((user, i) => {
     return (
-      <View style={{ marginHorizontal: 5 }}>
+      <View style={{ marginHorizontal: 5 }} key={i}>
         <Avatar
-          key={i}
           size="medium"
           rounded
           source={{ uri: user.photo }}
