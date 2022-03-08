@@ -152,17 +152,20 @@ function MapScreen(props) {
   });
 
   const newUserList = userList.map((user, index) => {
-    return (
-      <Marker
-        key={index}
-        coordinate={{
-          latitude: user.location.lat,
-          longitude: user.location.lon,
-        }}
-        description="I am here"
-        pinColor="#8525FF"
-      />
-    );
+    console.log(user);
+    if (user.location) {
+      return (
+        <Marker
+          key={index}
+          coordinate={{
+            latitude: user.location.lat,
+            longitude: user.location.lon,
+          }}
+          description="I am here"
+          pinColor="#8525FF"
+        />
+      );
+    }
   });
 
   const toggleOverlay = () => {
