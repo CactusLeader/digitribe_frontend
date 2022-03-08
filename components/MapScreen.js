@@ -68,7 +68,7 @@ function MapScreen(props) {
   useEffect(() => {
     async function loadData() {
       var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/place"
+        `https://digitribebackend.herokuapp.com/place/${props.token}`
       );
       var response = await rawResponse.json();
       console.log("response", response);
