@@ -164,6 +164,8 @@ function ChatScreen(props) {
       name = nameUser;
     }
 
+    //BRAVO ELO, C'EST TA FAUTE
+
     return (
       <View key={i} style={styleMessage}>
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
