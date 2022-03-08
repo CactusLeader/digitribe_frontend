@@ -12,8 +12,9 @@ import { connect } from "react-redux";
 const Stack = createStackNavigator();
 
 function MapScreen(props) {
-  const [currentLatitude, setCurrentLatitude] = useState("10");
-  const [currentLongitude, setCurrentLongitude] = useState("10.5");
+  const [currentLatitude, setCurrentLatitude] = useState(10);
+  const [currentLongitude, setCurrentLongitude] = useState(10.5);
+
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -24,44 +25,46 @@ function MapScreen(props) {
   const [getCoordinate, setGetCoordinate] = useState(false);
   const [placeList, setPlaceList] = useState([]);
   const [userList, setUserList] = useState([]);
-
-  // console.log("placeList", placeList);
-  // console.log("userList", userList);
-
-  // console.log("props.poi", props.poi);
-
-  // 08/03 ==> Modif commune Elo et Max
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
-    async function askPermissions() {
-      var permissions = await Permissions.askAsync(Permissions.LOCATION);
-      // console.log("permissions", permissions);
-      if (permissions.status === "granted") {
-        await Location.watchPositionAsync(
-          { distanceInterval: 10 },
-          (location) => {
-            // console.log("location", location);
-            setCurrentLatitude(location.coords.latitude);
-            setCurrentLongitude(location.coords.longitude);
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+      await Location.watchPositionAsync(
+        {
+          distanceInterval: 10,
+          accuracy: Location.Accuracy.Lowest,
+          timeInterval: 60000,
+        },
+        (loc) => handleLocation(loc)
+      );
+    })();
+  }, []);
+
+  handleLocation = (loc) => {
+    setCurrentLatitude(loc.coords.latitude);
+    setCurrentLongitude(loc.coords.longitude);
+  };
+
+  useEffect(() => {
+    (async () => {
+      if (currentLatitude && currentLongitude) {
+        let rawData = await fetch(
+          "https://digitribebackend.herokuapp.com/map",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: `currentLatitude=${currentLatitude}&currentLongitude=${currentLongitude}&token=${props.token}`,
           }
         );
-        if (currentLatitude && currentLongitude) {
-          let rawData = await fetch(
-            "https://digitribebackend.herokuapp.com/map",
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: `currentLatitude=${currentLatitude}&currentLongitude=${currentLongitude}&token=${props.token}`,
-            }
-          );
-          let data = await rawData.json();
-          // console.log("data", data);
-          // console.log("data.location", data.location);
-        }
+        let data = await rawData.json();
       }
-    }
-    askPermissions();
-  }, []);
+    })();
+  }, [currentLatitude]);
 
   useEffect(() => {
     async function loadData() {
@@ -69,7 +72,7 @@ function MapScreen(props) {
         "https://digitribebackend.herokuapp.com/place"
       );
       var response = await rawResponse.json();
-      // console.log("response", response);
+      console.log("response", response);
       setPlaceList(response.place);
     }
     loadData();
@@ -97,8 +100,8 @@ function MapScreen(props) {
 
     const lat = evt.nativeEvent.coordinate.latitude;
     const long = evt.nativeEvent.coordinate.longitude;
-    console.log("lat", lat);
-    console.log("long", long);
+    // console.log("lat", lat);
+    // console.log("long", long);
 
     setGetCoordinate(true);
 
@@ -131,8 +134,8 @@ function MapScreen(props) {
         }
       );
       let dataFinal = await rawData.json();
-      console.log("dataFinal", dataFinal);
-      console.log("dataFinal.newPlace", dataFinal.newPlace);
+      // console.log("dataFinal", dataFinal);
+      // console.log("dataFinal.newPlace", dataFinal.newPlace);
     }
   };
 
@@ -142,8 +145,8 @@ function MapScreen(props) {
         <Marker
           onPress={() => onPressMarker()}
           coordinate={{
-            latitude: place.coordinate.lat,
-            longitude: place.coordinate.lon,
+            latitude: place.location.coordinates[1],
+            longitude: place.location.coordinates[0],
           }}
           pinColor="#FFD440"
           title={place.title}
@@ -154,7 +157,7 @@ function MapScreen(props) {
   });
 
   const newUserList = userList.map((user, index) => {
-    console.log(user);
+    // console.log(user);
     if (user.location) {
       return (
         <Marker
@@ -281,6 +284,14 @@ function MapScreen(props) {
           justifyContent: "flex-start",
         }}
       >
+        <Marker
+          coordinate={{
+            latitude: currentLatitude,
+            longitude: currentLongitude,
+          }}
+          description="I am here"
+          pinColor="#FB33FF"
+        />
         {newUserList}
         {tabListPOI}
         {newPlaceList}
@@ -378,7 +389,7 @@ function MapScreen(props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  console.log("#1mapDispatchToProps");
+  // console.log("#1mapDispatchToProps");
   return {
     onAddPoiOnMap: function (lat, long) {
       // console.log("#1mapDispatchToProps#onClickAddPoi");

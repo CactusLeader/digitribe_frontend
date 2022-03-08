@@ -7,7 +7,6 @@ import {
   ScrollView,
 } from "react-native";
 import { Card } from "react-native-elements";
-import { LinearGradient } from "expo";
 import { connect } from "react-redux";
 import getAge from "../utils/age";
 
@@ -34,14 +33,7 @@ function PeopleScreen(props) {
 
   const cardList = peopleList.map((people, index) => {
     return (
-      // <LinearGradient
-      //   start={[0, 0.5]}
-      //   end={[1, 0.5]}
-      //   colors={["#EFBB35", "#4AAE9B"]}
-      //   style={{ borderRadius: 5 }}
-      //   key={index}
-      // >
-      <Card containerStyle={[styles.card, styles.shadowProp]}>
+      <Card containerStyle={[styles.card, styles.shadowProp]} key={index}>
         <Card.Image
           style={styles.cardImage}
           source={{
@@ -56,7 +48,6 @@ function PeopleScreen(props) {
 
         <Text style={styles.cardText}>{people.description}</Text>
       </Card>
-      // </LinearGradient>
     );
   });
 
