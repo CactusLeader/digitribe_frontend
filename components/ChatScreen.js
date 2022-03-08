@@ -131,17 +131,17 @@ function ChatScreen(props) {
       name = nameUser;
     }
 
-    // if (messageData.read === true) {
-    //   iconName = "checkmark-done-outline";
-    //   colorIcon = "green";
-    // }
+    if (messageData.read === true) {
+      iconName = "checkmark-done-outline";
+      colorIcon = "green";
+    }
 
     return (
       <View key={i} style={styleMessage}>
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
         <Text style={{ color: "white", alignSelf: "flex-end" }}>
           {name}
-          {/* <Ionicons name={iconName} size={15} color={colorIcon} /> */}
+          <Ionicons name={iconName} size={15} color={colorIcon} />
         </Text>
       </View>
     );

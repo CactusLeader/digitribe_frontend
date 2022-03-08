@@ -12,8 +12,8 @@ import { connect } from "react-redux";
 const Stack = createStackNavigator();
 
 function MapScreen(props) {
-  const [currentLatitude, setCurrentLatitude] = useState(0);
-  const [currentLongitude, setCurrentLongitude] = useState(0);
+  const [currentLatitude, setCurrentLatitude] = useState("10");
+  const [currentLongitude, setCurrentLongitude] = useState("10.5");
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -61,29 +61,29 @@ function MapScreen(props) {
     askPermissions();
   }, []);
 
-  useEffect(() => {
-    async function loadData() {
-      var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/place"
-      );
-      var response = await rawResponse.json();
-      // console.log("response", response);
-      setPlaceList(response.place);
-    }
-    loadData();
-  }, []);
+  // useEffect(() => {
+  //   async function loadData() {
+  //     var rawResponse = await fetch(
+  //       "https://digitribebackend.herokuapp.com/place"
+  //     );
+  //     var response = await rawResponse.json();
+  //     // console.log("response", response);
+  //     setPlaceList(response.place);
+  //   }
+  //   loadData();
+  // }, []);
 
-  useEffect(() => {
-    async function loadData() {
-      var rawResponse2 = await fetch(
-        "https://digitribebackend.herokuapp.com/map"
-      );
-      var responseUser = await rawResponse2.json();
-      // console.log("responseUser.user", responseUser.user);
-      setUserList(responseUser.user);
-    }
-    loadData();
-  }, []);
+  // useEffect(() => {
+  //   async function loadData() {
+  //     var rawResponse2 = await fetch(
+  //       "https://digitribebackend.herokuapp.com/map"
+  //     );
+  //     var responseUser = await rawResponse2.json();
+  //     // console.log("responseUser.user", responseUser.user);
+  //     setUserList(responseUser.user);
+  //   }
+  //   loadData();
+  // }, []);
 
   const onPressButton = () => {
     setVisible(true);
