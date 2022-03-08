@@ -13,9 +13,7 @@ const Stack = createStackNavigator();
 
 function MapScreen(props) {
   const [currentLatitude, setCurrentLatitude] = useState(10);
-  console.log("currentLatitude", currentLatitude);
   const [currentLongitude, setCurrentLongitude] = useState(10.5);
-  console.log("currentLongitude", currentLongitude);
 
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
@@ -27,48 +25,7 @@ function MapScreen(props) {
   const [getCoordinate, setGetCoordinate] = useState(false);
   const [placeList, setPlaceList] = useState([]);
   const [userList, setUserList] = useState([]);
-
-  const [location, setLocation] = useState(null);
-  console.log("location", location);
   const [errorMsg, setErrorMsg] = useState(null);
-
-  // console.log("placeList", placeList);
-  // console.log("userList", userList);
-
-  // console.log("props.poi", props.poi);
-
-  // 08/03 ==> Modif commune Elo et Max
-
-  // useEffect(() => {
-  //   async function askPermissions() {
-  //     var permissions = await Permissions.askAsync(Permissions.LOCATION);
-  //     // console.log("permissions", permissions);
-  //     if (permissions.status === "granted") {
-  //       await Location.watchPositionAsync(
-  //         { distanceInterval: 10 },
-  //         (location) => {
-  //           // console.log("location", location);
-  //           setCurrentLatitude(location.coords.latitude);
-  //           setCurrentLongitude(location.coords.longitude);
-  //         }
-  //       );
-  //       if (currentLatitude && currentLongitude) {
-  //         let rawData = await fetch(
-  //           "https://digitribebackend.herokuapp.com/map",
-  //           {
-  //             method: "POST",
-  //             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-  //             body: `currentLatitude=${currentLatitude}&currentLongitude=${currentLongitude}&token=${props.token}`,
-  //           }
-  //         );
-  //         let data = await rawData.json();
-  //         // console.log("data", data);
-  //         // console.log("data.location", data.location);
-  //       }
-  //     }
-  //   }
-  //   askPermissions();
-  // }, []);
 
   useEffect(() => {
     (async () => {
@@ -77,7 +34,6 @@ function MapScreen(props) {
         setErrorMsg("Permission to access location was denied");
         return;
       }
-
       await Location.watchPositionAsync(
         {
           distanceInterval: 10,
@@ -116,7 +72,7 @@ function MapScreen(props) {
         "https://digitribebackend.herokuapp.com/place"
       );
       var response = await rawResponse.json();
-      // console.log("response", response);
+      console.log("response", response);
       setPlaceList(response.place);
     }
     loadData();
@@ -189,8 +145,8 @@ function MapScreen(props) {
         <Marker
           onPress={() => onPressMarker()}
           coordinate={{
-            latitude: place.coordinate.lat,
-            longitude: place.coordinate.lon,
+            latitude: place.location.coordinates[1],
+            longitude: place.location.coordinates[0],
           }}
           pinColor="#FFD440"
           title={place.title}
