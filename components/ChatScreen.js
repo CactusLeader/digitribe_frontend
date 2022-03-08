@@ -62,6 +62,20 @@ function ChatScreen(props) {
     loadData();
   }, []);
 
+  useEffect(() => {
+    async function loadData2() {
+      const rawResponse2 = await fetch(
+        `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        }
+      );
+      const response2 = await rawResponse2.json();
+    }
+    loadData2();
+  }, [listMessage]);
+
   const firstName = props.firstName;
 
   const MessageSubmit = async () => {
@@ -111,8 +125,8 @@ function ChatScreen(props) {
     backgroundColor: "#FFD440",
   };
 
-  let iconName = "checkmark-outline";
-  let colorIcon = "black";
+  // let iconName = "checkmark-outline";
+  // let colorIcon = "black";
 
   const listMessageItemBack = listMessageFromBack.map((messageData, i) => {
     let msg = messageData.text.replace(/:\)/g, "\u263A");
@@ -123,17 +137,22 @@ function ChatScreen(props) {
 
     let styleMessage = {};
     let name = "";
+    let messageIcon = "";
     if (dataUserId === messageData.userIdEmit) {
       styleMessage = { ...baseStyleMessage, ...emitStyleMessage };
       name = props.firstName;
+      if (messageData.read === true) {
+        messageIcon = (
+          <Ionicons name="checkmark-done-outline" size={15} color="green" />
+        );
+      } else {
+        messageIcon = (
+          <Ionicons name="checkmark-outline" size={15} color="black" />
+        );
+      }
     } else {
       styleMessage = { ...baseStyleMessage, ...ReceivStyleMessage };
       name = nameUser;
-    }
-
-    if (messageData.read === true) {
-      iconName = "checkmark-done-outline";
-      colorIcon = "green";
     }
 
     return (
@@ -141,7 +160,7 @@ function ChatScreen(props) {
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
         <Text style={{ color: "white", alignSelf: "flex-end" }}>
           {name}
-          <Ionicons name={iconName} size={15} color={colorIcon} />
+          {messageIcon}
         </Text>
       </View>
     );
@@ -156,9 +175,19 @@ function ChatScreen(props) {
 
     let styleMessage = {};
     let name = "";
+    let messageIcon = "";
     if (messageData.tokenSocket === props.token) {
       styleMessage = { ...baseStyleMessage, ...emitStyleMessage };
       name = props.firstName;
+      if (messageData.read === true) {
+        messageIcon = (
+          <Ionicons name="checkmark-done-outline" size={15} color="green" />
+        );
+      } else {
+        messageIcon = (
+          <Ionicons name="checkmark-outline" size={15} color="black" />
+        );
+      }
     } else {
       styleMessage = { ...baseStyleMessage, ...ReceivStyleMessage };
       name = nameUser;
@@ -166,10 +195,18 @@ function ChatScreen(props) {
 
     //BRAVO ELO, C'EST TA FAUTE
 
+    if (messageData.read === true) {
+      iconName = "checkmark-done-outline";
+      colorIcon = "green";
+    }
+
     return (
       <View key={i} style={styleMessage}>
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-        <Text style={{ color: "white", alignSelf: "flex-end" }}>{name}</Text>
+        <Text style={{ color: "white", alignSelf: "flex-end" }}>
+          {name}
+          {messageIcon}
+        </Text>
       </View>
     );
   });
