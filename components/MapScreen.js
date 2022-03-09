@@ -5,15 +5,15 @@ import { Camera } from "expo-camera";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
 import { createStackNavigator } from "@react-navigation/stack";
 import { connect } from "react-redux";
 
 const Stack = createStackNavigator();
 
 function MapScreen(props) {
-  const [currentLatitude, setCurrentLatitude] = useState(10);
-  const [currentLongitude, setCurrentLongitude] = useState(10.5);
+  const [currentLatitude, setCurrentLatitude] = useState(0);
+  const [currentLongitude, setCurrentLongitude] = useState(0);
+
   const [addPOI, setAddPOI] = useState(false);
   const [listPOI, setListPOI] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -61,33 +61,14 @@ function MapScreen(props) {
           }
         );
         let data = await rawData.json();
+        console.log("data", data);
+        if (data.result) {
+          setPlaceList(data.places);
+          setUserList(data.users);
+        }
       }
     })();
-  }, [currentLatitude]);
-
-  useEffect(() => {
-    async function loadData() {
-      var rawResponse = await fetch(
-        `https://digitribebackend.herokuapp.com/place/${props.token}`
-      );
-      var response = await rawResponse.json();
-      console.log("response", response);
-      setPlaceList(response.place);
-    }
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    async function loadData() {
-      var rawResponse2 = await fetch(
-        "https://digitribebackend.herokuapp.com/map"
-      );
-      var responseUser = await rawResponse2.json();
-      // console.log("responseUser.user", responseUser.user);
-      setUserList(responseUser.user);
-    }
-    loadData();
-  }, []);
+  }, [currentLatitude, currentLongitude]);
 
   const onPressButton = () => {
     setVisible(true);
@@ -139,33 +120,35 @@ function MapScreen(props) {
   };
 
   const newPlaceList = placeList.map((place, index) => {
-    return (
-      <View key={index}>
-        <Marker
-          onPress={() => onPressMarker()}
-          coordinate={{
-            latitude: place.location.coordinates[1],
-            longitude: place.location.coordinates[0],
-          }}
-          pinColor="#FFD440"
-          title={place.title}
-          description={place.description}
-        ></Marker>
-      </View>
-    );
+    if (place.location !== undefined) {
+      return (
+        <View key={index}>
+          <Marker
+            onPress={() => onPressMarker()}
+            coordinate={{
+              latitude: place.location.coordinates[1],
+              longitude: place.location.coordinates[0],
+            }}
+            pinColor="#FFD440"
+            title={place.title}
+            description={place.description}
+          ></Marker>
+        </View>
+      );
+    }
   });
 
   const newUserList = userList.map((user, index) => {
     // console.log(user);
-    if (user.location) {
+    if (user.location !== undefined && user.token !== props.token) {
       return (
         <Marker
           key={index}
           coordinate={{
-            latitude: user.location.lat,
-            longitude: user.location.lon,
+            latitude: user.location.coordinates[1],
+            longitude: user.location.coordinates[0],
           }}
-          description="I am here"
+          title={user.firstname}
           pinColor="#8525FF"
         />
       );
@@ -221,11 +204,11 @@ function MapScreen(props) {
           style={{
             height: "25%",
             width: "100%",
-            backgroundColor: "white",
+            backgroundColor: "#FFD440",
             position: "absolute",
             justifyContent: "center",
             alignItems: "center",
-            borderColor: "#FFD440",
+            borderColor: "white",
             borderTopStartRadius: 50,
             borderTopEndRadius: 50,
             borderWidth: 5,
@@ -236,8 +219,8 @@ function MapScreen(props) {
               uri: poi.photo,
             }}
             style={{
-              width: 180,
-              height: 180,
+              width: 200,
+              height: 200,
               resizeMode: "contain",
             }}
           />
@@ -288,7 +271,7 @@ function MapScreen(props) {
             latitude: currentLatitude,
             longitude: currentLongitude,
           }}
-          description="I am here"
+          title="Je suis là !"
           pinColor="#FB33FF"
         />
         {newUserList}

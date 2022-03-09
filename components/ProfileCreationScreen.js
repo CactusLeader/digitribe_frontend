@@ -162,7 +162,7 @@ function ProfileCreationScreen(props) {
                 title="Suivant"
                 containerStyle={{
                   width: 300,
-                  marginTop:40
+                  marginTop: 40,
                 }}
                 titleStyle={{
                   color: "white",
@@ -185,7 +185,6 @@ const styles = StyleSheet.create({
   header: {
     marginTop: "15%",
     alignItems: "center",
-    
   },
   avatar: {
     flexDirection: "row",
@@ -199,7 +198,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "700",
     marginBottom: 65,
-    fontFamily: 'Poppins_900Black' 
+    fontFamily: "Poppins_900Black",
   },
   button: {
     width: "auto",
@@ -221,7 +220,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    
   },
 });
 
