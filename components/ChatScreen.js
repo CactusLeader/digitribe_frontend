@@ -15,7 +15,10 @@ import socketIOClient from "socket.io-client";
 
 import { connect } from "react-redux";
 
-const socket = socketIOClient("https://digitribebackend.herokuapp.com/");
+import * as Animatable from "react-native-animatable";
+// MyCustomComponent = Animatable.createAnimatableComponent(MyCustomComponent);
+
+const socket = socketIOClient("http://192.168.148.169:3000/");
 
 function ChatScreen(props) {
   const [currentMessage, setCurrentMessage] = useState();
@@ -39,7 +42,7 @@ function ChatScreen(props) {
     async function loadData() {
       // console.log("#iqhsbfjkhbjvhbjhdcbvjhbfdhjqvbjhdfbjvbjhdfbjhvbdfjbvhj");
       const rawResponse = await fetch(
-        `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`
+        `http://192.168.148.169:3000/messages/users/${props.token}/recipients/${props.id}`
       );
       const responseMessage = await rawResponse.json();
 
@@ -65,7 +68,7 @@ function ChatScreen(props) {
   useEffect(() => {
     async function loadData2() {
       const rawResponse2 = await fetch(
-        `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`,
+        `http://192.168.148.169:3000/messages/users/${props.token}/recipients/${props.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -91,7 +94,7 @@ function ChatScreen(props) {
     const date = new Date();
 
     const data = await fetch(
-      `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`,
+      `http://192.168.148.169:3000/messages/users/${props.token}/recipients/${props.id}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -196,13 +199,20 @@ function ChatScreen(props) {
     }
 
     return (
-      <View key={i} style={styleMessage}>
+      <Animatable.View
+        animation="lightSpeedIn"
+        key={i}
+        style={styleMessage}
+        // iterationCount=1
+      >
+        {/* <View key={i} style={styleMessage}> */}
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
         <Text style={{ color: "white", alignSelf: "flex-end" }}>
           {name}
           {messageIcon}
         </Text>
-      </View>
+        {/* // </View> */}
+      </Animatable.View>
     );
   });
 
@@ -240,7 +250,15 @@ function ChatScreen(props) {
         />
       </View>
 
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        ref={(ref) => {
+          this.scrollView = ref;
+        }}
+        onContentSizeChange={() =>
+          this.scrollView.scrollToEnd({ animated: true })
+        }
+      >
         {listMessageItemBack}
         {listMessageItem}
       </ScrollView>

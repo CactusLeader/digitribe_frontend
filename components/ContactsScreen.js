@@ -15,7 +15,7 @@ function ContactsScreen(props) {
   useEffect(() => {
     async function loadData() {
       const rawResponse = await fetch(
-        `http://digitribebackend.herokuapp.com/contact/users/${props.token}`
+        `http://192.168.148.169:3000/contact/users/${props.token}`
       );
       const responseContact = await rawResponse.json();
 

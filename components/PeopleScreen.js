@@ -16,7 +16,7 @@ function PeopleScreen(props) {
   useEffect(() => {
     async function loadData() {
       var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/profiles/users"
+        "http://192.168.148.169:3000/profiles/users"
       );
       var responsePeople = await rawResponse.json();
       setPeopleList(responsePeople.peopleAround);

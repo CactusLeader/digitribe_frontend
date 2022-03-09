@@ -50,7 +50,7 @@ function ProfileCreationScreen(props) {
       name: "user_avatar.jpg",
     });
     const rawResponse = await fetch(
-      "https://digitribebackend.herokuapp.com/signup/avatar",
+      "http://192.168.148.169:3000/signup/avatar",
       {
         method: "post",
         body: data,
@@ -72,18 +72,15 @@ function ProfileCreationScreen(props) {
       personnalInfo.push(`interestIds=${accountInfos.interestIds}`);
       const pInfo = personnalInfo.join("&");
       // console.log("personnalInfo", pInfo);
-      const data = await fetch(
-        "https://digitribebackend.herokuapp.com/signup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: pInfo,
-        }
-      );
+      const data = await fetch("http://192.168.148.169:3000/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: pInfo,
+      });
       const body = await data.json();
       if (body.result === true) {
         setLoading(false);
-        props.navigation.navigate("BottomNavigator", { screen: "Map" });
+        props.navigation.navigate("BottomNavigator", { screen: "Contacts" });
         props.onTokenEmit(body.token);
         props.onFirstnameEmit(body.saveUser.firstname);
       } else {
@@ -162,7 +159,7 @@ function ProfileCreationScreen(props) {
                 title="Suivant"
                 containerStyle={{
                   width: 300,
-                  marginTop:40
+                  marginTop: 40,
                 }}
                 titleStyle={{
                   color: "white",
@@ -185,7 +182,6 @@ const styles = StyleSheet.create({
   header: {
     marginTop: "15%",
     alignItems: "center",
-    
   },
   avatar: {
     flexDirection: "row",
@@ -199,7 +195,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "700",
     marginBottom: 65,
-    fontFamily: 'Poppins_900Black' 
+    fontFamily: "Poppins_900Black",
   },
   button: {
     width: "auto",
@@ -221,7 +217,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    
   },
 });
 

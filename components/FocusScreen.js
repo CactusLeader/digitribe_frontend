@@ -10,9 +10,7 @@ function FocusScreen(props) {
 
   useEffect(() => {
     async function loadData() {
-      var rawResponse = await fetch(
-        "https://digitribebackend.herokuapp.com/signup"
-      );
+      var rawResponse = await fetch("http://192.168.148.169:3000/signup");
       var responseInterest = await rawResponse.json();
       setInterestsList(responseInterest.interests);
       console.log(responseInterest);
@@ -71,26 +69,26 @@ function FocusScreen(props) {
       </View>
       {interests}
       <View style={styles.button}>
-      <Button
-      title="Suivant"
-      titleStyle={{
-        color: "white",
-        fontSize: 25,
-        fontFamily: 'Roboto_400Regular' 
-      }}
-      buttonStyle={{
-        backgroundColor: "#FFD440",
-        borderRadius: 100,
-        borderColor: "white",
-        borderWidth: 0.5,
-      }}
-      onPress={() => focusSubmit()}
-      type="outline"
-      containerStyle={{
-        marginBottom: 200,
-        width: 250,
-      }}
-    />
+        <Button
+          title="Suivant"
+          titleStyle={{
+            color: "white",
+            fontSize: 25,
+            fontFamily: "Roboto_400Regular",
+          }}
+          buttonStyle={{
+            backgroundColor: "#FFD440",
+            borderRadius: 100,
+            borderColor: "white",
+            borderWidth: 0.5,
+          }}
+          onPress={() => focusSubmit()}
+          type="outline"
+          containerStyle={{
+            marginBottom: 200,
+            width: 250,
+          }}
+        />
       </View>
     </ImageBackground>
   );
@@ -109,7 +107,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 90,
     textAlign: "center",
-    fontFamily: 'bold' 
+    fontFamily: "bold",
   },
   innerSubHeader: {
     color: "#FFD440",
@@ -117,12 +115,11 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 20,
     textAlign: "center",
-    fontFamily: 'bold'  
+    fontFamily: "bold",
   },
   button: {
     alignItems: "center",
     marginVertical: 170,
-    
   },
 });
 

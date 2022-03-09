@@ -52,14 +52,11 @@ function MapScreen(props) {
   useEffect(() => {
     (async () => {
       if (currentLatitude && currentLongitude) {
-        let rawData = await fetch(
-          "https://digitribebackend.herokuapp.com/map",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: `currentLatitude=${currentLatitude}&currentLongitude=${currentLongitude}&token=${props.token}`,
-          }
-        );
+        let rawData = await fetch("http://192.168.148.169:3000/map", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: `currentLatitude=${currentLatitude}&currentLongitude=${currentLongitude}&token=${props.token}`,
+        });
         let data = await rawData.json();
       }
     })();
@@ -68,7 +65,7 @@ function MapScreen(props) {
   useEffect(() => {
     async function loadData() {
       var rawResponse = await fetch(
-        `https://digitribebackend.herokuapp.com/place/${props.token}`
+        `http://192.168.148.169:3000/place/${props.token}`
       );
       var response = await rawResponse.json();
       console.log("response", response);
@@ -79,9 +76,7 @@ function MapScreen(props) {
 
   useEffect(() => {
     async function loadData() {
-      var rawResponse2 = await fetch(
-        "https://digitribebackend.herokuapp.com/map"
-      );
+      var rawResponse2 = await fetch("http://192.168.148.169:3000/map");
       var responseUser = await rawResponse2.json();
       // console.log("responseUser.user", responseUser.user);
       setUserList(responseUser.user);
@@ -124,14 +119,11 @@ function MapScreen(props) {
       poiInfo.push(`token=${props.token}`);
       const pInfo = poiInfo.join("&");
 
-      let rawData = await fetch(
-        "https://digitribebackend.herokuapp.com/place",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: pInfo,
-        }
-      );
+      let rawData = await fetch("http://192.168.148.169:3000/place", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: pInfo,
+      });
       let dataFinal = await rawData.json();
       // console.log("dataFinal", dataFinal);
       // console.log("dataFinal.newPlace", dataFinal.newPlace);

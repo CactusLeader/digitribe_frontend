@@ -14,7 +14,7 @@ function LoginScreen(props) {
   // const [firstname, setFirstname] = useState("");
 
   const MapSubmit = async () => {
-    const data = await fetch("https://digitribebackend.herokuapp.com/login", {
+    const data = await fetch("http://192.168.148.169:3000/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: `email=${email}&password=${password}`,
@@ -29,7 +29,7 @@ function LoginScreen(props) {
       // setFirstname(body.user.firstname);
       props.addToken(body.token);
       props.onSubmitFirstname(body.user.firstname);
-      props.navigation.navigate("BottomNavigator", { screen: "Map" });
+      props.navigation.navigate("BottomNavigator", { screen: "Contacts" });
     } else {
       setErrorsLogin(body.error);
     }
