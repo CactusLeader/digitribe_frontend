@@ -15,6 +15,9 @@ import socketIOClient from "socket.io-client";
 
 import { connect } from "react-redux";
 
+import * as Animatable from "react-native-animatable";
+// MyCustomComponent = Animatable.createAnimatableComponent(MyCustomComponent);
+
 const socket = socketIOClient("https://digitribebackend.herokuapp.com/");
 
 function ChatScreen(props) {
@@ -196,13 +199,20 @@ function ChatScreen(props) {
     }
 
     return (
-      <View key={i} style={styleMessage}>
+      <Animatable.View
+        animation="lightSpeedIn"
+        key={i}
+        style={styleMessage}
+        // iterationCount=1
+      >
+        {/* <View key={i} style={styleMessage}> */}
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
         <Text style={{ color: "white", alignSelf: "flex-end" }}>
           {name}
           {messageIcon}
         </Text>
-      </View>
+        {/* // </View> */}
+      </Animatable.View>
     );
   });
 
@@ -240,7 +250,15 @@ function ChatScreen(props) {
         />
       </View>
 
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        ref={(ref) => {
+          this.scrollView = ref;
+        }}
+        onContentSizeChange={() =>
+          this.scrollView.scrollToEnd({ animated: true })
+        }
+      >
         {listMessageItemBack}
         {listMessageItem}
       </ScrollView>

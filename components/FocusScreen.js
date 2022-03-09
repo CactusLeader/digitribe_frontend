@@ -76,7 +76,7 @@ function FocusScreen(props) {
           titleStyle={{
             color: "white",
             fontSize: 25,
-            fontFamily: "normal",
+            fontFamily: "Roboto_400Regular",
           }}
           buttonStyle={{
             backgroundColor: "#FFD440",
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginBottom: 20,
     textAlign: "center",
-    fontFamily: "normal",
+    fontFamily: "bold",
   },
   button: {
     alignItems: "center",

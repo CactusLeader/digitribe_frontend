@@ -167,7 +167,7 @@ function ProfileCreationScreen(props) {
                 titleStyle={{
                   color: "white",
                   fontSize: 25,
-                  fontFamily: 'normal' 
+                  fontFamily: "normal",
                 }}
                 onPress={() => accountSubmit()}
               />
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: "700",
     marginBottom: 65,
-    fontFamily: 'bold' 
+    fontFamily: "Poppins_900Black",
   },
   button: {
     width: "auto",
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   input: {
     height: "20%",
     margin: 12,
-    top:30,
+    top: 30,
     borderWidth: 1,
     padding: 10,
     width: "85%",
