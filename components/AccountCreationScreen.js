@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import { Overlay } from "react-native-elements";
 import { connect } from "react-redux";
-import { Input } from "react-native-elements";
+// import { Input } from "react-native-elements";
+import Input from "../utils/Input.js";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Ionicons } from "@expo/vector-icons";
 import Button from "../utils/ButtonFinal.js";
@@ -107,14 +108,6 @@ function AccountCreationScreen(props) {
             style={styles.container}
           >
             <View style={styles.inner}>
-              {/* <Input
-              value={username}
-              onChangeText={(val) => handleUsername(val)}
-              placeholder="Pseudo"
-              leftIcon={<Ionicons name="body" size={24} color="#FFD440" />}
-              label="Pseudo"
-              labelStyle={styles.label}
-            /> */}
               <Input
                 value={lastname}
                 onChangeText={(val) => handleLastname(val)}
@@ -183,6 +176,7 @@ function AccountCreationScreen(props) {
                 }
                 label="Mot de passe"
                 labelStyle={styles.label}
+                password={true}
               />
               <Button
                 title="Suivant"
@@ -190,11 +184,19 @@ function AccountCreationScreen(props) {
                 titleStyle={{
                   color: "white",
                   fontSize: 25,
+<<<<<<< HEAD
                   fontFamily: 'normal',
                 }}
                 containerStyle={{
                   width: 250,
                   marginVertical:40
+=======
+                  fontFamily: "normal",
+                }}
+                containerStyle={{
+                  width: 270,
+                  marginVertical: 40,
+>>>>>>> divers
                 }}
               />
             </View>
@@ -217,8 +219,12 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "#8525FF",
+<<<<<<< HEAD
     fontFamily: 'normal',
    
+=======
+    fontFamily: "normal",
+>>>>>>> divers
   },
   header: {
     color: "white",
@@ -226,7 +232,7 @@ const styles = StyleSheet.create({
     marginBottom: 48,
     alignSelf: "center",
     marginTop: "20%",
-    fontFamily: 'bold' 
+    fontFamily: "bold",
   },
   datePicker: {
     width: 320,

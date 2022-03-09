@@ -42,7 +42,7 @@ function PeopleScreen(props) {
           onPress={() => handleProfile(people._id)}
         />
         <Card.Divider />
-        <Card.Title>
+        <Card.Title style={styles.title}>
           {people.firstname}, {getAge(people.birthdate)} ans
         </Card.Title>
 
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   card: {
     width: "40%",
-    borderWidth: 5,
+    borderWidth: 2,
     borderRadius: 15,
     borderColor: "#FFD440",
     backgroundColor: "white",
@@ -96,11 +96,15 @@ const styles = StyleSheet.create({
   },
   cardImage: {
     padding: 0,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    borderTopLeftRadius: 13,
+    borderTopRightRadius: 13,
+  },
+  title: {
+    marginBottom: 0,
   },
   cardText: {
     margin: 10,
+    height: "12%",
   },
   button: {
     alignItems: "center",
@@ -108,7 +112,7 @@ const styles = StyleSheet.create({
   shadowProp: {
     shadowColor: "#171717",
     shadowOffset: { width: -2, height: 4 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.1,
     shadowRadius: 3,
   },
 });
