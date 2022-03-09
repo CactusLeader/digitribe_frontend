@@ -12,6 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import socketIOClient from "socket.io-client";
 import { connect } from "react-redux";
 import * as Animatable from "react-native-animatable";
+import { useIsFocused } from "@react-navigation/native";
 
 const socket = socketIOClient("https://digitribebackend.herokuapp.com/");
 
@@ -23,6 +24,8 @@ function ChatScreen(props) {
   const [listMessageFromBack, setListMessageFromBack] = useState([]);
   const [dataUserId, setDataUserId] = useState("");
 
+  const isFocused = useIsFocused();
+
   const onMessagesToAll = (newMessageData) => {
     // console.log("newMessageData", newMessageData);
     // console.log("prenom de l utilisateur", props.firstName);
@@ -30,8 +33,10 @@ function ChatScreen(props) {
   };
 
   useEffect(() => {
-    socket.on("sendMessageToAll", onMessagesToAll);
-  }, [listMessage]);
+    if (isFocused) {
+      socket.on("sendMessageToAll", onMessagesToAll);
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     async function loadData() {
@@ -57,8 +62,10 @@ function ChatScreen(props) {
       setListMessageFromBack(tabFinalMessage);
       setDataUserId(responseMessage.id);
     }
-    loadData();
-  }, []);
+    if (isFocused) {
+      loadData();
+    }
+  }, [isFocused]);
 
   useEffect(() => {
     async function loadData2() {
@@ -71,8 +78,10 @@ function ChatScreen(props) {
       );
       const response2 = await rawResponse2.json();
     }
-    loadData2();
-  }, [listMessage]);
+    if (isFocused) {
+      loadData2();
+    }
+  }, [listMessage, isFocused]);
 
   const firstName = props.firstName;
 
@@ -127,15 +136,14 @@ function ChatScreen(props) {
     let msg = messageData.text.replace(/:\)/g, "\u263A");
     msg = msg.replace(/:\(/g, "\u2639");
     msg = msg.replace(/:p/g, "\uD83D\uDE1B");
-
     msg = msg.replace(/[a-z]*fuck[a-z]*/gi, "\u2022\u2022\u2022");
 
     let styleMessage = {};
-    let name = "";
+    let name = null;
     let messageIcon = "";
+    let separation = ":";
     if (dataUserId === messageData.userIdEmit) {
       styleMessage = { ...baseStyleMessage, ...emitStyleMessage };
-      name = props.firstName;
       if (messageData.read === true) {
         messageIcon = (
           <Ionicons name="checkmark-done-outline" size={15} color="green" />
@@ -147,14 +155,28 @@ function ChatScreen(props) {
       }
     } else {
       styleMessage = { ...baseStyleMessage, ...ReceivStyleMessage };
-      name = nameUser;
+      name = (
+        <Text style={{ color: "grey", fontSize: 16, fontWeight: "bold" }}>
+          {nameUser}
+        </Text>
+      );
+    }
+
+    const date = new Date(messageData.date);
+    const hour = date.getHours() - 1;
+    const minute = date.getUTCMinutes();
+    if (minute < 10) {
+      separation = ":0";
     }
 
     return (
       <View key={i} style={styleMessage}>
+        {name}
         <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-        <Text style={{ color: "white", alignSelf: "flex-end" }}>
-          {name}
+        <Text style={{ color: "white", alignSelf: "flex-end", fontSize: 12 }}>
+          {hour}
+          {separation}
+          {minute}
           {messageIcon}
         </Text>
       </View>
@@ -165,16 +187,19 @@ function ChatScreen(props) {
     let msg = messageData.message.replace(/:\)/g, "\u263A");
     msg = msg.replace(/:\(/g, "\u2639");
     msg = msg.replace(/:p/g, "\uD83D\uDE1B");
-
     msg = msg.replace(/[a-z]*fuck[a-z]*/gi, "\u2022\u2022\u2022");
 
+    const date = new Date();
+    const hour = date.getHours();
+    const minute = date.getUTCMinutes();
+    let separation = ":";
+
     let styleMessage = {};
-    let name = "";
+    let name = null;
     let messageIcon = "";
     let animationType = "";
     if (messageData.tokenSocket === props.token) {
       styleMessage = { ...baseStyleMessage, ...emitStyleMessage };
-      name = props.firstName;
       animationType = "slideInRight";
       if (messageData.read === true) {
         messageIcon = (
@@ -187,7 +212,11 @@ function ChatScreen(props) {
       }
     } else {
       styleMessage = { ...baseStyleMessage, ...ReceivStyleMessage };
-      name = nameUser;
+      name = (
+        <Text style={{ color: "grey", fontSize: 16, fontWeight: "bold" }}>
+          {nameUser}
+        </Text>
+      );
       animationType = "slideInLeft";
     }
 
@@ -196,12 +225,19 @@ function ChatScreen(props) {
       colorIcon = "green";
     }
 
+    if (minute < 10) {
+      separation = ":0";
+    }
+
     if (i === listMessage.length - 1) {
       return (
         <Animatable.View animation={animationType} key={i} style={styleMessage}>
+          {name}
           <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-          <Text style={{ color: "white", alignSelf: "flex-end" }}>
-            {name}
+          <Text style={{ color: "white", alignSelf: "flex-end", fontSize: 12 }}>
+            {hour}
+            {separation}
+            {minute}
             {messageIcon}
           </Text>
         </Animatable.View>
@@ -210,8 +246,11 @@ function ChatScreen(props) {
       return (
         <View key={i} style={styleMessage}>
           <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-          <Text style={{ color: "white", alignSelf: "flex-end" }}>
+          <Text style={{ color: "white", alignSelf: "flex-end", fontSize: 12 }}>
             {name}
+            {hour}
+            {separation}
+            {minute}
             {messageIcon}
           </Text>
         </View>
