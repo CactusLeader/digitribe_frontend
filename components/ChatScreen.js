@@ -3,20 +3,15 @@ import {
   View,
   ScrollView,
   KeyboardAvoidingView,
-  StyleSheet,
   Image,
   Text,
 } from "react-native";
-import { Button, ListItem, Input } from "react-native-elements";
+import { Button, Input } from "react-native-elements";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Ionicons } from "@expo/vector-icons";
-
 import socketIOClient from "socket.io-client";
-
 import { connect } from "react-redux";
-
 import * as Animatable from "react-native-animatable";
-// MyCustomComponent = Animatable.createAnimatableComponent(MyCustomComponent);
 
 const socket = socketIOClient("https://digitribebackend.herokuapp.com/");
 

@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-
-import { StyleSheet, View, Text, ScrollView } from "react-native";
-
-import { ListItem, Icon, Avatar, Badge } from "react-native-elements";
-
+import { View, Text, ScrollView } from "react-native";
+import { ListItem, Avatar, Badge } from "react-native-elements";
 import { connect } from "react-redux";
+import { useIsFocused } from "@react-navigation/native";
 
 function ContactsScreen(props) {
-  const [contactsList, setContactsList] = useState([]);
   const [messagesList, setMessagesList] = useState([]);
   const [userId, setUserId] = useState("");
   const [contactsListFinal, setContactsListFinal] = useState([]);
+
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     async function loadData() {
@@ -28,50 +27,39 @@ function ContactsScreen(props) {
         return new Date(b.date) - new Date(a.date);
       });
 
-      setContactsList(responseContact.dataUserFilteredFinal);
       setMessagesList(tabFinalMessage);
       setUserId(responseContact.id);
+
+      let nonLu = 0;
+      const tabContact = [...responseContact.dataUserFilteredFinal];
+      for (let j = 0; j < tabContact.length; j++) {
+        for (let i = 0; i < messagesList.length; i++) {
+          if (
+            tabContact[j]._id === messagesList[i].userIdEmit &&
+            userId === messagesList[i].userIdReception &&
+            messagesList[i].read === false
+          ) {
+            nonLu++;
+          }
+          tabContact[j].nonLu = nonLu;
+        }
+        let tabFinalContact = tabContact.sort(function (a, b) {
+          return b.nonLu - a.nonLu;
+        });
+        setContactsListFinal(tabFinalContact);
+      }
     }
-    loadData();
-  }, [contactsList]);
+    if (isFocused) {
+      loadData();
+    }
+  }, [messagesList, isFocused]);
 
   const handleContact = (id) => {
     props.onContactClick(id);
     props.navigation.navigate("Chat");
   };
 
-  let nonLu2 = 0;
-  useEffect(() => {
-    async function loadData2() {
-      // console.log("#2");
-      const tabContact = [...contactsList];
-      for (let j = 0; j < tabContact.length; j++) {
-        // console.log(" contactsList.length", contactsList.length);
-        for (let i = 0; i < messagesList.length; i++) {
-          // console.log(" messagesList", messagesList.length);
-          if (
-            contactsList[j]._id === messagesList[i].userIdEmit &&
-            userId === messagesList[i].userIdReception &&
-            messagesList[i].read === false
-          ) {
-            nonLu2++;
-          }
-          tabContact[j].nonLu = nonLu2;
-        }
-        // console.log("tabContact", tabContact);
-
-        let tabFinalContact = tabContact.sort(function (a, b) {
-          return b.nonLu - a.nonLu;
-        });
-
-        setContactsListFinal(tabFinalContact);
-      }
-    }
-    loadData2();
-  }, [contactsList]);
-
   const tablistContacts = contactsListFinal.map((user, index) => {
-    let nonLu = 0;
     let message = "";
 
     for (let i = 0; i < messagesList.length; i++) {
@@ -116,7 +104,7 @@ function ContactsScreen(props) {
     );
   });
 
-  const tablistNewContacts = contactsList.map((user, i) => {
+  const tablistNewContacts = contactsListFinal.map((user, i) => {
     return (
       <View style={{ marginHorizontal: 5 }} key={i}>
         <Avatar
