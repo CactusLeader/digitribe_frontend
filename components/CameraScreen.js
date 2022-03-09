@@ -88,6 +88,7 @@ function CameraScreen(props) {
       }}
       type={type}
       flashMode={flash}
+      zoom = {0.00}
       ref={(ref) => (cameraRef = ref)}
     >
       <TouchableOpacity

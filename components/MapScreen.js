@@ -20,11 +20,12 @@ function MapScreen(props) {
   const [description, setDescription] = useState("");
   const [hasPhoto, setHasPhoto] = useState(false);
   const [seePhoto, setSeePhoto] = useState(false);
-  const [getCoordinate, setGetCoordinate] = useState(false);
   const [placeList, setPlaceList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalInfo, setModalInfo] = useState({});
   const [errorMsg, setErrorMsg] = useState(null);
+  const [newPoiAdded, setNewPoiAdded] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -65,10 +66,11 @@ function MapScreen(props) {
         if (data.result) {
           setPlaceList(data.places);
           setUserList(data.users);
+          setNewPoiAdded(false);
         }
       }
     })();
-  }, [currentLatitude, currentLongitude]);
+  }, [currentLatitude, currentLongitude, newPoiAdded]);
 
   const onPressButton = () => {
     setVisible(true);
@@ -82,8 +84,6 @@ function MapScreen(props) {
     const long = evt.nativeEvent.coordinate.longitude;
     // console.log("lat", lat);
     // console.log("long", long);
-
-    setGetCoordinate(true);
 
     if (addPOI) {
       setListPOI([
@@ -114,6 +114,7 @@ function MapScreen(props) {
         }
       );
       let dataFinal = await rawData.json();
+      setNewPoiAdded(true);
       // console.log("dataFinal", dataFinal);
       // console.log("dataFinal.newPlace", dataFinal.newPlace);
     }
@@ -121,55 +122,17 @@ function MapScreen(props) {
 
   const newPlaceList = placeList.map((place, index) => {
     if (place.location !== undefined) {
+      // console.log("place before return", place);
       return (
         <View key={index}>
           <Marker
-            onPress={() => onPressMarker()}
+            onPress={() => onPressMarker(place)}
             coordinate={{
               latitude: place.location.coordinates[1],
               longitude: place.location.coordinates[0],
             }}
             pinColor="#FFD440"
-           
           ></Marker>
-          <View style={styles.centeredView}>
-            <Modal
-              animationType="fade"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalTextTitle}>{place.title}</Text>
-                  <Text style={styles.modalText}>{place.description}</Text>
-                  <View >
-                    <Image
-                      source={{
-                        uri: place.photo,
-                      }}
-                      style={{
-                        width: 250,
-                        height: 350,
-                      }}
-                      resizeMode="contain"
-                    />
-                  </View>
-                  <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => onPressMarker()}
-                  >
-                    <Text style={styles.textStyle}>fermer</Text>
-                  </Pressable>
-                </View>
-              </View>
-            </Modal>
-            <Pressable style={styles.button} onPress={() => onPressMarker()}>
-            </Pressable>
-          </View>
         </View>
       );
     }
@@ -222,11 +185,13 @@ function MapScreen(props) {
     props.navigation.navigate("Camera");
   };
 
-  const onPressMarker = () => {
-    console.log("#onpressmarker");
-    console.log("seePhoto", seePhoto);
-    setModalVisible(true);
+  const onPressMarker = (place) => {
+    // console.log("#onpressmarker");
+    // console.log("seePhoto", seePhoto);
+    // console.log("place", place);
+
     setModalVisible(!modalVisible);
+    setModalInfo(place);
     if (seePhoto) {
       setSeePhoto(false);
     } else {
@@ -234,56 +199,47 @@ function MapScreen(props) {
     }
   };
 
-  let image = null;
-
-  const tabListPOI = props.poi.map((poi, index) => {
-    // if (seePhoto && hasPhoto) {
-    //   image = (
-    //     <View
-    //       style={{
-    //         height: "25%",
-    //         width: "100%",
-    //         backgroundColor: "#FFD440",
-    //         position: "absolute",
-    //         justifyContent: "center",
-    //         alignItems: "center",
-    //         borderColor: "white",
-    //         borderTopStartRadius: 50,
-    //         borderTopEndRadius: 50,
-    //         borderWidth: 5,
-    //       }}
-    //     >
-    //       <Image
-    //         source={{
-    //           uri: poi.photo,
-    //         }}
-    //         style={{
-    //           width: 200,
-    //           height: 200,
-    //           resizeMode: "contain",
-    //         }}
-    //       />
-    //     </View>
-    //   );
-    // }
-
-    if (getCoordinate) {
-      return (
-        <View key={index}>
-          <Marker
-            onPress={() => onPressMarker()}
-            coordinate={{
-              latitude: poi.lat,
-              longitude: poi.lon,
-            }}
-            pinColor="#FFD440"
-            title={poi.title}
-            description={poi.desc}
-          ></Marker>
-        </View>
-      );
-    }
-  });
+  let modalPoi = null;
+  if (modalInfo) {
+    modalPoi = (
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="fade"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTextTitle}>{modalInfo.title}</Text>
+              <Text style={styles.modalText}>{modalInfo.description}</Text>
+              <View>
+                <Image
+                  source={{
+                    uri: modalInfo.photo,
+                  }}
+                  style={{
+                    width: 250,
+                    height: 350,
+                  }}
+                  resizeMode="contain"
+                />
+              </View>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => onPressMarker()}
+              >
+                <Text style={styles.textStyle}>fermer</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -315,10 +271,9 @@ function MapScreen(props) {
         />
 
         {newUserList}
-        {tabListPOI}
+        {/* {tabListPOI} */}
         {newPlaceList}
       </MapView>
-      {image}
       <View
         style={{
           position: "absolute",
@@ -347,6 +302,7 @@ function MapScreen(props) {
           }}
           onPress={() => onPressButton()}
         />
+
         <Overlay
           isVisible={visible}
           onBackdropPress={toggleOverlay}
@@ -405,6 +361,7 @@ function MapScreen(props) {
             onPress={() => onPressAddPoi()}
           />
         </Overlay>
+        {modalPoi}
       </View>
     </View>
   );
@@ -433,29 +390,29 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 20,
-    top:15,
+    top: 15,
     padding: 10,
     elevation: 2,
   },
   buttonClose: {
-    backgroundColor:"#FFD440",
+    backgroundColor: "#FFD440",
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
-    fontSize : 18
+    fontSize: 18,
   },
   modalTextTitle: {
     marginBottom: 15,
     textAlign: "center",
-    fontWeight : "bold",
-    fontSize : 16
+    fontWeight: "bold",
+    fontSize: 16,
   },
   modalText: {
     marginBottom: 15,
     textAlign: "center",
-    fontSize : 14
+    fontSize: 14,
   },
 });
 
