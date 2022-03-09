@@ -190,10 +190,10 @@ function AccountCreationScreen(props) {
                 titleStyle={{
                   color: "white",
                   fontSize: 25,
-                  fontFamily: 'normal' 
+                  fontFamily: 'normal',
                 }}
                 containerStyle={{
-                  width: 270,
+                  width: 250,
                   marginVertical:40
                 }}
               />
@@ -213,10 +213,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around",
     alignItems: "center",
+    marginLeft:35,
+    width: "80%"
   },
   label: {
     color: "#8525FF",
-    fontFamily: 'normal' 
+    fontFamily: 'normal',
+   
   },
   header: {
     color: "white",

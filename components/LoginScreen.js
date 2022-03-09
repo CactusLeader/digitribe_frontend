@@ -56,43 +56,48 @@ function LoginScreen(props) {
       source={require("../assets/2.png")}
       style={styles.container}
     >
-      <Text
-        style={{
-          fontSize: 50,
-          color: "#8525FF",
-          marginBottom: 30,
-          marginTop: -50,
-          fontFamily: "bold",
-        }}
-      >
-        Login
-      </Text>
+      <View>
+        <Text
+          style={{
+            fontSize: 50,
+            color: "#8525FF",
+            marginTop: -150,
+            marginBottom: 60,
+            fontFamily: "bold",
+          }}
+        >
+          Login
+        </Text>
+      </View>
       {tabErrorsLogin}
+
       <Input
-        containerStyle={{ marginBottom: 25, width: "70%" }}
+        containerStyle={{ width: "70%", bottom: -50 }}
         inputStyle={{ marginLeft: 10 }}
         placeholder="Email"
         onChangeText={(val) => setEmail(val)}
       />
       <Input
-        containerStyle={{ marginVertical: 25, width: "70%" }}
+        containerStyle={{ width: "70%", bottom: -110 }}
         inputStyle={{ marginLeft: 10 }}
         placeholder="Password"
         onChangeText={(val) => setPassword(val)}
       />
-      <Button
-        title="Se login et continuer"
-        containerStyle={{
-          width: 300,
-          marginTop: 50,
-        }}
-        titleStyle={{
-          color: "white",
-          fontSize: 25,
-          fontFamily: "normal",
-        }}
-        onPress={() => MapSubmit()}
-      />
+      <View>
+        <Button
+          title="Se login et continuer"
+          containerStyle={{
+            width: 300,
+            bottom: -270,
+          }}
+          titleStyle={{
+            color: "white",
+            fontSize: 25,
+            fontFamily: "normal",
+          }}
+          onPress={() => MapSubmit()}
+        />
+      </View>
     </ImageBackground>
   );
 }
