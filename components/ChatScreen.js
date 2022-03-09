@@ -176,9 +176,11 @@ function ChatScreen(props) {
     let styleMessage = {};
     let name = "";
     let messageIcon = "";
+    let animationType = "";
     if (messageData.tokenSocket === props.token) {
       styleMessage = { ...baseStyleMessage, ...emitStyleMessage };
       name = props.firstName;
+      animationType = "slideInRight";
       if (messageData.read === true) {
         messageIcon = (
           <Ionicons name="checkmark-done-outline" size={15} color="green" />
@@ -191,6 +193,7 @@ function ChatScreen(props) {
     } else {
       styleMessage = { ...baseStyleMessage, ...ReceivStyleMessage };
       name = nameUser;
+      animationType = "slideInLeft";
     }
 
     if (messageData.read === true) {
@@ -198,22 +201,27 @@ function ChatScreen(props) {
       colorIcon = "green";
     }
 
-    return (
-      <Animatable.View
-        animation="lightSpeedIn"
-        key={i}
-        style={styleMessage}
-        // iterationCount=1
-      >
-        {/* <View key={i} style={styleMessage}> */}
-        <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
-        <Text style={{ color: "white", alignSelf: "flex-end" }}>
-          {name}
-          {messageIcon}
-        </Text>
-        {/* // </View> */}
-      </Animatable.View>
-    );
+    if (i === listMessage.length - 1) {
+      return (
+        <Animatable.View animation={animationType} key={i} style={styleMessage}>
+          <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
+          <Text style={{ color: "white", alignSelf: "flex-end" }}>
+            {name}
+            {messageIcon}
+          </Text>
+        </Animatable.View>
+      );
+    } else {
+      return (
+        <View key={i} style={styleMessage}>
+          <Text style={{ color: "white", fontSize: 18 }}>{msg}</Text>
+          <Text style={{ color: "white", alignSelf: "flex-end" }}>
+            {name}
+            {messageIcon}
+          </Text>
+        </View>
+      );
+    }
   });
 
   return (

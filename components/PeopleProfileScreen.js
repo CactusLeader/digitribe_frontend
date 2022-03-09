@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  console.log("state", state);
+  // console.log("state", state);
   return { id: state.people };
 }
 

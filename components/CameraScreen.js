@@ -12,13 +12,13 @@ function CameraScreen(props) {
   const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
 
-  console.log("loading", loading);
-  console.log("isFocused", isFocused);
+  // console.log("loading", loading);
+  // console.log("isFocused", isFocused);
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      console.log("status", status);
+      // console.log("status", status);
       setHasPermission(status === "granted");
     })();
   });
@@ -37,7 +37,7 @@ function CameraScreen(props) {
         type: "image/jpeg",
         name: "photo.jpg",
       });
-      console.log("photo.uri", photo.uri);
+      // console.log("photo.uri", photo.uri);
       var rawResponse = await fetch(
         "https://digitribebackend.herokuapp.com/upload",
         {
@@ -50,8 +50,8 @@ function CameraScreen(props) {
       if (response.url) {
         setLoading(false);
         props.navigation.navigate("BottomNavigator", { screen: "Map" });
-        console.log("response", response);
-        console.log("response.url", response.url);
+        // console.log("response", response);
+        // console.log("response.url", response.url);
         props.onAddPhotoClick(response.url);
       }
     }
@@ -195,7 +195,7 @@ function CameraScreen(props) {
 }
 
 function mapDispatchToProps(dispatch) {
-  console.log("#1mapDispatchToProps");
+  // console.log("#1mapDispatchToProps");
   return {
     onAddPhotoClick: function (urlPhoto) {
       // console.log("#1mapDispatchToProps-onAddPhotoClick");

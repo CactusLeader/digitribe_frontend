@@ -57,7 +57,7 @@ function ProfileCreationScreen(props) {
       }
     );
     const response = await rawResponse.json();
-    console.log("response", response);
+    // console.log("response", response);
 
     if (response.result === true) {
       const personnalInfo = [];

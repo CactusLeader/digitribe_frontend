@@ -20,7 +20,7 @@ function PeopleScreen(props) {
       );
       var responsePeople = await rawResponse.json();
       setPeopleList(responsePeople.peopleAround);
-      console.log(peopleList);
+      // console.log(peopleList);
       // console.log("interestsList", interestsList);
     }
     loadData();

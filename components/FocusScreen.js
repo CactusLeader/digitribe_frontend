@@ -15,14 +15,14 @@ function FocusScreen(props) {
       );
       var responseInterest = await rawResponse.json();
       setInterestsList(responseInterest.interests);
-      console.log(responseInterest);
-      console.log("interestsList", interestsList);
+      // console.log(responseInterest);
+      // console.log("interestsList", interestsList);
     }
     loadData();
   }, []);
 
   const handleCheckInterests = (val) => {
-    console.log("val", val);
+    // console.log("val", val);
     if (selectedInterests.includes(val)) {
       setSelectedInterests(selectedInterests.filter((el) => el !== val));
     } else {

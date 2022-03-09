@@ -61,7 +61,7 @@ function MapScreen(props) {
           }
         );
         let data = await rawData.json();
-        console.log("data", data);
+        // console.log("data", data);
         if (data.result) {
           setPlaceList(data.places);
           setUserList(data.users);
