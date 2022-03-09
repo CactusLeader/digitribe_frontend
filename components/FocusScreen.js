@@ -66,7 +66,7 @@ function FocusScreen(props) {
       <View style={styles.header}>
         <Text style={styles.innerHeader}>Bienvenue {props.firstname}!</Text>
         <Text style={styles.innerSubHeader}>
-          Quels sont vos centres d'intérêts ?
+          Quels sont vos centres d'intérêts ? ;)
         </Text>
       </View>
       {interests}
@@ -76,7 +76,7 @@ function FocusScreen(props) {
           titleStyle={{
             color: "white",
             fontSize: 25,
-            fontFamily: "normal",
+            fontFamily: "Roboto_400Regular",
           }}
           buttonStyle={{
             backgroundColor: "#FFD440",
@@ -112,16 +112,16 @@ const styles = StyleSheet.create({
     fontFamily: "bold",
   },
   innerSubHeader: {
-    color: "black",
+    color: "#FFD440",
     fontSize: 20,
     fontWeight: "700",
-    marginBottom: 20,
+    marginBottom: 60,
     textAlign: "center",
-    fontFamily: "normal",
+    fontFamily: "bold",
   },
   button: {
     alignItems: "center",
-    marginVertical: 170,
+    marginVertical: 120,
   },
 });
 

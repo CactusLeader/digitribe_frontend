@@ -213,8 +213,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around",
     alignItems: "center",
-    marginLeft:35,
-    width: "80%"
+    
   },
   label: {
     color: "#8525FF",

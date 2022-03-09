@@ -1,11 +1,9 @@
 import { Camera } from "expo-camera";
 import { View, TouchableOpacity, ActivityIndicator, Text } from "react-native";
 import { useState, useEffect } from "react";
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
-
-
 
 function CameraScreen(props) {
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -15,7 +13,7 @@ function CameraScreen(props) {
   const isFocused = useIsFocused();
 
   console.log("loading", loading);
-  console.log('isFocused', isFocused)
+  console.log("isFocused", isFocused);
 
   useEffect(() => {
     (async () => {
@@ -83,10 +81,7 @@ function CameraScreen(props) {
     );
   }
 
-  
-
   return (
-    
     <Camera
       style={{
         flex: 1,
