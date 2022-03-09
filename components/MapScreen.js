@@ -61,7 +61,7 @@ function MapScreen(props) {
           }
         );
         let data = await rawData.json();
-        console.log("data", data);
+        // console.log("data", data);
         if (data.result) {
           setPlaceList(data.places);
           setUserList(data.users);
@@ -139,7 +139,6 @@ function MapScreen(props) {
   });
 
   const newUserList = userList.map((user, index) => {
-    // console.log(user);
     if (user.location !== undefined && user.token !== props.token) {
       return (
         <Marker
@@ -257,8 +256,8 @@ function MapScreen(props) {
         region={{
           latitude: currentLatitude,
           longitude: currentLongitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
         }}
         style={{
           flex: 1,

@@ -29,9 +29,7 @@ import poi from "./reducers/poi";
 import people from "./reducers/people";
 
 import AppLoading from "expo-app-loading";
-import {
-  useFonts,
-} from "@expo-google-fonts/roboto";
+import { useFonts } from "@expo-google-fonts/roboto";
 
 import fonts from "./utils/global";
 
@@ -66,10 +64,11 @@ const BottomNavigator = () => {
           return <Ionicons name={iconName} size={25} color={color} />;
         },
       })}
-      // activeColor= "#FFD440"
-      // inactiveColor= "#FFFFFF"
       barStyle={{
         backgroundColor: "#8525FF",
+        shadowOffset: { width: 0, height: 0, elevation: 0 },
+        borderTopWidth: 0,
+        shadowOpacity: 0,
       }}
       shifting={true}
     >
@@ -81,7 +80,14 @@ const BottomNavigator = () => {
         component={MapScreen}
       />
       <Tab.Screen
-        options={{ tabBarColor: "#FFD440" }}
+        options={{
+          tabBarColor: "#FFD440",
+          style: {
+            shadowOffset: { width: 0, height: 0, elevation: 0 },
+            borderTopWidth: 0,
+            shadowOpacity: 0,
+          },
+        }}
         name="People"
         component={PeopleScreen}
       />
