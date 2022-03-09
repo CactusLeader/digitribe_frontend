@@ -13,6 +13,8 @@
     "@expo-google-fonts/abril-fatface": "^0.2.2",
     "@expo-google-fonts/dev": "^0.2.2",
     "@expo-google-fonts/inter": "^0.2.2",
+    "@expo-google-fonts/lora": "^0.2.2",
+    "@expo-google-fonts/montserrat": "^0.2.2",
     "@expo-google-fonts/poppins": "^0.2.2",
     "@expo-google-fonts/roboto": "^0.2.2",
     "@expo-google-fonts/source-code-pro": "^0.2.2",

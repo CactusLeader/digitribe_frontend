@@ -1,10 +1,10 @@
-import { Roboto_400Regular } from "@expo-google-fonts/roboto";
+import { Montserrat_400Regular } from "@expo-google-fonts/montserrat";
 
-import { AbrilFatface_400Regular } from "@expo-google-fonts/abril-fatface";
+import { Lora_400Regular} from "@expo-google-fonts/lora";
 
 const fonts = {
-  bold: AbrilFatface_400Regular,
-  normal: Roboto_400Regular,
+  bold: Montserrat_400Regular,
+  normal: Lora_400Regular,
 };
 
 export default fonts;
