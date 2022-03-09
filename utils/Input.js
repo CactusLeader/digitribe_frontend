@@ -52,7 +52,6 @@ function Input(props) {
     };
   }
 
-  console.log(!showPasswordText);
   return (
     <RNEInput
       {...props}
