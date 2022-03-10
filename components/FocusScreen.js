@@ -66,7 +66,7 @@ function FocusScreen(props) {
       <View style={styles.header}>
         <Text style={styles.innerHeader}>Bienvenue {props.firstname}!</Text>
         <Text style={styles.innerSubHeader}>
-          Quels sont vos centres d'intérêts ? ;)
+          Quels sont vos centres d'intérêts ? 
         </Text>
       </View>
       {interests}
@@ -76,7 +76,7 @@ function FocusScreen(props) {
           titleStyle={{
             color: "white",
             fontSize: 25,
-            fontFamily: "Roboto_400Regular",
+            fontFamily: "normal",
           }}
           buttonStyle={{
             backgroundColor: "#FFD440",

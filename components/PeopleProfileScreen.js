@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text, ImageBackground } from "react-native";
-import { Image } from "react-native-elements";
+import { Image, Button } from "react-native-elements";
 import { connect } from "react-redux";
-import DigiButton from "../utils/Button";
 import { Ionicons } from "@expo/vector-icons";
 import getAge from "../utils/age";
 
@@ -46,7 +45,7 @@ function PeopleProfileScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/DigitribeBackground2.png")}
+      source={require("../assets/3.png")}
       style={styles.container}
     >
       <View>
@@ -62,9 +61,20 @@ function PeopleProfileScreen(props) {
         <Text style={styles.description}>{people.description}</Text>
         <View style={styles.icon}>{icon}</View>
         <View style={styles.button}>
-          <DigiButton
+          <Button
             onPress={() => handlePeopleContact()}
             title="Envoyer message"
+            titleStyle={{
+              color: "white",
+              fontSize: 25,
+              fontFamily: "normal",
+            }}
+            buttonStyle={{
+              backgroundColor: "#FFD440",
+              borderRadius: 100,
+              borderColor: "white",
+              borderWidth: 0.5,
+            }}
             icon={
               <Ionicons
                 name="chatbubble-ellipses"
@@ -120,6 +130,7 @@ const styles = StyleSheet.create({
   button: {
     alignSelf: "center",
     justifyContent: "flex-end",
+    marginTop : 75
   },
 });
 
