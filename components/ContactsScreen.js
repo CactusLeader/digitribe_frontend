@@ -77,6 +77,9 @@ function ContactsScreen(props) {
     let valeur = "error";
     if (user.nonLu === 0) {
       valeur = "success";
+    } else if (user.nonLu === undefined) {
+      valeur = "success";
+      user.nonLu = 0;
     }
 
     return (

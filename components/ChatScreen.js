@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import {
   View,
   ScrollView,
@@ -6,41 +5,83 @@ import {
   Image,
   Text,
 } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Input } from "react-native-elements";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Ionicons } from "@expo/vector-icons";
 import socketIOClient from "socket.io-client";
 import { connect } from "react-redux";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { Ionicons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
-import { useIsFocused } from "@react-navigation/native";
-
-const socket = socketIOClient("https://digitribebackend.herokuapp.com/");
 
 function ChatScreen(props) {
   const [currentMessage, setCurrentMessage] = useState();
   const [listMessage, setListMessage] = useState([]);
+
   const [nameUser, setNameUser] = useState("");
   const [urlUser, setUrlUser] = useState("");
   const [listMessageFromBack, setListMessageFromBack] = useState([]);
   const [dataUserId, setDataUserId] = useState("");
 
-  const isFocused = useIsFocused();
+  const socketRef = useRef(null);
 
-  const onMessagesToAll = (newMessageData) => {
-    // console.log("newMessageData", newMessageData);
-    // console.log("prenom de l utilisateur", props.firstName);
+  const sendMessage = (newMessageData) => {
     setListMessage([...listMessage, newMessageData]);
+    if (socketRef) {
+      socketRef.current.off("sendMessageToAll", sendMessage);
+    }
   };
 
   useEffect(() => {
-    if (isFocused) {
-      socket.on("sendMessageToAll", onMessagesToAll);
+    // console.log("Création");
+    socketRef.current = socketIOClient(
+      "https://digitribebackend.herokuapp.com/"
+    );
+    return () => {
+      // console.log("destruction");
+      if (socketRef) {
+        socketRef.current.off("sendMessageToAll", sendMessage);
+        socketRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (socketRef) {
+      socketRef.current.on("sendMessageToAll", sendMessage);
     }
-  }, [isFocused]);
+  }, [listMessage]);
+
+  const firstName = props.firstName;
+
+  const messageSubmit = async () => {
+    if (socketRef) {
+      socketRef.current.emit("sendMessage", {
+        message: currentMessage,
+        firstName: firstName,
+        tokenSocket: props.token,
+      });
+    }
+    setCurrentMessage("");
+
+    const date = new Date();
+
+    const data = await fetch(
+      `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `message=${currentMessage}&date=${date}`,
+      }
+    );
+    const body = await data.json();
+
+    // console.log("body", body);
+  };
 
   useEffect(() => {
     async function loadData() {
-      // console.log("#iqhsbfjkhbjvhbjhdcbvjhbfdhjqvbjhdfbjvbjhdfbjhvbdfjbvhj");
+      // console.log("loadData1");
+
       const rawResponse = await fetch(
         `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`
       );
@@ -62,13 +103,12 @@ function ChatScreen(props) {
       setListMessageFromBack(tabFinalMessage);
       setDataUserId(responseMessage.id);
     }
-    if (isFocused) {
-      loadData();
-    }
-  }, [isFocused]);
+    loadData();
+  }, []);
 
   useEffect(() => {
     async function loadData2() {
+      // console.log("loadData2");
       const rawResponse2 = await fetch(
         `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`,
         {
@@ -78,37 +118,8 @@ function ChatScreen(props) {
       );
       const response2 = await rawResponse2.json();
     }
-    if (isFocused) {
-      loadData2();
-    }
-  }, [listMessage, isFocused]);
-
-  const firstName = props.firstName;
-
-  const MessageSubmit = async () => {
-    socket.emit("sendMessage", {
-      message: currentMessage,
-      firstName: firstName,
-      tokenSocket: props.token,
-    });
-    socket.off("sendMessageToAll", onMessagesToAll);
-
-    setCurrentMessage("");
-
-    const date = new Date();
-
-    const data = await fetch(
-      `https://digitribebackend.herokuapp.com/messages/users/${props.token}/recipients/${props.id}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: `message=${currentMessage}&date=${date}`,
-      }
-    );
-    const body = await data.json();
-
-    // console.log("body", body);
-  };
+    loadData2();
+  }, [listMessage]);
 
   const baseStyleMessage = {
     marginHorizontal: 8,
@@ -332,7 +343,7 @@ function ChatScreen(props) {
               height: 50,
             }}
             type="solid"
-            onPress={() => MessageSubmit()}
+            onPress={() => messageSubmit()}
           />
         </View>
       </KeyboardAvoidingView>

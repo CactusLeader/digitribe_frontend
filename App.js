@@ -29,9 +29,7 @@ import poi from "./reducers/poi";
 import people from "./reducers/people";
 
 import AppLoading from "expo-app-loading";
-import {
-  useFonts,
-} from "@expo-google-fonts/roboto";
+import { useFonts } from "@expo-google-fonts/roboto";
 
 import fonts from "./utils/global";
 
