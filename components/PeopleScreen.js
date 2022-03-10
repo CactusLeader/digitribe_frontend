@@ -53,7 +53,7 @@ function PeopleScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/3.png")}
+      source={require("../assets/4.png")}
       style={styles.container}
     >
       <View style={styles.header}>

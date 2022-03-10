@@ -27,6 +27,8 @@ function MapScreen(props) {
   const [errorMsg, setErrorMsg] = useState(null);
   const [newPoiAdded, setNewPoiAdded] = useState(false);
 
+  console.log("modalInfo", modalInfo);
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -200,6 +202,11 @@ function MapScreen(props) {
 
   let modalPoi = null;
   if (modalInfo) {
+    console.log("typeof modalInfo.photo", modalInfo);
+    console.log("typeof modalInfo.photo", typeof modalInfo.photo);
+    const isPhoto =
+      modalInfo.photo !== undefined && modalInfo.photo !== "undefined";
+    console.log("isPhoto", isPhoto);
     modalPoi = (
       <View style={styles.centeredView}>
         <Modal
@@ -215,18 +222,23 @@ function MapScreen(props) {
             <View style={styles.modalView}>
               <Text style={styles.modalTextTitle}>{modalInfo.title}</Text>
               <Text style={styles.modalText}>{modalInfo.description}</Text>
-              <View>
-                <Image
-                  source={{
-                    uri: modalInfo.photo,
-                  }}
-                  style={{
-                    width: 250,
-                    height: 350,
-                  }}
-                  resizeMode="contain"
-                />
-              </View>
+
+              {isPhoto ? (
+                <View>
+                  <Image
+                    source={{
+                      uri: modalInfo.photo,
+                    }}
+                    style={{
+                      width: 250,
+                      height: 350,
+                    }}
+                    resizeMode="contain"
+                  />
+                </View>
+              ) : (
+                <View></View>
+              )}
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => onPressMarker()}

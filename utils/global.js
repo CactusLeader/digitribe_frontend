@@ -1,9 +1,9 @@
-import { Montserrat_400Regular } from "@expo-google-fonts/montserrat";
+import { Montserrat_700Bold } from "@expo-google-fonts/montserrat";
 
-import { Lora_400Regular} from "@expo-google-fonts/lora";
+import { Lora_400Regular } from "@expo-google-fonts/lora";
 
 const fonts = {
-  bold: Montserrat_400Regular,
+  bold: Montserrat_700Bold,
   normal: Lora_400Regular,
 };
 

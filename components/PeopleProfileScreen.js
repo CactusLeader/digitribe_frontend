@@ -46,7 +46,7 @@ function PeopleProfileScreen(props) {
 
   return (
     <ImageBackground
-      source={require("../assets/DigitribeBackground2.png")}
+      source={require("../assets/3.png")}
       style={styles.container}
     >
       <View>

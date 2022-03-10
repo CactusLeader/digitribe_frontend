@@ -184,19 +184,11 @@ function AccountCreationScreen(props) {
                 titleStyle={{
                   color: "white",
                   fontSize: 25,
-<<<<<<< HEAD
-                  fontFamily: 'normal',
-                }}
-                containerStyle={{
-                  width: 250,
-                  marginVertical:40
-=======
                   fontFamily: "normal",
                 }}
                 containerStyle={{
                   width: 270,
                   marginVertical: 40,
->>>>>>> divers
                 }}
               />
             </View>
@@ -219,12 +211,8 @@ const styles = StyleSheet.create({
   },
   label: {
     color: "#8525FF",
-<<<<<<< HEAD
     fontFamily: 'normal',
-   
-=======
-    fontFamily: "normal",
->>>>>>> divers
+  
   },
   header: {
     color: "white",
