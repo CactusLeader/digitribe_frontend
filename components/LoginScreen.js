@@ -73,7 +73,7 @@ function LoginScreen(props) {
       source={require("../assets/2.png")}
       style={styles.container}
     >
-      <Text style={styles.header}>Créer un compte</Text>
+      <Text style={styles.header}>Login</Text>
       {tabErrorsLogin}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAwareScrollView contentContainerStyle={styles.inner}>
