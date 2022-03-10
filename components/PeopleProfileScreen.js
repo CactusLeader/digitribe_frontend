@@ -48,7 +48,6 @@ function PeopleProfileScreen(props) {
       source={require("../assets/3.png")}
       style={styles.container}
     >
-      {/* <View> */}
       <Image
         source={{
           uri: people.photo,
@@ -85,7 +84,6 @@ function PeopleProfileScreen(props) {
           }
         />
       </View>
-      {/* </View> */}
     </ImageBackground>
   );
 }
@@ -129,7 +127,7 @@ const styles = StyleSheet.create({
   button: {
     alignSelf: "center",
     position: "absolute",
-    bottom: "6%",
+    bottom: Platform.OS === "ios" ? "6%" : "3%",
   },
 });
 

@@ -74,9 +74,9 @@ function LoginScreen(props) {
       style={styles.container}
     >
       <Text style={styles.header}>Login</Text>
-      {tabErrorsLogin}
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAwareScrollView contentContainerStyle={styles.inner}>
+          {tabErrorsLogin}
           <Input
             value={email}
             placeholder="Email"
