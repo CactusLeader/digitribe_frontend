@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   StyleSheet,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
   View,
@@ -10,18 +9,20 @@ import {
 } from "react-native";
 import { Overlay } from "react-native-elements";
 import { connect } from "react-redux";
-// import { Input } from "react-native-elements";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Input from "../utils/Input.js";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Ionicons } from "@expo/vector-icons";
 import Button from "../utils/ButtonFinal.js";
 
 function AccountCreationScreen(props) {
-  // const [username, setUsername] = useState("");
   const [lastname, setLastname] = useState("");
+  const [lastnameCheck, setLastnameCheck] = useState(true);
   const [firstname, setFirstname] = useState("");
+  const [firstnameCheck, setFirstnameCheck] = useState(true);
   const [email, setEmail] = useState("");
+  const [emailCheck, setEmailCheck] = useState(true);
   const [password, setPassword] = useState("");
+  const [passwordCheck, setPasswordCheck] = useState(true);
 
   const [birthdate, setBirthdate] = useState(new Date(Date.now()));
   const [isPickerShow, setIsPickerShow] = useState(false);
@@ -37,10 +38,6 @@ function AccountCreationScreen(props) {
       setIsPickerShow(false);
     }
   };
-
-  // const handleUsername = (val) => {
-  //   setUsername(val);
-  // };
 
   const handleLastname = (val) => {
     setLastname(val.trim());
@@ -59,32 +56,39 @@ function AccountCreationScreen(props) {
   };
 
   const accountSubmit = () => {
-    const personnalInfo = {
-      // username,
-      lastname,
-      firstname,
-      birthdate,
-      email,
-      password,
-    };
-    props.onPersonnalInfoClick(personnalInfo);
-    if (!lastname.trim()) {
-      alert("Veuillez entrer votre nom !");
-      return;
+    if (!lastname) {
+      setLastnameCheck(false);
+    } else if (lastname) {
+      setLastnameCheck(true);
     }
-    if (!firstname.trim()) {
-      alert("Veuillez entrer votre prénom !");
-      return;
+    if (!firstname) {
+      setFirstnameCheck(false);
+    } else if (firstname) {
+      setFirstnameCheck(true);
     }
-    if (!email.trim()) {
-      alert("Veuillez entrer votre email !");
-      return;
+    if (
+      !email ||
+      !email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)
+    ) {
+      setEmailCheck(false);
+    } else if (email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+      setEmailCheck(true);
     }
-    if (!password.trim()) {
-      alert("Veuillez entrer un mot de passe !");
-      return;
+    if (!password || password.length < 6) {
+      setPasswordCheck(false);
+    } else if (password.length >= 6) {
+      setPasswordCheck(true);
     }
+
     if (lastname && firstname && birthdate && email && password) {
+      const personnalInfo = {
+        lastname,
+        firstname,
+        birthdate,
+        email,
+        password,
+      };
+      props.onPersonnalInfoClick(personnalInfo);
       props.navigation.navigate("Focus");
     }
   };
@@ -100,48 +104,52 @@ function AccountCreationScreen(props) {
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.container}>
+        <View contentContainerStyle={styles.container}>
           <Text style={styles.header}>Créer un compte</Text>
-          <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.container}
-          >
+          <KeyboardAwareScrollView>
             <View style={styles.inner}>
               <Input
                 value={lastname}
                 onChangeText={(val) => handleLastname(val)}
                 placeholder="Nom de famille"
-                leftIcon={
-                  <Ionicons name="md-person-circle" size={24} color="#8525FF" />
-                }
+                leftIcon={{
+                  type: "ionicon",
+                  name: "md-person-circle",
+                  size: 24,
+                  color: "#8525FF",
+                }}
                 label="Nom de famille"
                 labelStyle={styles.label}
+                errorStyle={{ color: "red" }}
+                errorMessage={!lastnameCheck ? "Veuillez entrez votre nom" : ""}
               />
               <Input
                 value={firstname}
                 onChangeText={(val) => handleFirstname(val)}
                 placeholder="Prénom"
-                leftIcon={
-                  <Ionicons
-                    name="md-person-circle-outline"
-                    size={24}
-                    color="#8525FF"
-                  />
-                }
+                leftIcon={{
+                  type: "ionicon",
+                  name: "md-person-circle-outline",
+                  size: 24,
+                  color: "#8525FF",
+                }}
                 label="Prénom"
                 labelStyle={styles.label}
+                errorStyle={{ color: "red" }}
+                errorMessage={
+                  !firstnameCheck ? "Veuillez entrer votre prénom" : ""
+                }
               />
               <Input
                 value={birthdate.toDateString()}
                 onFocus={() => handleBirthdate()}
                 placeholder="Date de naissance"
-                leftIcon={
-                  <Ionicons
-                    name="md-person-circle-outline"
-                    size={24}
-                    color="#8525FF"
-                  />
-                }
+                leftIcon={{
+                  type: "ionicon",
+                  name: "calendar",
+                  size: 24,
+                  color: "#8525FF",
+                }}
                 label="Date de naissance"
                 labelStyle={styles.label}
               />
@@ -162,20 +170,34 @@ function AccountCreationScreen(props) {
                 value={email}
                 onChangeText={(val) => handleEmail(val)}
                 placeholder="Email"
-                leftIcon={<Ionicons name="mail" size={24} color="#8525FF" />}
+                leftIcon={{
+                  type: "ionicon",
+                  name: "mail",
+                  size: 24,
+                  color: "#8525FF",
+                }}
                 label="Email"
                 labelStyle={styles.label}
+                errorStyle={{ color: "red" }}
+                errorMessage={
+                  !emailCheck ? "Veuillez entrez une adresse email valide" : ""
+                }
               />
               <Input
                 value={password}
                 onChangeText={(val) => handlePassword(val)}
                 placeholder="Mot de passe"
-                leftIcon={
-                  <Ionicons name="lock-closed" size={24} color="#8525FF" />
-                }
+                leftIcon={{
+                  type: "ionicon",
+                  name: "lock-closed",
+                  size: 24,
+                  color: "#8525FF",
+                }}
                 label="Mot de passe"
                 labelStyle={styles.label}
                 password={true}
+                errorStyle={{ color: "red" }}
+                errorMessage={!passwordCheck ? "Mot de passe trop court" : ""}
               />
               <Button
                 title="Suivant"
@@ -191,7 +213,7 @@ function AccountCreationScreen(props) {
                 }}
               />
             </View>
-          </KeyboardAvoidingView>
+          </KeyboardAwareScrollView>
         </View>
       </TouchableWithoutFeedback>
     </ImageBackground>

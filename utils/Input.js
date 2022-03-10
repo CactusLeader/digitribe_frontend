@@ -27,10 +27,10 @@ function Input(props) {
     ...(focused ? { color: "#FFD440" } : {}),
   };
 
-  //   const leftIcon = {
-  //     ...props.leftIcon,
-  //     ...(focused ? { color: "#FFD440" } : {}),
-  //   };
+  const leftIcon = {
+    ...props.leftIcon,
+    ...(focused ? { color: "#FFD440" } : {}),
+  };
 
   let rightIcon = {
     ...props.rightIcon,
@@ -57,7 +57,7 @@ function Input(props) {
       {...props}
       onFocus={onFocus}
       onBlur={onBlur}
-      //   leftIcon={leftIcon}
+      leftIcon={leftIcon}
       rightIcon={rightIcon}
       //   inputContainerStyle={inputContainerStyle}
       labelStyle={labelStyle}

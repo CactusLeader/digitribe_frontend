@@ -20,8 +20,6 @@ function PeopleScreen(props) {
       );
       var responsePeople = await rawResponse.json();
       setPeopleList(responsePeople.peopleAround);
-      // console.log(peopleList);
-      // console.log("interestsList", interestsList);
     }
     loadData();
   }, []);
@@ -32,23 +30,26 @@ function PeopleScreen(props) {
   };
 
   const cardList = peopleList.map((people, index) => {
-    return (
-      <Card containerStyle={[styles.card, styles.shadowProp]} key={index}>
-        <Card.Image
-          style={styles.cardImage}
-          source={{
-            uri: people.photo,
-          }}
-          onPress={() => handleProfile(people._id)}
-        />
-        <Card.Divider />
-        <Card.Title style={styles.title}>
-          {people.firstname}, {getAge(people.birthdate)} ans
-        </Card.Title>
+    if (people.token !== props.token)
+      return (
+        <Card containerStyle={[styles.card, styles.shadowProp]} key={index}>
+          <Card.Image
+            style={styles.cardImage}
+            source={{
+              uri: people.photo,
+            }}
+            onPress={() => handleProfile(people._id)}
+          />
+          <Card.Divider />
+          <Card.Title style={styles.title}>
+            {people.firstname}, {getAge(people.birthdate)} ans
+          </Card.Title>
 
-        <Text style={styles.cardText}>{people.description}</Text>
-      </Card>
-    );
+          <Text numberOfLines={4} style={styles.cardText}>
+            {people.description}
+          </Text>
+        </Card>
+      );
   });
 
   return (
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
     borderColor: "#FFD440",
     backgroundColor: "white",
     padding: 0,
+    marginBottom: "2%",
   },
   cardImage: {
     padding: 0,
@@ -104,7 +106,7 @@ const styles = StyleSheet.create({
   },
   cardText: {
     margin: 10,
-    height: "12%",
+    // height: "12%",
   },
   button: {
     alignItems: "center",
@@ -117,6 +119,12 @@ const styles = StyleSheet.create({
   },
 });
 
+function mapStateToProps(state) {
+  return {
+    token: state.token,
+  };
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     onPeopleClick: function (id) {
@@ -125,4 +133,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(PeopleScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(PeopleScreen);
