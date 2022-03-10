@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, ImageBackground } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ImageBackground,
+  ScrollView,
+} from "react-native";
 import { Image, Button } from "react-native-elements";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
@@ -54,11 +60,14 @@ function PeopleProfileScreen(props) {
         }}
         style={{ height: 500 }}
       />
-      <Text style={styles.name}>
-        {people.firstname}, {getAge(people.birthdate)}
-      </Text>
-      <Text style={styles.description}>{people.description}</Text>
-      <View style={styles.icon}>{icon}</View>
+      <ScrollView>
+        <Text style={styles.name}>
+          {people.firstname}, {getAge(people.birthdate)}
+        </Text>
+        <Text style={styles.description}>{people.description}</Text>
+        <View style={styles.icon}>{icon}</View>
+      </ScrollView>
+
       <View style={styles.button}>
         <Button
           onPress={() => handlePeopleContact()}
@@ -126,7 +135,7 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
-    position: "absolute",
+    justifyContent: "flex-end",
     bottom: Platform.OS === "ios" ? "6%" : "3%",
   },
 });
