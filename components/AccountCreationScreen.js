@@ -121,7 +121,7 @@ function AccountCreationScreen(props) {
                 label="Nom de famille"
                 labelStyle={styles.label}
                 errorStyle={{ color: "red" }}
-                errorMessage={!lastnameCheck ? "Veuillez entrez votre nom" : ""}
+                errorMessage={!lastnameCheck ? "Veuillez entrer votre nom" : ""}
               />
               <Input
                 value={firstname}
@@ -180,7 +180,7 @@ function AccountCreationScreen(props) {
                 labelStyle={styles.label}
                 errorStyle={{ color: "red" }}
                 errorMessage={
-                  !emailCheck ? "Veuillez entrez une adresse email valide" : ""
+                  !emailCheck ? "Veuillez entrer une adresse email valide" : ""
                 }
               />
               <Input

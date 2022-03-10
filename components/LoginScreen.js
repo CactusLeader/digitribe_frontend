@@ -90,7 +90,7 @@ function LoginScreen(props) {
             }}
             errorStyle={{ color: "red" }}
             errorMessage={
-              !emailCheck ? "Veuillez entrez une adresse email valide" : ""
+              !emailCheck ? "Veuillez entrer une adresse email valide" : ""
             }
           />
           <Input
@@ -106,7 +106,9 @@ function LoginScreen(props) {
             }}
             password={true}
             errorStyle={{ color: "red" }}
-            errorMessage={!passwordCheck ? "Mot de passe trop court" : ""}
+            errorMessage={
+              !passwordCheck ? "Veuillez entrer un mot de passe valide" : ""
+            }
           />
           <Button
             title="Se login et continuer"
