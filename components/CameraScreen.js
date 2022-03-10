@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { Button } from "react-native-elements";
 import { connect } from "react-redux";
+import { googleGeocodeAsync } from "expo-location/build/LocationGoogleGeocoding";
 
 function CameraScreen(props) {
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -12,13 +13,11 @@ function CameraScreen(props) {
   const [loading, setLoading] = useState(false);
   const isFocused = useIsFocused();
 
-  // console.log("loading", loading);
-  // console.log("isFocused", isFocused);
+  console.log("isFocused", isFocused);
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
-      // console.log("status", status);
       setHasPermission(status === "granted");
     })();
   });
@@ -27,7 +26,7 @@ function CameraScreen(props) {
     setLoading(true);
     if (cameraRef) {
       let photo = await cameraRef.takePictureAsync({
-        quality: 0.7,
+        quality: 0.3,
         base64: true,
         exif: true,
       });
@@ -37,7 +36,6 @@ function CameraScreen(props) {
         type: "image/jpeg",
         name: "photo.jpg",
       });
-      // console.log("photo.uri", photo.uri);
       var rawResponse = await fetch(
         "https://digitribebackend.herokuapp.com/upload",
         {
@@ -50,8 +48,6 @@ function CameraScreen(props) {
       if (response.url) {
         setLoading(false);
         props.navigation.navigate("BottomNavigator", { screen: "Map" });
-        // console.log("response", response);
-        // console.log("response.url", response.url);
         props.onAddPhotoClick(response.url);
       }
     }
@@ -66,7 +62,7 @@ function CameraScreen(props) {
     return <Text>Aucun accès à la caméra</Text>;
   }
 
-  if (loading === true && useIsFocused) {
+  if (loading === true && isFocused) {
     return (
       <View
         style={{
@@ -88,7 +84,7 @@ function CameraScreen(props) {
       }}
       type={type}
       flashMode={flash}
-      zoom = {0.00}
+      zoom={0.0}
       ref={(ref) => (cameraRef = ref)}
     >
       <TouchableOpacity
@@ -114,11 +110,10 @@ function CameraScreen(props) {
               backgroundColor: "#FFD440",
               borderRadius: 100,
               borderColor: "#FFD440",
-              //   borderWidth: 6,
               width: 70,
               height: 70,
               marginLeft: 15,
-              marginVertical: 15,
+              marginVertical: 20,
             }}
             onPress={() => {
               setType(
@@ -147,7 +142,6 @@ function CameraScreen(props) {
               backgroundColor: "#8525FF",
               borderRadius: 100,
               borderColor: "white",
-              //   borderWidth: 6,
               width: 85,
               height: 85,
               marginVertical: 30,
@@ -173,12 +167,10 @@ function CameraScreen(props) {
               backgroundColor: "#FFD440",
               borderRadius: 100,
               borderColor: "#FFD440",
-              //   borderWidth: 6,
               width: 70,
               height: 70,
-              marginVertical: 5,
               marginRight: 15,
-              marginVertical: 15,
+              marginVertical: 20,
             }}
             onPress={() => {
               setFlash(
@@ -192,14 +184,11 @@ function CameraScreen(props) {
       </TouchableOpacity>
     </Camera>
   );
-  // }
 }
 
 function mapDispatchToProps(dispatch) {
-  // console.log("#1mapDispatchToProps");
   return {
     onAddPhotoClick: function (urlPhoto) {
-      // console.log("#1mapDispatchToProps-onAddPhotoClick");
       dispatch({
         type: "addPhoto",
         photo: urlPhoto,

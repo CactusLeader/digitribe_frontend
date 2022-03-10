@@ -64,7 +64,6 @@ function MapScreen(props) {
           }
         );
         let data = await rawData.json();
-        // console.log("data", data);
         if (data.result) {
           setPlaceList(data.places);
           setUserList(data.users);
@@ -84,8 +83,6 @@ function MapScreen(props) {
 
     const lat = evt.nativeEvent.coordinate.latitude;
     const long = evt.nativeEvent.coordinate.longitude;
-    // console.log("lat", lat);
-    // console.log("long", long);
 
     if (addPOI) {
       setListPOI([
@@ -103,7 +100,6 @@ function MapScreen(props) {
       poiInfo.push(`title=${poi[poi.length - 1].title}`);
       poiInfo.push(`latitude=${poi[poi.length - 1].lat}`);
       poiInfo.push(`longitude=${poi[poi.length - 1].lon}`);
-      // poiInfo.push(`userId=${}`);
       poiInfo.push(`token=${props.token}`);
       const pInfo = poiInfo.join("&");
 
@@ -117,15 +113,12 @@ function MapScreen(props) {
       );
       let dataFinal = await rawData.json();
       setNewPoiAdded(true);
-      // console.log("dataFinal", dataFinal);
-      // console.log("dataFinal.newPlace", dataFinal.newPlace);
     }
   };
 
   const newPlaceList = placeList.map((place, index) => {
     if (place.location !== undefined) {
-      // console.log("place before return", place);
-      return (
+        return (
         <View key={index}>
           <Marker
             onPress={() => onPressMarker(place)}
@@ -187,10 +180,6 @@ function MapScreen(props) {
   };
 
   const onPressMarker = (place) => {
-    // console.log("#onpressmarker");
-    // console.log("seePhoto", seePhoto);
-    // console.log("place", place);
-
     setModalVisible(!modalVisible);
     setModalInfo(place);
     if (seePhoto) {
@@ -202,11 +191,8 @@ function MapScreen(props) {
 
   let modalPoi = null;
   if (modalInfo) {
-    console.log("typeof modalInfo.photo", modalInfo);
-    console.log("typeof modalInfo.photo", typeof modalInfo.photo);
     const isPhoto =
       modalInfo.photo !== undefined && modalInfo.photo !== "undefined";
-    console.log("isPhoto", isPhoto);
     modalPoi = (
       <View style={styles.centeredView}>
         <Modal
@@ -282,7 +268,6 @@ function MapScreen(props) {
         />
 
         {newUserList}
-        {/* {tabListPOI} */}
         {newPlaceList}
       </MapView>
       <View
@@ -358,6 +343,7 @@ function MapScreen(props) {
             buttonStyle={{
               color: "#8525FF",
               backgroundColor: "#FFD440",
+              borderRadius: 100
             }}
             icon={
               <Icon
@@ -428,10 +414,8 @@ const styles = StyleSheet.create({
 });
 
 function mapDispatchToProps(dispatch) {
-  // console.log("#1mapDispatchToProps");
   return {
     onAddPoiOnMap: function (lat, long) {
-      // console.log("#1mapDispatchToProps#onClickAddPoi");
       dispatch({
         type: "addCoord",
         lat: lat,
@@ -449,11 +433,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-  // console.log("mapStateToProps");
   return {
     poi: state.poi,
     token: state.token,
-    // id: state.people,
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);

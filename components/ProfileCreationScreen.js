@@ -14,7 +14,7 @@ import * as ImagePicker from "expo-image-picker";
 import Button from "../utils/ButtonFinal.js";
 import { connect } from "react-redux";
 import { Picker } from "@react-native-picker/picker";
-import ButtonDrop from "../utils/Button.js";
+
 
 function ProfileCreationScreen(props) {
   const [image, setImage] = useState(null);
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: "700",
     marginBottom: 65,
-    fontFamily: "Poppins_900Black",
+    fontFamily: "normal",
   },
   button: {
     width: "auto",

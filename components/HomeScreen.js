@@ -24,8 +24,6 @@ function HomeScreen(props) {
           marginTop: 250,
         }}
       >
-        {/* <Button title="Sign up" onPress={() => signupSubmit()} />
-        <Button title="Login" onPress={() => loginSubmit()} /> */}
 
         <Button
           title="Sign-up"

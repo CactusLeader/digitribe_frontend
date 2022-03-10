@@ -1,5 +1,4 @@
 import { Montserrat_700Bold } from "@expo-google-fonts/montserrat";
-
 import { Lora_400Regular } from "@expo-google-fonts/lora";
 
 const fonts = {
