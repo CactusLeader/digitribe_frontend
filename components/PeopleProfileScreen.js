@@ -48,45 +48,44 @@ function PeopleProfileScreen(props) {
       source={require("../assets/3.png")}
       style={styles.container}
     >
-      <View>
-        <Image
-          source={{
-            uri: people.photo,
+      {/* <View> */}
+      <Image
+        source={{
+          uri: people.photo,
+        }}
+        style={{ height: 500 }}
+      />
+      <Text style={styles.name}>
+        {people.firstname}, {getAge(people.birthdate)}
+      </Text>
+      <Text style={styles.description}>{people.description}</Text>
+      <View style={styles.icon}>{icon}</View>
+      <View style={styles.button}>
+        <Button
+          onPress={() => handlePeopleContact()}
+          title="Envoyer message"
+          titleStyle={{
+            color: "white",
+            fontSize: 25,
+            fontFamily: "normal",
           }}
-          style={{ height: 500 }}
+          buttonStyle={{
+            backgroundColor: "#FFD440",
+            borderRadius: 100,
+            borderColor: "white",
+            borderWidth: 0.5,
+          }}
+          icon={
+            <Ionicons
+              name="chatbubble-ellipses"
+              size={24}
+              color="white"
+              style={{ marginRight: "5%" }}
+            />
+          }
         />
-        <Text style={styles.name}>
-          {people.firstname}, {getAge(people.birthdate)}
-        </Text>
-        <Text style={styles.description}>{people.description}</Text>
-        <View style={styles.icon}>{icon}</View>
-        <View style={styles.button}>
-          <Button
-            onPress={() => handlePeopleContact()}
-            title="Envoyer message"
-            titleStyle={{
-              color: "white",
-              fontSize: 25,
-              fontFamily: "normal",
-            }}
-            buttonStyle={{
-              backgroundColor: "#FFD440",
-              borderRadius: 100,
-              borderColor: "white",
-              borderWidth: 0.5,
-            }}
-            icon={
-              <Ionicons
-                name="chatbubble-ellipses"
-                size={24}
-                color="white"
-                style={{ marginRight: "5%" }}
-                buttonStyle={{ selfAlign: "center" }}
-              />
-            }
-          />
-        </View>
       </View>
+      {/* </View> */}
     </ImageBackground>
   );
 }
@@ -129,8 +128,8 @@ const styles = StyleSheet.create({
   },
   button: {
     alignSelf: "center",
-    justifyContent: "flex-end",
-    marginTop : 75
+    position: "absolute",
+    bottom: "6%",
   },
 });
 
