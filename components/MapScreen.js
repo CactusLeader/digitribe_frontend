@@ -27,8 +27,6 @@ function MapScreen(props) {
   const [errorMsg, setErrorMsg] = useState(null);
   const [newPoiAdded, setNewPoiAdded] = useState(false);
 
-  console.log("modalInfo", modalInfo);
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -118,7 +116,7 @@ function MapScreen(props) {
 
   const newPlaceList = placeList.map((place, index) => {
     if (place.location !== undefined) {
-        return (
+      return (
         <View key={index}>
           <Marker
             onPress={() => onPressMarker(place)}
@@ -343,7 +341,7 @@ function MapScreen(props) {
             buttonStyle={{
               color: "#8525FF",
               backgroundColor: "#FFD440",
-              borderRadius: 100
+              borderRadius: 100,
             }}
             icon={
               <Icon

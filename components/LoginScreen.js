@@ -95,7 +95,7 @@ function LoginScreen(props) {
           />
           <Input
             value={password}
-            placeholder="Password"
+            placeholder="Mot de passe"
             onChangeText={(val) => setPassword(val)}
             label="Mot de passe"
             leftIcon={{
